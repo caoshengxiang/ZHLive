@@ -38,7 +38,6 @@ module.exports = {
         "no-else-return": 0,//如果if语句里面有return,后面不能跟else语句
         "no-empty": 2,//块语句中的内容不能为空
         "no-empty-character-class": 2,//正则表达式中的[]内容不能为空
-        "no-empty-label": 1,//禁止使用空label
         "no-eq-null": 2,//禁止对null使用==或!=运算符
         "no-eval": 1,//禁止使用eval
         "no-ex-assign": 2,//禁止给catch语句中的异常参数赋值
@@ -59,7 +58,7 @@ module.exports = {
         "no-irregular-whitespace": 2,//不能有不规则的空格
         "no-iterator": 2,//禁止使用__iterator__ 属性
         "no-label-var": 2,//label名不能与var声明的变量名相同
-        "no-labels": 2,//禁止标签声明
+        "no-labels": 0,//禁止标签声明
         "no-lone-blocks": 2,//禁止不必要的嵌套块
         "no-lonely-if": 2,//禁止else语句内只有if语句
         "no-loop-func": 1,//禁止在循环中使用函数（如果没有引用外部变量不形成闭包就可以）
@@ -72,7 +71,7 @@ module.exports = {
         "no-native-reassign": 2,//不能重写native对象
         "no-negated-in-lhs": 2,//in 操作符的左边不能有!
         "no-nested-ternary": 0,//禁止使用嵌套的三目运算
-        "no-new": 1,//禁止在使用new构造一个实例后不赋值
+        "no-new": 0,//禁止在使用new构造一个实例后不赋值
         "no-new-func": 1,//禁止使用new Function
         "no-new-object": 2,//禁止使用new Object()
         "no-new-require": 2,//禁止使用new require
