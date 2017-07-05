@@ -72,7 +72,7 @@
         props: {},
         data() {
             return {
-                pickBirthDate: new Date(946656000000), // 插件的时间戳
+                pickBirthDate: '', // 插件的时间戳
                 pickerOptions0: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -101,12 +101,17 @@
         },
         components: {},
         beforeCreate(){
+
         },
         created() {
+
         },
         beforeMount() {
         },
         mounted() {
+            this.age = utils.date2age(new Date( parseInt(this.detail.time, 10) ))
+            this.formatBirth = utils.yyyymmdd(new Date(parseInt(this.detail.time, 10) + 24*3600*1000))
+            this.pickBirthDate = new Date(parseInt(this.detail.time, 10))
         },
         beforeUpdate() {
         },
