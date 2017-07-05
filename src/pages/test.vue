@@ -1,6 +1,7 @@
 <!--suppress ALL -->
 <template>
     <div>
+        <button @click="change">change</button>
         {{te}}
     </div>
 </template>
@@ -9,7 +10,17 @@
         name: 'Test',
         data() {
             return {
-                te: 'test'
+                te: 1
+            }
+        },
+        methods: {
+            change() {
+                this.te  = 2;
+            }
+        },
+        watch: {
+            te(va) {
+                console.log(va)
             }
         }
     }

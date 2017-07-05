@@ -1,7 +1,6 @@
 <template>
     <div>
-        <h3>铸魂直播-后台</h3>
-
+举报/反馈
     </div>
 </template>
 <script>
