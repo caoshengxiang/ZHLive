@@ -11,7 +11,12 @@ const test = resolve => require.ensure([], () => resolve(require('../pages/test.
 const signin = resolve => require.ensure([], () => resolve(require('../pages/sign/sign_in.vue')), 'sign')
 const bgIndex = resolve => require.ensure([], () => resolve(require('../pages/index.vue')), 'bgIndex')
 const accountManagement = resolve => require.ensure([], () => resolve(require('../pages/account_management/account_management.vue')), 'accountManagement')
+
 const accountShow = resolve => require.ensure([], () => resolve(require('../pages/account_management/show.vue')), 'accountManagement')
+const showDisable = resolve => require.ensure([], () => resolve(require('../pages/account_management/showDisable.vue')), 'accountManagement')
+const showLiveApply = resolve => require.ensure([], () => resolve(require('../pages/account_management/showLiveApply.vue')), 'accountManagement')
+const showLiveUser = resolve => require.ensure([], () => resolve(require('../pages/account_management/showLiveUser.vue')), 'accountManagement')
+
 const accountEdit = resolve => require.ensure([], () => resolve(require('../pages/account_management/edit.vue')), 'accountManagement')
 
 const classification = resolve => require.ensure([], () => resolve(require('../pages/classification/classification.vue')), 'classification')
@@ -34,13 +39,25 @@ export default new Router({
             component: bgIndex,
             children: [
                 {
-                    path: ':page',
+                    path: ':type/:page',
                     name: 'accountManagement',
                     component: accountManagement
                 },{
-                    path: 'account/:id',
+                    path: 'account/all/:id',
                     name: 'accountShow',
                     component: accountShow
+                }, {
+                    path: 'account/disable/:id',
+                    name: 'showDisable',
+                    component: showDisable
+                }, {
+                    path: 'account/live/:id',
+                    name: 'showLiveUser',
+                    component: showLiveUser
+                }, {
+                    path: 'account/apply/:id',
+                    name: 'showLiveApply',
+                    component: showLiveApply
                 }, {
                     path: 'edit/:id',
                     name: 'accountEdit',

@@ -23,7 +23,7 @@
         methods: {
             signIn() {
                 if (this.username && this.password) {
-                    this.$router.push({name: 'accountManagement'})
+                    this.$router.push({name: 'accountManagement', params: {type: 0, page: 1}})
                 } else {
                     alert('输入账户/密码')
                 }

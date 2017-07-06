@@ -24,8 +24,8 @@
                 </li>
                 <li>
                     <span>年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</span>
-                    <span class="r">
-                        {{age}} ({{formatBirth}})
+                    <span class="r birth">
+                        {{age}}&nbsp;&nbsp;({{formatBirth}})
                         <el-date-picker
                                 class="data-p"
                                 v-model="pickBirthDate"
@@ -172,9 +172,17 @@
                     margin-left: 10px;
                     position: relative;
                     .data-p {
-                        opacity: 1;
+                        opacity: 0;
                         position: absolute;
-                        left: 110px;
+                        left: 0px;
+                        cursor: pointer;
+                    }
+
+                    &.birth {
+                        border: 1px solid #ccc;
+                        padding: 3px 5px;
+                        border-radius: 5px;
+                        cursor: pointer;
                     }
                 }
             }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="top">
-            <a class="back" @click="backList">返回列表</a>
+            主播申请审核
         </div>
         <div class="con">
             <img class="head-img" src="../../assets/placeholder.png" alt="">

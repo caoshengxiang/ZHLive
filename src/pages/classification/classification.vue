@@ -1,6 +1,12 @@
 <template>
     <div>
-        分类
+        <div class="top">
+            <a class="link">分类管理</a>
+            <a class="link">标签管理</a>
+        </div>
+        <div>
+
+        </div>
     </div>
 </template>
 <script>
@@ -33,4 +39,10 @@
     }
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
+    @import "../../styles/mixin";
+    .top {
+        @include top-box;
+        display: flex;
+        align-items: center;
+    }
 </style>

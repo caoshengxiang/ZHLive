@@ -31,7 +31,7 @@
             changeMenu(i) {
                 switch (i) {
                     case 0:
-                        this.$router.push({name: 'accountManagement', params: {page: 1}})
+                        this.$router.push({name: 'accountManagement', params: {type: 0,page: 1}})
                         this.setActive(0)
                         this.isActive0  = true
                         break;
@@ -66,7 +66,7 @@
                         this.isActive0  = true
                 }
             },
-            setActive(n) {
+            setActive() {
 //                let i;
 //
 //                for (i = 0; i < this.isActive.length; i++) {

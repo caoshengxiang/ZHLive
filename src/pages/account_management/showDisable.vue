@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="top">
-            <a class="back" @click="backList">返回列表</a>
+            禁用用户
         </div>
         <div class="con">
             <img class="head-img" src="../../assets/placeholder.png" alt="">
@@ -85,15 +85,7 @@
         @include top-box;
         display: flex;
         align-items: center;
-        .back {
-            background: #ff5d00;
-            color: #fff;
-            padding: 3px 50px;
-            margin-left: 20px;
-            border-radius: 3px;
-            text-decoration: none;
-            cursor: pointer;
-        }
+
     }
     .con {
         padding: 30px;

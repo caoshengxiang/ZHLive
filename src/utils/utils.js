@@ -19,8 +19,8 @@ export function yyyymmdd(time) {
 
     console.log(time)
     y = time.getFullYear();
-    m = time.getMonth() > 9 ? time.getMonth() +1 : '0'+(time.getMonth() +1);
-    d = time.getDate() > 10 ? time.getDate() : '0' + time.getDate();
+    m = time.getMonth() >= 9 ? time.getMonth() +1 : '0'+(time.getMonth() +1);
+    d = time.getDate() >= 10 ? time.getDate() : '0' + time.getDate();
 
     return y + '-' + m + '-' + d
     // return new Date(time).toISOString().slice(0,10)
