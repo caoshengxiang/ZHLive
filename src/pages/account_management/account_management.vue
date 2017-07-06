@@ -299,6 +299,11 @@
         },
         created() {
             console.log('请求数据'+this.$route.params.type, this.$route.params.page);
+            this.$store.dispatch('account/ac_accountLists', {
+                type: this.$route.params.type,
+                pageIndex: this.$route.params.page,
+                pageSize: 10
+            })
         },
         beforeMount() {
         },

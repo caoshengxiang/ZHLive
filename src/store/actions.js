@@ -3,9 +3,14 @@
  */
 
 export default {
-  a_test ({commit}, param) {
-    // ajax
-    console.log('dispatch', param)
-    commit('mut_Test', 'action')
-  }
+    ac_user ({commit}, param) {
+        // ajax
+        console.log('dispatch', param)
+
+        sessionStorage.user = param.name;
+        commit('mut_user', param.name)
+    },
+    ac_t() {
+        console.log('bbbbbbbbbbbbbb')
+    }
 }

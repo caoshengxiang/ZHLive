@@ -3,7 +3,7 @@
  */
 
 export default {
-    mut_user (st, data) {
-        st.user = data;
+    ac() {
+         console.log('bababababababa')
     }
 }

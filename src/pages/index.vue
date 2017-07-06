@@ -31,6 +31,9 @@
         beforeCreate(){
         },
         created() {
+            if (sessionStorage.user) {
+                this.$store.commit('mut_user', sessionStorage.user)
+            }
         },
         beforeMount() {
         },

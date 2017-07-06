@@ -1,7 +1,7 @@
 <template>
     <div class="head">
         <span class="title">铸魂直播-后端管理</span>
-        <span class="wel">{{username}}‧<a>退出登录</a></span>
+        <span class="wel" @click="logoutHandle">{{username}}‧<a>退出登录</a></span>
     </div>
 </template>
 <script>
@@ -11,11 +11,20 @@
         props: {},
         data() {
             return {
-                username: 'allen'
+
             }
         },
-        computed: {},
-        methods: {},
+        computed: {
+            username() {
+                return this.$store.state.user
+            }
+        },
+        methods: {
+            logoutHandle() {
+                sessionStorage.user = ''
+                this.$router.push({name: 'signin'})
+            }
+        },
         components: {},
         beforeCreate(){
         },

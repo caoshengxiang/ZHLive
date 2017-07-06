@@ -23,7 +23,10 @@
         methods: {
             signIn() {
                 if (this.username && this.password) {
-                    this.$router.push({name: 'accountManagement', params: {type: 0, page: 1}})
+                    this.$store.dispatch('ac_user', {name: this.username, password: this.password}).then(() => {
+                        this.$router.push({name: 'accountManagement', params: {type: 0, page: 1}})
+                    })
+
                 } else {
                     alert('输入账户/密码')
                 }

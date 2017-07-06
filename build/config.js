@@ -10,7 +10,7 @@ module.exports = {
         contentBase: path.join(__dirname, '/../dist'),
         proxyTable: { // 设置代理服务器
             '/web/*': {
-                target: 'http://192.168.1.21:9090',
+                target: 'http://47.95.6.138:8080',
                 secure: false
             },
         }

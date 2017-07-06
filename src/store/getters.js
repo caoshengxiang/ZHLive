@@ -4,6 +4,6 @@
 
 export default {
   getterTest (st) {
-    return 'allen: ' + st.test
+    return '用户: ' + st.user
   }
 }

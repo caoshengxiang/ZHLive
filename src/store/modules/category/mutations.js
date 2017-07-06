@@ -3,7 +3,5 @@
  */
 
 export default {
-    mut_user (st, data) {
-        st.user = data;
-    }
+
 }
