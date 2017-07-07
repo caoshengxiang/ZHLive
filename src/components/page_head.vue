@@ -1,7 +1,7 @@
 <template>
     <div class="head">
         <span class="title">铸魂直播-后端管理</span>
-        <span class="wel" @click="logoutHandle">{{username}}‧<a>退出登录</a></span>
+        <span class="wel">{{username}}‧<a @click="logoutHandle">退出登录</a></span>
     </div>
 </template>
 <script>
@@ -52,6 +52,9 @@
         .wel {
             float: right;
             margin-right: 50px;
+            a{
+                cursor: pointer;
+            }
         }
     }
 </style>

@@ -9,7 +9,7 @@ module.exports = {
         assetsPublicPath: '',
         contentBase: path.join(__dirname, '/../dist'),
         proxyTable: { // 设置代理服务器
-            '/web/*': {
+            '/api': {
                 target: 'http://47.95.6.138:8080',
                 secure: false
             },

@@ -47,6 +47,10 @@ export default new Router({
                     name: 'accountShow',
                     component: accountShow
                 }, {
+                    path: 'account/edit/:id',
+                    name: 'accountEdit',
+                    component: accountEdit
+                }, {
                     path: 'account/disable/:id',
                     name: 'showDisable',
                     component: showDisable
@@ -58,10 +62,6 @@ export default new Router({
                     path: 'account/apply/:id',
                     name: 'showLiveApply',
                     component: showLiveApply
-                }, {
-                    path: 'edit/:id',
-                    name: 'accountEdit',
-                    component: accountEdit
                 }, {
                     path: 'cla',
                     name: 'classification',

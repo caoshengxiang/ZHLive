@@ -39,7 +39,7 @@ module.exports = function (env) {
             // 别名设置,主要是为了配和webpack.ProvidePlugin设置全局插件;
             // 为了方便开发，我们可以定义自己的别名，以便很快捷地引用不同的模块
             alias: {
-                vue: 'vue/dist/vue.js',
+                // vue: 'vue/dist/vue.js',
                 // jquery: path.resolve(__dirname,'./src/j/jquery.min.js') //绝对路径;
             },
 
@@ -141,10 +141,12 @@ module.exports = function (env) {
             ]
         },
         plugins: [
+            /* 全局使用 */
             /* 所有$都会加载对应的jquery模块，其他同 */
             new webpack.ProvidePlugin({
                 $: "jquery",
-                jQuery: "jquery"
+                jQuery: "jquery",
+                $axios: 'axios'
             }),
             new webpack.LoaderOptionsPlugin({ //浏览器加前缀
                 options: {

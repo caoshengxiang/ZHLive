@@ -8,54 +8,62 @@
             <ul class="detail">
                 <li>
                     <span>用户编号:</span>
-                    <span>1111</span>
+                    <span>{{userInfo.userId}}</span>
                 </li>
                 <li>
                     <span>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</span>
-                    <span></span>
+                    <span>{{userInfo.nickname}}</span>
                 </li>
                 <li>
                     <span>手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机:</span>
-                    <span></span>
+                    <span>{{userInfo.phoneNum}}</span>
                 </li>
                 <li>
                     <span>年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</span>
-                    <span></span>
+                    <span>{{userInfo.age}}</span>
                 </li>
                 <li>
                     <span>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
-                    <span></span>
+                    <span>{{userInfo.gender === 'MALE'?'男':'女'}}</span>
                 </li>
                 <li>
                     <span>注册时间:</span>
-                    <span></span>
+                    <span>{{userInfo.createTime}}</span>
                 </li>
                 <li>
                     <span>个人简介:</span>
+                    <span>{{userInfo.signature}}</span>
                 </li>
                 <li class="line"></li>
                 <li>
                     <span>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名:</span>
-                    <span></span>
+                    <span>{{userInfo.name}}</span>
                 </li>
                 <li>
                     <span>身份证号:</span>
-                    <span></span>
+                    <span>{{userInfo.idNum}}</span>
                 </li>
             </ul>
         </div>
     </div>
 </template>
 <script>
-
+    import { mapActions } from 'vuex'
     export default {
         name: 'show',
         props: {},
         data() {
             return {}
         },
-        computed: {},
+        computed: {
+            userInfo() {
+                return this.$store.state.account.userInfo
+            }
+        },
         methods: {
+            ...mapActions({
+                user_info: 'account/ac_userInfo'
+            }),
             backList() {
                 this.$router.go(-1);
             }
@@ -64,6 +72,7 @@
         beforeCreate(){
         },
         created() {
+            this.user_info({userId: this.$route.params.id})
         },
         beforeMount() {
         },

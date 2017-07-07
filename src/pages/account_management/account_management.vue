@@ -39,21 +39,21 @@
                     <th>个人简历</th>
                     <th>操作</th>
                 </tr>
-                <tr class="d" v-for="item in tableData">
-                    <td>{{item.number}}</td>
-                    <td></td>
+                <tr class="d" v-for="(item, index) in tableData">
+                    <td>{{index + 1 + (currentPage-1)*10 }}</td>
+                    <td><img :src="item.icon" alt="头像"></td>
                     <td>{{item.nickname}}</td>
-                    <td>{{item.tel}}</td>
-                    <td>{{item.time}}</td>
+                    <td>{{item.phoneNum}}</td>
+                    <td>{{item.createTime}}</td>
                     <td>{{item.age}}</td>
-                    <td>{{item.sex}}</td>
+                    <td>{{item.gender === 'MALE'? '男':'女'}}</td>
                     <td>{{item.name}}</td>
-                    <td>{{item.intro}}</td>
+                    <td>{{item.signature}}</td>
                     <td class="op" v-if="dropDownMenuItem === 0">
                         <button class="item0" @click="showAccount(item)">查看</button>
                         <button class="item0-1" @click="editAccount(item)">编辑</button>
-                        <button class="item0-2" @click="disableAccount(item)" :class="{able: item.disable}">
-                            {{item.disable==true ? '解禁':'禁用'}}
+                        <button class="item0-2" @click="disableAccount(item)" :class="{able: item.status==='ACTIVE'?false:true}">
+                            {{item.status === 'ACTIVE' ? '禁用':'解禁'}}
                         </button>
                     </td>
                     <td class="op" v-if="dropDownMenuItem === 1">
@@ -74,8 +74,9 @@
             <div class="page">
                 <el-pagination
                         layout="prev, pager, next, jumper"
-                        :total="500"
+                        :total="total"
                         @current-change="handleCurrentChange"
+                        :current-page="currentPage"
                 >
                 </el-pagination>
             </div>
@@ -89,139 +90,6 @@
         props: {},
         data() {
             return {
-                total: 500,
-                tableData: [
-                    {
-                        id: 1,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: false
-                    },
-                    {
-                        id: 2,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: true
-                    },
-                    {
-                        id: 3,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: false
-                    },
-                    {
-                        id: 4,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: false
-                    },
-                    {
-                        id: 5,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: false
-                    },
-                    {
-                        id: 6,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: false
-                    },
-                    {
-                        id: 7,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: false
-                    },
-                    {
-                        id: 8,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: false
-                    },
-                    {
-                        id: 9,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: false
-                    },
-                    {
-                        id: 10,
-                        number: '000001',
-                        headImg: '',
-                        nickname: 'allen',
-                        tel: '17744332211',
-                        time: '',
-                        age: 19,
-                        sex: '男',
-                        name: '李小',
-                        intro: '你好',
-                        disable: false
-                    },
-                ],
                 dropDownMenu: ['全部用户', '禁用用户', '全部主播', '主播申请列表'],
                 dropDownMenuItem: 0,
                 searchValue: '',
@@ -232,54 +100,98 @@
                 console.log('请求数据'+ va)
             }
         },
-        computed: {},
+        computed: {
+            tableData() {
+                return this.$store.state.account.accountLists;
+            },
+            total() {
+                return this.$store.state.account.total;
+            },
+            currentPage() {
+                return parseInt(this.$route.params.page, 10)
+            }
+        },
         methods: {
             handleCurrentChange(item) { // 分页
                 this.$router.push({name: 'accountManagement', params: {page: item}})
                 console.log('请求数据第'+item +'页');
+
+                // 请求第几页数据
+//                this.$store.dispatch('account/ac_accountLists', {
+//                    type: this.$route.params.type + 1,
+//                    pageIndex: item - 1,
+//                    pageSize: 10
+//                })
+                this.getUserLists(this.$route.params.type + 1, item - 1, 10)
             },
             showAccount(item) {
-                this.$router.push({name: 'accountShow', params: {id: item.id}})
+                console.log(item)
+                this.$router.push({name: 'accountShow', params: {id: item.userId}})
             },
             editAccount(item) {
-                this.$router.push({name: 'accountEdit', params: {id: item.id}})
+                this.$router.push({name: 'accountEdit', params: {id: item.userId}})
             },
             disableAccount(item) {
-                if (item.disable) { // 已被禁用
-                    this.$message({
-                        type: 'success',
-                        message: '操作成功!'
-                    });
-                } else {
+                if (item.status === 'ACTIVE') { // 启用状态
                     this.$confirm('确认禁用此用户?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        this.$message({
-                            type: 'success',
-                            message: '禁用成功!'
-                        });
+                        this.$store.dispatch('account/ac_disableUser', {
+                            userId: item.userId
+                        }).then((d)=> {
+                            console.log('allen',d)
+                            setTimeout(()=>{
+                                this.getUserLists(this.$route.params.type + 1, this.$route.params.page - 1, 10)
+                                this.$message({
+                                    type: 'success',
+                                    message: '禁用成功!'
+                                });
+                            }, 2)
+                        })
                     }).catch(() => {
 //                    this.$message({
 //                        type: 'info',
 //                        message: '已取消'
 //                    });
                     });
+                } else { // 禁用状态
+                    this.$store.dispatch('account/ac_enableUser', {
+                        userId: item.userId
+                    }).then(()=>{
+                        setTimeout(()=>{
+                            this.getUserLists(this.$route.params.type + 1, this.$route.params.page - 1, 10)
+                            this.$message({
+                                type: 'success',
+                                message: '操作成功!'
+                            });
+                        }, 2)
+                    })
                 }
             },
             showDisableAccount(item){
-                this.$router.push({name: 'showDisable', params: {id: item.id}})
+                this.$router.push({name: 'showDisable', params: {id: item.userId}})
             },
-            endDisableAccount() {
+            endDisableAccount(item) {
+                this.$store.dispatch('account/ac_enableUser', {
+                    userId: item.userId
+                }).then(()=>{
+                    this.getUserLists(parseInt(this.$route.params.type, 10) + 1, this.$route.params.page - 1, 10)
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                })
             },
             showLiveAccount(item) {
-                this.$router.push({name: 'showLiveUser', params: {id: item.id}})
+//                this.$router.push({name: 'showLiveUser', params: {id: item.userId}})
+                this.$router.push({name: 'accountShow', params: {id: item.userId}})
             },
             delLiveAccount() {
             },
             showApplyLiveAccount(item) {
-                this.$router.push({name: 'showLiveApply', params: {id: item.id}})
+                this.$router.push({name: 'showLiveApply', params: {id: item.userId}})
             },
             passApply() {
             },
@@ -288,22 +200,49 @@
             handleCommand(va) {
                 this.dropDownMenuItem = parseInt(va, 10);
                 this.$router.push({name: 'accountManagement', params: {type: va, page: 1}})
-
+//                this.$store.dispatch('account/ac_accountLists', {
+//                    type: this.dropDownMenuItem + 1,
+//                    pageIndex: 0,
+//                    pageSize: 10
+//                })
+                this.getUserLists(this.dropDownMenuItem + 1, 0, 10)
             },
             handleSearchClick() {
-                alert(1)
+//                this.$store.dispatch('account/ac_accountLists', {
+//                    type: this.dropDownMenuItem + 1,
+//                    pageIndex: 0,
+//                    pageSize: 10,
+//                    search: this.searchValue
+//                })
+                this.getUserLists(this.dropDownMenuItem + 1, 0, 10, this.searchValue)
+            },
+            getUserLists(type, page, size, search) {
+                let param;
+
+                param = {
+                    type: type,
+                    pageIndex: page,
+                    pageSize: size
+                }
+
+                if (search) {
+                    param.search = search
+                }
+                this.$store.dispatch('account/ac_accountLists', param)
             }
+
         },
         components: {},
         beforeCreate(){
         },
         created() {
-            console.log('请求数据'+this.$route.params.type, this.$route.params.page);
-            this.$store.dispatch('account/ac_accountLists', {
-                type: this.$route.params.type,
-                pageIndex: this.$route.params.page,
-                pageSize: 10
-            })
+            // 初始请求所用用户列表数据
+//            this.$store.dispatch('account/ac_accountLists', {
+//                type: this.$route.params.type + 1,
+//                pageIndex: this.$route.params.page - 1,
+//                pageSize: 10
+//            })
+            this.getUserLists(this.$route.params.type + 1, this.$route.params.page - 1, 10)
         },
         beforeMount() {
         },

@@ -3,7 +3,7 @@
         <div class="top">编辑用户资料</div>
         <div class="con">
             <div>
-                <img class="head-img" src="../../assets/placeholder.png" alt="">
+                <img class="head-img" :src="userInfo.icon" alt="头像">
                 <div class="upload">
                     <el-button class="bt" icon="upload2">重新上传</el-button>
                     <input type="file" class="file" name="file">
@@ -12,50 +12,58 @@
             <ul class="detail">
                 <li>
                     <span class="l">用户编号:</span>
-                    <span class="r">1111</span>
+                    <span class="r">{{userInfo.userId}}</span>
                 </li>
                 <li>
                     <span>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</span>
-                    <span class="r"><input type="text" value="昵称"></span>
+                    <span class="r"><input type="text" :placeholder="userInfo.nickname"
+                                           v-model="detail.nickname"></span>
                 </li>
                 <li>
                     <span>手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机:</span>
-                    <span class="r">13300000000</span>
+                    <span class="r">{{userInfo.phoneNum}}</span>
                 </li>
                 <li>
                     <span>年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</span>
                     <span class="r birth">
-                        {{age}}&nbsp;&nbsp;({{formatBirth}})
+                        {{userInfo.age}}&nbsp;&nbsp;({{userInfo.birthday}})
                         <el-date-picker
                                 class="data-p"
                                 v-model="pickBirthDate"
                                 type="date"
                                 placeholder="出生日期"
                                 :picker-options="pickerOptions0"
-                                >
+                        >
                         </el-date-picker>
                     </span>
                 </li>
                 <li>
                     <span>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
-                    <span class="r"><input type="text" value="男"></span>
+                    <span class="r">
+                        <!--<input type="text" :placeholder="userInfo.gender === 'MALE'?'男':'nv'">-->
+                        <el-radio-group v-model="detail.gender">
+                            <el-radio label="男"></el-radio>
+                            <el-radio label="女"></el-radio>
+                        </el-radio-group>
+                    </span>
                 </li>
                 <li>
                     <span>注册时间:</span>
-                    <span class="r"></span>
+                    <span class="r">{{userInfo.createTime}}</span>
                 </li>
                 <li>
                     <span>个人简介:</span>
-                    <span class="r"><input type="text" value="12342134"></span>
+                    <span class="r"><input type="text" :placeholder="userInfo.signature"
+                                           v-model="detail.signature"></span>
                 </li>
                 <li class="line"></li>
                 <li>
                     <span>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名:</span>
-                    <span class="r"><input type="text" value="allen"></span>
+                    <span class="r"><input type="text" :placeholder="userInfo.name" v-model="detail.name"></span>
                 </li>
                 <li>
                     <span>身份证号:</span>
-                    <span class="r"><input type="text" value="2983492384932"></span>
+                    <span class="r"><input type="text" :placeholder="userInfo.idNum" v-model="detail.idNum"></span>
                 </li>
             </ul>
             <div class="op">
@@ -67,6 +75,7 @@
 </template>
 <script>
     import * as utils from '../../utils/utils'
+    import {mapActions, mapGetters} from 'vuex'
     export default {
         name: 'edit',
         props: {},
@@ -78,25 +87,58 @@
                         return time.getTime() > Date.now();
                     },
                 },
-                birthDate: new Date('946656000000'), // 服务器获取
-                age: '',
-                formatBirth: '',
-                detail: {id: 10,number: '000001', headImg: '', nickname: 'allen', tel: '17744332211', time: '946656000000', age: 19, sex: '男', name: '李小', intro: '你好', disable: false}
+                detail: {
+                    userId: '',
+                    icon: '',
+                    nickname: '',
+                    age: '',
+                    birthday: '',
+                    gender: '',
+                    signature: '',
+                    name: '',
+                    idNum: ''
+                }
             }
         },
         watch: {
             pickBirthDate(val) {
-                this.age = utils.date2age(val)
-                this.formatBirth = utils.yyyymmdd(val)
+                this.detail.birthday = utils.yyyymmdd(val)
+                this.userInfo.age = utils.date2age(val)
+                this.userInfo.birthday = utils.yyyymmdd(val)
             }
         },
-        computed: {},
+        computed: {
+            ...mapGetters('account', [
+                'getters_userInfo'
+            ]),
+            userInfo() {
+                this.detail = {
+                    userId: this.getters_userInfo.userId,
+                    icon: this.getters_userInfo.icon,
+                    nickname: this.getters_userInfo.nickname,
+                    age: this.getters_userInfo.age,
+                    birthday: this.getters_userInfo.birthday,
+                    gender: this.getters_userInfo.gender,
+                    signature: this.getters_userInfo.signature,
+                    name: this.getters_userInfo.name,
+                    idNum: this.getters_userInfo.idNum
+                }
+                return this.getters_userInfo
+//                return this.$store.getters.account.getters_userInfo
+            }
+        },
         methods: {
+            ...mapActions({
+                user_info: 'account/ac_userInfo',
+                ac_modify_user: 'account/ac_modify_user'
+            }),
             backList() {
                 this.$router.go(-1);
             },
             save() {
-
+                this.ac_modify_user(this.detail).then(()=>{
+//                    this.$router.go(-1);
+                })
             }
         },
         components: {},
@@ -104,14 +146,12 @@
 
         },
         created() {
-
+            this.user_info({userId: this.$route.params.id})
         },
         beforeMount() {
         },
         mounted() {
-            this.age = utils.date2age(new Date( parseInt(this.detail.time, 10) ))
-            this.formatBirth = utils.yyyymmdd(new Date(parseInt(this.detail.time, 10) + 24*3600*1000))
-            this.pickBirthDate = new Date(parseInt(this.detail.time, 10))
+
         },
         beforeUpdate() {
         },
@@ -183,6 +223,18 @@
                         padding: 3px 5px;
                         border-radius: 5px;
                         cursor: pointer;
+                    }
+                    ::-webkit-input-placeholder { /* WebKit browsers */
+                        color: #000;
+                    }
+                    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+                        color: #000;
+                    }
+                    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+                        color: #000;
+                    }
+                    :-ms-input-placeholder { /* Internet Explorer 10+ */
+                        color: #000;
                     }
                 }
             }

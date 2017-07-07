@@ -25,3 +25,16 @@ export function yyyymmdd(time) {
     return y + '-' + m + '-' + d
     // return new Date(time).toISOString().slice(0,10)
 }
+
+// 格式化get请求地址 api?id=1
+export function getUrl(url, param) {
+    let str = url;
+
+    if (typeof param === 'object' && param) {
+        str += '?';
+        Object.keys(param).forEach((key)=>{
+            str += key + '=' + param[key] + '&'
+        })
+    }
+    return str;
+}

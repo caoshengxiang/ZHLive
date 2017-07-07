@@ -11,7 +11,8 @@ export default {
     namespaced: true,
     state: {
         total: 0,
-        accountLists: []
+        accountLists: [],
+        userInfo: {}
     },
     getters,
     actions,
