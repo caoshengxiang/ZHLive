@@ -137,7 +137,7 @@
             },
             save() {
                 this.ac_modify_user(this.detail).then(()=>{
-//                    this.$router.go(-1);
+                    this.$router.go(-1);
                 })
             },
             handleFile() { // 前端预览图片
@@ -148,10 +148,13 @@
 
                 r.readAsDataURL(f);
                 r.onload = function () {
+                    let index = this.result.indexOf('base64,');
+
                     img.src = this.result;
 //                    console.log(f)
-//                    console.log(this)
-                    that.detail.icon = this.result.substring(22, this.result.length)
+                    console.log(this)
+                    console.log(index)
+                    that.detail.icon = this.result.substring(index + 7, this.result.length)
 //                    console.log(that.detail.icon)
                 };
 

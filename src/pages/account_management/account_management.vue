@@ -44,7 +44,7 @@
                 </tr>
                 <tr class="d" v-for="(item, index) in tableData" :key="index">
                     <td>{{index + 1 + (currentPage-1)*10 }}</td>
-                    <td><img :src="item.icon" alt="头像"></td>
+                    <td><img class="head-img" :src="item.icon" alt="头像"></td>
                     <td>{{item.nickname}}</td>
                     <td>{{item.phoneNum}}</td>
                     <td>{{item.createTime}}</td>
@@ -214,8 +214,8 @@
                     param.search = search
                 }
                 this.$store.dispatch('account/ac_accountLists', param)
-            }
-,
+            },
+
             showMessagePage() { // 跳转系统消息页面
                 this.$router.push({name: 'message', params: {page: 1}})
             },
@@ -284,6 +284,9 @@
                     text-align: center;
                     overflow: hidden;
                     font-size: 14px;
+                    .head-img {
+                        width: 24px;
+                    }
                 }
                 .op {
                     button {

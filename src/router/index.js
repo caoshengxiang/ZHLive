@@ -72,14 +72,14 @@ export default new Router({
                     path: 'account/msg/:page',
                     name: 'message',
                     component: message
-                }, {　// 分类
+                }, { // 分类
                     path: 'cla',
                     name: 'classification',
                     component: classification
                 }, { //
                     path: 'live/:type',
                     name: 'liveType',
-                    component:　liveManage
+                    component: liveManage
                 }
             ]
         }

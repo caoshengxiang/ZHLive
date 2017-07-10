@@ -93,6 +93,7 @@
         },
         created() {
             if (sessionStorage.menuIndex) {
+                // TODO 刷新页面导致页面回到菜单的第一个界面，试下用路由参数解决
                 this.changeMenu(parseInt(sessionStorage.menuIndex, 10))
             }
         },

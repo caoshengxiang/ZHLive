@@ -60,7 +60,7 @@
 
             <!--　发布新消息　-->
             <el-dialog title="发布系统消息" :visible.sync="dialogVisible2">
-                <textarea name="" id="edit" cols="80" rows="26" placeholder="输入消息"></textarea>
+                <textarea style="padding-left: 3px" name="" id="edit" cols="80" rows="26" placeholder="输入消息"></textarea>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="">发　布</el-button>
                     <el-button @click="dialogVisible2 = false">取 消</el-button>
