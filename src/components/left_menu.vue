@@ -108,7 +108,6 @@
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
     .menu {
-        background: grey;
         min-height: 300px;
         ul {
             width: 110px;

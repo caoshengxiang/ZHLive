@@ -1,20 +1,23 @@
 <template>
     <div>
         <div class="top">
-            <div class="drop-down"></div>
-            <el-dropdown
-                    trigger="click"
-                    @command="handleCommand">
-                <el-button type="primary">
-                    {{dropDownMenu[dropDownMenuItem]}}<i class="el-icon-caret-bottom el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                            v-for="(item, i) in dropDownMenu"
-                            :command="i.toString()">{{item}}
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
+            <div class="drop-down">
+                <el-dropdown
+                        trigger="click"
+                        @command="handleCommand">
+                    <el-button type="primary">
+                        {{dropDownMenu[dropDownMenuItem]}}<i class="el-icon-caret-bottom el-icon--right"></i>
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item
+                                v-for="(item, i) in dropDownMenu"
+                                :command="i.toString()">{{item}}
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+
+                <div class="message" @click="showMessagePage">系统消息</div>
+            </div>
 
             <div class="search">
                 <el-input
@@ -39,7 +42,7 @@
                     <th>个人简历</th>
                     <th>操作</th>
                 </tr>
-                <tr class="d" v-for="(item, index) in tableData">
+                <tr class="d" v-for="(item, index) in tableData" :key="index">
                     <td>{{index + 1 + (currentPage-1)*10 }}</td>
                     <td><img :src="item.icon" alt="头像"></td>
                     <td>{{item.nickname}}</td>
@@ -52,7 +55,8 @@
                     <td class="op" v-if="dropDownMenuItem === 0">
                         <button class="item0" @click="showAccount(item)">查看</button>
                         <button class="item0-1" @click="editAccount(item)">编辑</button>
-                        <button class="item0-2" @click="disableAccount(item)" :class="{able: item.status==='ACTIVE'?false:true}">
+                        <button class="item0-2" @click="disableAccount(item)"
+                                :class="{able: item.status==='ACTIVE'?false:true}">
                             {{item.status === 'ACTIVE' ? '禁用':'解禁'}}
                         </button>
                     </td>
@@ -97,7 +101,7 @@
         },
         watch: {
             '$route.params.type'(va) {
-                console.log('请求数据'+ va)
+                console.log('请求数据' + va)
             }
         },
         computed: {
@@ -114,7 +118,7 @@
         methods: {
             handleCurrentChange(item) { // 分页
                 this.$router.push({name: 'accountManagement', params: {page: item}})
-                console.log('请求数据第'+item +'页');
+                console.log('请求数据第' + item + '页');
 
                 // 请求第几页数据
 //                this.$store.dispatch('account/ac_accountLists', {
@@ -122,7 +126,7 @@
 //                    pageIndex: item - 1,
 //                    pageSize: 10
 //                })
-                this.getUserLists(this.$route.params.type + 1, item - 1, 10)
+                this.getUserLists(this.$route.params.type + 1, item, 10)
             },
             showAccount(item) {
                 console.log(item)
@@ -140,10 +144,10 @@
                     }).then(() => {
                         this.$store.dispatch('account/ac_disableUser', {
                             userId: item.userId
-                        }).then((d)=> {
-                            console.log('allen',d)
-                            setTimeout(()=>{
-                                this.getUserLists(this.$route.params.type + 1, this.$route.params.page - 1, 10)
+                        }).then((d) => {
+                            console.log('allen', d)
+                            setTimeout(() => {
+                                this.getUserLists(this.$route.params.type + 1, this.$route.params.page, 10)
                                 this.$message({
                                     type: 'success',
                                     message: '禁用成功!'
@@ -159,9 +163,9 @@
                 } else { // 禁用状态
                     this.$store.dispatch('account/ac_enableUser', {
                         userId: item.userId
-                    }).then(()=>{
-                        setTimeout(()=>{
-                            this.getUserLists(this.$route.params.type + 1, this.$route.params.page - 1, 10)
+                    }).then(() => {
+                        setTimeout(() => {
+                            this.getUserLists(this.$route.params.type + 1, this.$route.params.page, 10)
                             this.$message({
                                 type: 'success',
                                 message: '操作成功!'
@@ -176,8 +180,8 @@
             endDisableAccount(item) {
                 this.$store.dispatch('account/ac_enableUser', {
                     userId: item.userId
-                }).then(()=>{
-                    this.getUserLists(parseInt(this.$route.params.type, 10) + 1, this.$route.params.page - 1, 10)
+                }).then(() => {
+                    this.getUserLists(parseInt(this.$route.params.type, 10) + 1, this.$route.params.page, 10)
                     this.$message({
                         type: 'success',
                         message: '操作成功!'
@@ -205,7 +209,7 @@
 //                    pageIndex: 0,
 //                    pageSize: 10
 //                })
-                this.getUserLists(this.dropDownMenuItem + 1, 0, 10)
+                this.getUserLists(this.dropDownMenuItem + 1, 1, 10)
             },
             handleSearchClick() {
 //                this.$store.dispatch('account/ac_accountLists', {
@@ -214,7 +218,7 @@
 //                    pageSize: 10,
 //                    search: this.searchValue
 //                })
-                this.getUserLists(this.dropDownMenuItem + 1, 0, 10, this.searchValue)
+                this.getUserLists(this.dropDownMenuItem + 1, 1, 10, this.searchValue)
             },
             getUserLists(type, page, size, search) {
                 let param;
@@ -229,7 +233,10 @@
                     param.search = search
                 }
                 this.$store.dispatch('account/ac_accountLists', param)
-            }
+            },
+            showMessagePage() { // 跳转系统消息页面
+                this.$router.push({name: 'message', params: {page: 1}})
+            },
 
         },
         components: {},
@@ -239,10 +246,10 @@
             // 初始请求所用用户列表数据
 //            this.$store.dispatch('account/ac_accountLists', {
 //                type: this.$route.params.type + 1,
-//                pageIndex: this.$route.params.page - 1,
+//                pageIndex: this.$route.params.page,
 //                pageSize: 10
 //            })
-            this.getUserLists(this.$route.params.type + 1, this.$route.params.page - 1, 10)
+            this.getUserLists(this.$route.params.type + 1, this.$route.params.page, 10)
         },
         beforeMount() {
         },
@@ -267,6 +274,15 @@
         align-items: center;
         .drop-down {
             margin-left: 20px;
+            .message {
+                display: inline-block;
+                background: #9b9090;
+                padding: 7px 40px;
+                margin-left: 10px;
+                border-radius: 5px;
+                color: #e2dcdc;
+                cursor: pointer;
+            }
         }
         .search {
             width: 150px;
@@ -277,8 +293,6 @@
     }
 
     .con {
-        /*border: 1px solid red;*/
-
         table {
             padding: 20px;
             width: 100%;
