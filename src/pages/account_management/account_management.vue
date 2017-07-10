@@ -117,12 +117,7 @@
                 console.log('请求数据第'+item +'页');
 
                 // 请求第几页数据
-//                this.$store.dispatch('account/ac_accountLists', {
-//                    type: this.$route.params.type + 1,
-//                    pageIndex: item - 1,
-//                    pageSize: 10
-//                })
-                this.getUserLists(this.$route.params.type + 1, item - 1, 10)
+                this.getUserLists(parseInt(this.$route.params.type, 10) + 1, item - 1, 10)
             },
             showAccount(item) {
                 console.log(item)
@@ -132,6 +127,12 @@
                 this.$router.push({name: 'accountEdit', params: {id: item.userId}})
             },
             disableAccount(item) {
+                let param2 = {
+                    type: parseInt(this.$route.params.type, 10) + 1,
+                    pageIndex: parseInt(this.$route.params.page, 10) - 1,
+                    pageSize: 10
+                }
+
                 if (item.status === 'ACTIVE') { // 启用状态
                     this.$confirm('确认禁用此用户?', '提示', {
                         confirmButtonText: '确定',
@@ -139,16 +140,10 @@
                         type: 'warning'
                     }).then(() => {
                         this.$store.dispatch('account/ac_disableUser', {
-                            userId: item.userId
-                        }).then((d)=> {
-                            console.log('allen',d)
-                            setTimeout(()=>{
-                                this.getUserLists(this.$route.params.type + 1, this.$route.params.page - 1, 10)
-                                this.$message({
-                                    type: 'success',
-                                    message: '禁用成功!'
-                                });
-                            }, 2)
+                            param1: {
+                                userId: item.userId
+                            },
+                            param2: param2
                         })
                     }).catch(() => {
 //                    this.$message({
@@ -158,34 +153,31 @@
                     });
                 } else { // 禁用状态
                     this.$store.dispatch('account/ac_enableUser', {
-                        userId: item.userId
-                    }).then(()=>{
-                        setTimeout(()=>{
-                            this.getUserLists(this.$route.params.type + 1, this.$route.params.page - 1, 10)
-                            this.$message({
-                                type: 'success',
-                                message: '操作成功!'
-                            });
-                        }, 2)
+                        param1: {
+                            userId: item.userId
+                        },
+                        param2: param2
                     })
                 }
             },
             showDisableAccount(item){
                 this.$router.push({name: 'showDisable', params: {id: item.userId}})
             },
-            endDisableAccount(item) {
+            endDisableAccount(item) { // 解禁
+                let param2 = {
+                    type: parseInt(this.$route.params.type, 10) + 1,
+                    pageIndex: parseInt(this.$route.params.page, 10) - 1,
+                    pageSize: 10
+                }
+                
                 this.$store.dispatch('account/ac_enableUser', {
-                    userId: item.userId
-                }).then(()=>{
-                    this.getUserLists(parseInt(this.$route.params.type, 10) + 1, this.$route.params.page - 1, 10)
-                    this.$message({
-                        type: 'success',
-                        message: '操作成功!'
-                    });
+                    param1: {
+                        userId: item.userId
+                    },
+                    param2: param2
                 })
             },
             showLiveAccount(item) {
-//                this.$router.push({name: 'showLiveUser', params: {id: item.userId}})
                 this.$router.push({name: 'accountShow', params: {id: item.userId}})
             },
             delLiveAccount() {
@@ -200,20 +192,9 @@
             handleCommand(va) {
                 this.dropDownMenuItem = parseInt(va, 10);
                 this.$router.push({name: 'accountManagement', params: {type: va, page: 1}})
-//                this.$store.dispatch('account/ac_accountLists', {
-//                    type: this.dropDownMenuItem + 1,
-//                    pageIndex: 0,
-//                    pageSize: 10
-//                })
                 this.getUserLists(this.dropDownMenuItem + 1, 0, 10)
             },
             handleSearchClick() {
-//                this.$store.dispatch('account/ac_accountLists', {
-//                    type: this.dropDownMenuItem + 1,
-//                    pageIndex: 0,
-//                    pageSize: 10,
-//                    search: this.searchValue
-//                })
                 this.getUserLists(this.dropDownMenuItem + 1, 0, 10, this.searchValue)
             },
             getUserLists(type, page, size, search) {
@@ -230,19 +211,14 @@
                 }
                 this.$store.dispatch('account/ac_accountLists', param)
             }
-
         },
         components: {},
         beforeCreate(){
         },
         created() {
             // 初始请求所用用户列表数据
-//            this.$store.dispatch('account/ac_accountLists', {
-//                type: this.$route.params.type + 1,
-//                pageIndex: this.$route.params.page - 1,
-//                pageSize: 10
-//            })
-            this.getUserLists(this.$route.params.type + 1, this.$route.params.page - 1, 10)
+            this.getUserLists(parseInt(this.$route.params.type, 10) + 1, parseInt(this.$route.params.page, 10) - 1, 10)
+            this.dropDownMenuItem  = parseInt(this.$route.params.type, 10)
         },
         beforeMount() {
         },
@@ -258,7 +234,7 @@
         }
     }
 </script>
-<style lang="sass" rel="stylesheet/scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
     @import "../../styles/mixin";
 
     .top {

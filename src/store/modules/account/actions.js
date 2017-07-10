@@ -18,16 +18,35 @@ export default {
 
     // 禁用
     ac_disableUser ({commit}, param) {
-        console.log(param)
-        $axios.get(getUrl('/api/admin/user/disableUser', param)).then(res=>{
-            console.log(res)
+        $axios.get(getUrl('/api/admin/user/disableUser', param.param1)).then(res=>{
+            if (res.status === 200) {
+                $axios.get(getUrl('/api/admin/user/list', param.param2)).then((res2) => {
+                    // console.log('ok:', res2);
+                    return res2.data.data
+                }).then((d) => {
+                    commit('mut_total', d.total)
+                    commit('mut_account_Lists', d.data)
+                }).catch(e => {
+                    console.log(e)
+                })
+            }
         })
     },
 
     // 解禁
     ac_enableUser ({commit}, param) {
-        $axios.get(getUrl('/api/admin/user/enableUser', param)).then(res=>{
-            console.log(res)
+        $axios.get(getUrl('/api/admin/user/enableUser', param.param1)).then(res=>{
+            if (res.status === 200) {
+                $axios.get(getUrl('/api/admin/user/list', param.param2)).then((res2) => {
+                    // console.log('ok:', res2);
+                    return res2.data.data
+                }).then((d) => {
+                    commit('mut_total', d.total)
+                    commit('mut_account_Lists', d.data)
+                }).catch(e => {
+                    console.log(e)
+                })
+            }
         })
     },
 

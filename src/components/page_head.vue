@@ -29,6 +29,9 @@
         beforeCreate(){
         },
         created() {
+            if (!sessionStorage.user) {
+                this.$router.push({name:  'signIn'})
+            }
         },
         beforeMount() {
         },

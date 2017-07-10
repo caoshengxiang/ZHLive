@@ -32,6 +32,7 @@ export default new Router({
         },
         {
             path: '',
+            name: 'signIn',
             component: signin,
         }, {
             path: '/bg',

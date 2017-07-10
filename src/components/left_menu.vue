@@ -29,6 +29,7 @@
         computed: {},
         methods: {
             changeMenu(i) {
+                sessionStorage.menuIndex = i;
                 switch (i) {
                     case 0:
                         this.$router.push({name: 'accountManagement', params: {type: 0,page: 1}})
@@ -61,9 +62,9 @@
                         this.isActive5  = true
                         break;
                     default:
-                        this.$router.push({name: 'accountManagement'})
-                        this.setActive(0)
-                        this.isActive0  = true
+//                        this.$router.push({name: 'accountManagement'})
+//                        this.setActive(0)
+//                        this.isActive0  = true
                 }
             },
             setActive() {
@@ -91,6 +92,9 @@
         beforeCreate(){
         },
         created() {
+            if (sessionStorage.menuIndex) {
+                this.changeMenu(parseInt(sessionStorage.menuIndex, 10))
+            }
         },
         beforeMount() {
         },

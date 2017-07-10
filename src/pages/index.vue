@@ -49,7 +49,7 @@
         }
     }
 </script>
-<style lang="sass" rel="stylesheet/scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
 
     .con {
         padding-top: 36px;
