@@ -3,10 +3,10 @@
         <div class="top">编辑用户资料</div>
         <div class="con">
             <div>
-                <img class="head-img" :src="userInfo.icon" alt="头像">
+                <img class="head-img" id="headImg" :src="userInfo.icon" alt="头像">
                 <div class="upload">
                     <el-button class="bt" icon="upload2">重新上传</el-button>
-                    <input type="file" class="file" name="file">
+                    <input type="file" id="file" class="file" name="file" @change="handleFile">
                 </div>
             </div>
             <ul class="detail">
@@ -139,6 +139,22 @@
                 this.ac_modify_user(this.detail).then(()=>{
 //                    this.$router.go(-1);
                 })
+            },
+            handleFile() { // 前端预览图片
+                let f = document.getElementById('file').files[0];
+                let img = document.getElementById('headImg');
+                let r= new FileReader();
+                let that = this;
+
+                r.readAsDataURL(f);
+                r.onload = function () {
+                    img.src = this.result;
+//                    console.log(f)
+//                    console.log(this)
+                    that.detail.icon = this.result.substring(22, this.result.length)
+//                    console.log(that.detail.icon)
+                };
+
             }
         },
         components: {},

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="page">
         <page-head></page-head>
         <div class="con">
             <div class="menu-box">
@@ -50,9 +50,13 @@
     }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-
+    .page {
+        min-height: 810px;
+    }
     .con {
         padding-top: 36px;
+        min-height: 810px;
+        background:#c1b8b8;
     }
     .menu-box {
         width: 200px;
@@ -60,6 +64,8 @@
     }
     .container-r {
         margin-left: 200px;
-
+        background: #fff;
+        margin-right: 20px;
+        min-height: 680px;
     }
 </style>

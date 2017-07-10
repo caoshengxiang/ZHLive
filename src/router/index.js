@@ -16,11 +16,16 @@ const accountShow = resolve => require.ensure([], () => resolve(require('../page
 const showDisable = resolve => require.ensure([], () => resolve(require('../pages/account_management/showDisable.vue')), 'accountManagement')
 const showLiveApply = resolve => require.ensure([], () => resolve(require('../pages/account_management/showLiveApply.vue')), 'accountManagement')
 const showLiveUser = resolve => require.ensure([], () => resolve(require('../pages/account_management/showLiveUser.vue')), 'accountManagement')
+// 系统消息
+const message = resolve => require.ensure([], () => resolve(require('../pages/account_management/message/message.vue')), 'message')
+
 
 const accountEdit = resolve => require.ensure([], () => resolve(require('../pages/account_management/edit.vue')), 'accountManagement')
 
 const classification = resolve => require.ensure([], () => resolve(require('../pages/classification/classification.vue')), 'classification')
 
+// 直播管理
+const liveManage = resolve => require.ensure([], () => resolve(require('../pages/live/live.vue')), 'liveMage')
 
 export default new Router({
     // mode: 'history', // 这个模式路由没有#
@@ -63,10 +68,18 @@ export default new Router({
                     path: 'account/apply/:id',
                     name: 'showLiveApply',
                     component: showLiveApply
-                }, {
+                }, { // 系统消息
+                    path: 'account/msg/:page',
+                    name: 'message',
+                    component: message
+                }, {　// 分类
                     path: 'cla',
                     name: 'classification',
                     component: classification
+                }, { //
+                    path: 'live/:type',
+                    name: 'liveType',
+                    component:　liveManage
                 }
             ]
         }
