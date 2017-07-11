@@ -10,22 +10,36 @@ Vue.use(Router)
 const test = resolve => require.ensure([], () => resolve(require('../pages/test.vue')), 'test')
 const signin = resolve => require.ensure([], () => resolve(require('../pages/sign/sign_in.vue')), 'sign')
 const bgIndex = resolve => require.ensure([], () => resolve(require('../pages/index.vue')), 'bgIndex')
-const accountManagement = resolve => require.ensure([], () => resolve(require('../pages/account_management/account_management.vue')), 'accountManagement')
+const accountManagement = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/account_management.vue')), 'accountManagement')
 
-const accountShow = resolve => require.ensure([], () => resolve(require('../pages/account_management/show.vue')), 'accountManagement')
-const showDisable = resolve => require.ensure([], () => resolve(require('../pages/account_management/showDisable.vue')), 'accountManagement')
-const showLiveApply = resolve => require.ensure([], () => resolve(require('../pages/account_management/showLiveApply.vue')), 'accountManagement')
-const showLiveUser = resolve => require.ensure([], () => resolve(require('../pages/account_management/showLiveUser.vue')), 'accountManagement')
+const accountShow = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/show.vue')), 'accountManagement')
+const showDisable = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/showDisable.vue')), 'accountManagement')
+const showLiveApply = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/showLiveApply.vue')), 'accountManagement')
+const showLiveUser = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/showLiveUser.vue')), 'accountManagement')
 // 系统消息
 const message = resolve => require.ensure([], () => resolve(require('../pages/account_management/message/message.vue')), 'message')
 
 
-const accountEdit = resolve => require.ensure([], () => resolve(require('../pages/account_management/edit.vue')), 'accountManagement')
+const accountEdit = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/edit.vue')), 'accountManagement')
 
 const classification = resolve => require.ensure([], () => resolve(require('../pages/classification/classification.vue')), 'classification')
 
 // 直播管理
-const liveManage = resolve => require.ensure([], () => resolve(require('../pages/live/live.vue')), 'liveMage')
+const liveManage = resolve => require.ensure([], () => resolve(require('../pages/live/live_manage/live.vue')), 'liveManage')
+const hotWords = resolve => require.ensure([], () => resolve(require('../pages/live/hot_words/hot_words.vue')), 'liveManage')
+const giftManage = resolve => require.ensure([], () => resolve(require('../pages/live/gift_manage/gift_manage.vue')), 'liveManage')
+
+// 支付管理
+const paymentWealth = resolve => require.ensure([], () => resolve(require('../pages/payment/user_wealth/wealth.vue')), 'paymentManage')
+const paymentAnchor = resolve => require.ensure([], () => resolve(require('../pages/payment/anchor/anchor.vue')), 'paymentManage')
+const paymentCash = resolve => require.ensure([], () => resolve(require('../pages/payment/cash/cash.vue')), 'paymentManage')
+
+// banner管理
+const banner = resolve => require.ensure([], () => resolve(require('../pages/banner/banner.vue')), 'banner')
+
+// 举报/反馈
+const report = resolve => require.ensure([], () => resolve(require('../pages/report/report/report.vue')), 'report')
+const feedback = resolve => require.ensure([], () => resolve(require('../pages/report/feedback/feedback.vue')), 'report')
 
 export default new Router({
     // mode: 'history', // 这个模式路由没有#
@@ -76,10 +90,42 @@ export default new Router({
                     path: 'cla',
                     name: 'classification',
                     component: classification
-                }, { //
-                    path: 'live/:type',
-                    name: 'liveType',
+                }, { // 直播管理
+                    path: 'live/type/:type/:page',
+                    name: 'liveManage',
                     component: liveManage
+                }, { //
+                    path: 'live/hot',
+                    name: 'hotWords',
+                    component: hotWords
+                }, { //
+                    path: 'live/gift/:page',
+                    name: 'giftManage',
+                    component: giftManage
+                }, { // 支付管理
+                    path: 'payment/m/wealth',
+                    name: 'paymentManage',
+                    component: paymentWealth
+                }, {
+                    path: 'payment/m/anchor',
+                    name: 'paymentAnchor',
+                    component: paymentAnchor
+                }, {
+                    path: 'payment/m/cash',
+                    name: 'paymentCash',
+                    component: paymentCash
+                }, { // Banner管理
+                    path: 'banner/:type/:page',
+                    name: 'bannerManage',
+                    component: banner
+                }, { // 举报反馈
+                    path: 'report',
+                    name: 'reportManage',
+                    component: report
+                }, {
+                    path: 'feedback',
+                    name: 'feedback',
+                    component: feedback
                 }
             ]
         }

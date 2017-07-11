@@ -17,7 +17,7 @@
 </template>
 <script>
     import classi from './components/classi.vue'
-    import label from './components/label.vue'
+    import label from './components/tags.vue'
     export default {
         name: 'classification',
         props: {},

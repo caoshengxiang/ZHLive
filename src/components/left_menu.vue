@@ -29,6 +29,15 @@
         computed: {},
         methods: {
             changeMenu(i) {
+                /*
+                 * param i
+                 * 0 帐号管理
+                 * 1 分类管理
+                 * 2 直播管理
+                 * ３ 支付管理
+                 * ４ banner管理
+                 * ５ 举报反馈
+                 * */
                 sessionStorage.menuIndex = i;
                 switch (i) {
                     case 0:
@@ -42,22 +51,22 @@
                         this.isActive1  = true
                         break;
                     case 2:
-                        this.$router.push({name: 'classification'})
+                        this.$router.push({name: 'liveManage', params: {type: 0, page: 1}})
                         this.setActive(2)
                         this.isActive2  = true
                         break;
                     case 3:
-                        this.$router.push({name: 'classification'})
+                        this.$router.push({name: 'paymentManage'})
                         this.setActive(3)
                         this.isActive3  = true
                         break;
                     case 4:
-                        this.$router.push({name: 'classification'})
+                        this.$router.push({name: 'bannerManage', params: {type: 0, page: 1}})
                         this.setActive(4)
                         this.isActive4  = true
                         break;
                     case 5:
-                        this.$router.push({name: 'classification'})
+                        this.$router.push({name: 'reportManage'})
                         this.setActive(5)
                         this.isActive5  = true
                         break;
@@ -93,7 +102,7 @@
         },
         created() {
             if (sessionStorage.menuIndex) {
-                // TODO 刷新页面导致页面回到菜单的第一个界面，试下用路由参数解决
+                // TODO 刷新页面导致页面回到菜单的第一个界面，试下用路由参数解决 (lunux下好像有时正常？？?)
                 this.changeMenu(parseInt(sessionStorage.menuIndex, 10))
             }
         },

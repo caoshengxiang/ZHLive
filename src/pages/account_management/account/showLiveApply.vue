@@ -4,7 +4,7 @@
             主播申请审核
         </div>
         <div class="con">
-            <img class="head-img" src="../../assets/placeholder.png" alt="">
+            <img class="head-img" :src="userInfo.icon" alt="">
             <ul class="detail">
                 <li>
                     <span>用户编号:</span>
@@ -44,6 +44,11 @@
                     <span>{{userInfo.idNum}}</span>
                 </li>
             </ul>
+            <div class="btn-group">
+                <a class="btn b-1">通过</a>
+                <a class="btn b-2">拒绝</a>
+                <a class="btn b-3" @click="backList">返回</a>
+            </div>
         </div>
     </div>
 </template>
@@ -62,7 +67,7 @@
         },
         methods: {
             ...mapActions('account', [
-               'user_info'
+               'ac_userInfo'
             ]),
             backList() {
                 this.$router.go(-1);
@@ -72,7 +77,7 @@
         beforeCreate(){
         },
         created() {
-            this.user_info({userId: this.$route.params.id})
+            this.ac_userInfo({userId: this.$route.params.id})
         },
         beforeMount() {
         },
@@ -89,11 +94,13 @@
     }
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../../styles/mixin";
+    @import "../../../styles/mixin";
     .top {
         @include top-box;
         display: flex;
         align-items: center;
+        padding-left: 30px;
+        color: #fff;
         .back {
             background: #ff5d00;
             color: #fff;
@@ -120,6 +127,31 @@
                 margin:10px 0;
             }
         }
-
+        .btn-group {
+            margin-top: 30px;
+            .btn {
+                display: block;
+                width: 225px;
+                border-radius: 5px;
+                padding: 5px;
+                text-decoration: none;
+                cursor: pointer;
+                text-align: center;
+            }
+            .b-1{
+                background: green;
+                color: #fff;
+            }
+            .b-2 {
+                background: red;
+                color: #fff;
+                margin-top: 10px;
+            }
+            .b-3 {
+                border: 1px solid #ccc;
+                color: #847f7f;
+                margin-top: 10px;
+            }
+        }
     }
 </style>

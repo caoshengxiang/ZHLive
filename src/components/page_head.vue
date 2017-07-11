@@ -22,7 +22,7 @@
         methods: {
             logoutHandle() {
                 sessionStorage.user = ''
-                this.$router.push({name: 'signin'})
+                this.$router.push({name: 'signIn'})
             }
         },
         components: {},

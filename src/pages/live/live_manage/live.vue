@@ -16,6 +16,18 @@
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
+
+                <div class="con-col-item" @click="hotWordsPage">搜索热词设置</div>
+                <div class="con-col-item" @click="gitManagePage">礼物管理</div>
+            </div>
+
+            <div class="search">
+                <el-input
+                        placeholder="用户昵称"
+                        icon="search"
+                        v-model="searchValue"
+                        :on-icon-click="handleSearchClick">
+                </el-input>
             </div>
         </div>
     </div>
@@ -23,18 +35,31 @@
 <script>
 
     export default {
-        name: 'banner',
+        name: 'liveManage',
         props: {},
         data() {
             return {
-                dropDownMenu: ['热门Banner', '最新Banner', '附近Banner', '关注Banner'],
+                dropDownMenu: ['正在直播', '禁播频道', '聊天室禁用', '直播举报'],
                 dropDownMenuItem: 0,
+                searchValue: '',
             }
         },
         computed: {},
         methods: {
-            handleCommand(va) {
-                this.$router.push({name: 'bannerManage', params: {type: va, page: 1}})
+            handleCommand(va) { // 下拉
+                this.dropDownMenuItem = parseInt(va, 10);
+
+                this.$router.push({name: 'liveManage', params: {type: va, page: 1}})
+                // pull数据
+            },
+            hotWordsPage() { // 热词设置
+                this.$router.push({name: 'hotWords'})
+            },
+            gitManagePage() { // 礼物管理
+                this.$router.push({name: 'giftManage', params: {page: 1}})
+            },
+            handleSearchClick() {
+
             }
         },
         components: {},
@@ -57,5 +82,5 @@
     }
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../../styles/common";
+    @import "../../../styles/common";
 </style>

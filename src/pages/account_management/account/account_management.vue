@@ -243,7 +243,7 @@
     }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-    @import "../../styles/mixin";
+    @import "../../../styles/mixin";
 
     .top {
         @include top-box;

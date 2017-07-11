@@ -4,7 +4,7 @@
             <a class="back" @click="backList">返回列表</a>
         </div>
         <div class="con">
-            <img class="head-img" src="../../assets/placeholder.png" alt="">
+            <img class="head-img" src="../../../assets/placeholder.png" alt="">
             <ul class="detail">
                 <li>
                     <span>用户编号:</span>
@@ -89,7 +89,7 @@
     }
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../../styles/mixin";
+    @import "../../../styles/mixin";
     .top {
         @include top-box;
         display: flex;

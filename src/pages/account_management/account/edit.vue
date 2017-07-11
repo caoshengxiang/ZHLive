@@ -74,7 +74,7 @@
     </div>
 </template>
 <script>
-    import * as utils from '../../utils/utils'
+    import * as utils from '../../../utils/utils'
     import {mapActions, mapGetters} from 'vuex'
     export default {
         name: 'edit',
@@ -148,13 +148,10 @@
 
                 r.readAsDataURL(f);
                 r.onload = function () {
-                    let index = this.result.indexOf('base64,');
-
                     img.src = this.result;
 //                    console.log(f)
-                    console.log(this)
-                    console.log(index)
-                    that.detail.icon = this.result.substring(index + 7, this.result.length)
+//                    console.log(this)
+                    that.detail.icon = this.result
 //                    console.log(that.detail.icon)
                 };
 
@@ -183,7 +180,7 @@
     }
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
-    @import "../../styles/mixin";
+    @import "../../../styles/mixin";
 
     .con {
         padding: 30px;

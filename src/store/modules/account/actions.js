@@ -36,7 +36,7 @@ export default {
     // 解禁
     ac_enableUser ({commit}, param) {
         $axios.get(getUrl('/api/admin/user/enableUser', param.param1)).then(res=>{
-            if (res.status === 200) {
+            if (res.status === 200 && param.param2) {
                 $axios.get(getUrl('/api/admin/user/list', param.param2)).then((res2) => {
                     // console.log('ok:', res2);
                     return res2.data.data
