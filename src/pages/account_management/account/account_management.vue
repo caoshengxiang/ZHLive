@@ -270,6 +270,7 @@
     }
 
     .con {
+        color: #756f6f;
         table {
             padding: 20px;
             width: 100%;

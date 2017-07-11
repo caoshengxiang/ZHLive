@@ -19,10 +19,12 @@ const showLiveUser = resolve => require.ensure([], () => resolve(require('../pag
 // 系统消息
 const message = resolve => require.ensure([], () => resolve(require('../pages/account_management/message/message.vue')), 'message')
 
-
+// 帐号
 const accountEdit = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/edit.vue')), 'accountManagement')
 
-const classification = resolve => require.ensure([], () => resolve(require('../pages/classification/classification.vue')), 'classification')
+// 分类
+const classification = resolve => require.ensure([], () => resolve(require('../pages/classification/classify/classify.vue')), 'classification')
+const tags = resolve => require.ensure([], () => resolve(require('../pages/classification/tags/tags.vue')), 'classification')
 
 // 直播管理
 const liveManage = resolve => require.ensure([], () => resolve(require('../pages/live/live_manage/live.vue')), 'liveManage')
@@ -87,9 +89,13 @@ export default new Router({
                     name: 'message',
                     component: message
                 }, { // 分类
-                    path: 'cla',
+                    path: 'classify/cla/m',
                     name: 'classification',
                     component: classification
+                }, {
+                    path: 'classify/tags/m',
+                    name: 'tags',
+                    component: tags
                 }, { // 直播管理
                     path: 'live/type/:type/:page',
                     name: 'liveManage',

@@ -1,8 +1,10 @@
+@import "./mixin";
 .con-top {
   background: #a3a3a3;
   height: 51px;
   display: flex;
   align-items: center;
+  position: relative;
   .con-col {
     margin-left: 20px;
     .con-col-item {
@@ -52,4 +54,34 @@
   .el-input__inner:focus {
     border-color: #ccc !important;
   }
+}
+
+.con-table {
+  color: #756f6f;
+  table {
+    padding: 20px;
+    width: 100%;
+    tr {
+      th {
+        @include table-tr;
+        text-align: center;
+        font-size: 14px;
+      }
+      td {
+        @include table-tr;
+        text-align: center;
+        overflow: hidden;
+        font-size: 14px;
+      }
+    }
+    .border-bottom {
+      border-bottom: 1px solid #ccc;
+    }
+  }
+}
+
+
+.con-page {
+  text-align: center;
+  margin-top: 30px;
 }

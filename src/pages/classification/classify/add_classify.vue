@@ -1,26 +1,18 @@
 <template>
     <div>
-        <div class="top">
-
-        </div>
 
     </div>
 </template>
 <script>
-    import classi from './components/classi.vue'
-    import label from './tags/tags.vue'
+
     export default {
-        name: 'classification',
+        name: 'addClassify',
         props: {},
         data() {
-            return {
-
-            }
+            return {}
         },
         computed: {},
-        methods: {
-
-        },
+        methods: {},
         components: {},
         beforeCreate(){
         },
@@ -41,5 +33,4 @@
     }
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
-
 </style>
