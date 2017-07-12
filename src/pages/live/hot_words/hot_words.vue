@@ -20,14 +20,34 @@
                 <div class="con-col-item  con-col-active" @click="hotWordsPage">搜索热词设置</div>
                 <div class="con-col-item" @click="gitManagePage">礼物管理</div>
             </div>
+        </div>
+        <div class="label">
 
-            <div class="search">
+            <p class="tips">注：单个热词内容不宜太长，热词总数前端仅显示三行，超出部分不显示</p>
+            <div class="tags">
+                <el-tag
+                        :key="tag"
+                        v-for="tag in dynamicTags"
+                        :closable="true"
+                        :close-transition="false"
+                        @close="handleClose(tag)"
+                        class="tags-item"
+                >
+                    {{tag}}
+                </el-tag>
+                <span class="add-item">
                 <el-input
-                        placeholder="用户昵称"
-                        icon="search"
-                        v-model="searchValue"
-                        :on-icon-click="handleSearchClick">
+                        class="input-new-tag"
+                        v-if="inputVisible"
+                        v-model="inputValue"
+                        ref="saveTagInput"
+                        size="mini"
+                        @keyup.enter.native="handleInputConfirm"
+                        @blur="handleInputConfirm"
+                >
                 </el-input>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput"> + 标 签 </el-button>
+            </span>
             </div>
         </div>
     </div>
@@ -41,7 +61,9 @@
             return {
                 dropDownMenu: ['全部用户', '禁用用户', '全部主播', '主播申请列表'],
                 dropDownMenuItem: 0,
-                searchValue: '',
+                dynamicTags: ['标签一', '标签二', '标签三'],
+                inputVisible: false,
+                inputValue: ''
             }
         },
         computed: {},
@@ -60,6 +82,26 @@
             },
             handleSearchClick() {
 
+            },
+            handleClose(tag) {
+                this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+            },
+
+            showInput() {
+                this.inputVisible = true;
+                this.$nextTick(_ => {
+                    this.$refs.saveTagInput.$refs.input.focus();
+                });
+            },
+
+            handleInputConfirm() {
+                let inputValue = this.inputValue;
+
+                if (inputValue) {
+                    this.dynamicTags.push(inputValue);
+                }
+                this.inputVisible = false;
+                this.inputValue = '';
             }
         },
         components: {},
@@ -83,4 +125,22 @@
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../../styles/common";
+    .label {
+        padding: 10px 20px;
+        .tips {
+            margin: 10px 0;
+        }
+        .tags {
+            .tags-item {
+                display: inline-block;
+                margin-right: 10px;
+                margin-bottom: 10px;
+            }
+            .add-item {
+                display: inline-block;
+                width: 78px;
+                margin-bottom: 10px;
+            }
+        }
+    }
 </style>

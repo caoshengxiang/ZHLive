@@ -34,6 +34,18 @@
         border-color: #605d5d;
       }
     }
+    .con-top-back {
+      background: #ff5d00;
+      color: #fff;
+      padding: 5px 50px;
+      border-radius: 3px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .con-top-title {
+      color: #fff;
+      font-weight: bold;
+    }
   }
   .search {
     width: 150px;
@@ -54,6 +66,10 @@
   .el-input__inner:focus {
     border-color: #ccc !important;
   }
+}
+
+.con {
+  padding: 30px;
 }
 
 .con-table {
@@ -84,4 +100,11 @@
 .con-page {
   text-align: center;
   margin-top: 30px;
+}
+
+.dot:after {
+  content: ' · ';
+  display: inline-block;
+  font-weight: bold;
+  font-size: 16px;
 }

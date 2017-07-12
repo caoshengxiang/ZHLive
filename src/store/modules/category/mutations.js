@@ -3,5 +3,7 @@
  */
 
 export default {
-
+    mut_classify_lists(st, data) {
+        st.classifyLists = data
+    }
 }

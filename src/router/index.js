@@ -24,7 +24,10 @@ const accountEdit = resolve => require.ensure([], () => resolve(require('../page
 
 // 分类
 const classification = resolve => require.ensure([], () => resolve(require('../pages/classification/classify/classify.vue')), 'classification')
+const showClassify = resolve => require.ensure([], () => resolve(require('../pages/classification/classify/show_classify.vue')), 'classification')
+const editClassify = resolve => require.ensure([], () => resolve(require('../pages/classification/classify/edit_classify.vue')), 'classification')
 const tags = resolve => require.ensure([], () => resolve(require('../pages/classification/tags/tags.vue')), 'classification')
+
 
 // 直播管理
 const liveManage = resolve => require.ensure([], () => resolve(require('../pages/live/live_manage/live.vue')), 'liveManage')
@@ -92,6 +95,14 @@ export default new Router({
                     path: 'classify/cla/m',
                     name: 'classification',
                     component: classification
+                }, {
+                    path: 'classify/cla/detail/:id',
+                    name: 'showClassify',
+                    component: showClassify
+                }, {
+                    path: 'classify/cla/edit/:id',
+                    name: 'editClassify',
+                    component: editClassify
                 }, {
                     path: 'classify/tags/m',
                     name: 'tags',

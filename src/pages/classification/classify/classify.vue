@@ -5,7 +5,7 @@
                 <div class="con-col-item con-col-active" @click="classifyPage">分类管理</div>
                 <div class="con-col-item" @click="tagsPage">标签管理</div>
             </div>
-            <a class="add">+ 添加分类</a>
+            <a class="add" @click="editClassify(-99)">+ 添加分类</a>
         </div>
         <div class="con-table">
             <table>
@@ -14,13 +14,13 @@
                     <th>二级分类</th>
                     <th>操作</th>
                 </tr>
-                <tr class="border-bottom" v-for="(item, index) in classify" :key="index">
-                    <td>{{item.classify1}}</td>
-                    <td><span v-for="(cla2, i2) in item.classify2" :key="i2">{{cla2}}, </span></td>
+                <tr class="border-bottom" v-for="(item, index) in classifyLists" :key="index">
+                    <td>{{item.name}}</td>
+                    <td><span v-for="(cla2, i2) in item.child" :key="i2">{{cla2}}, </span></td>
                     <td class="op">
-                        <a class="op-1">查看</a>
-                        <a class="op-2">编辑</a>
-                        <a class="op-3">删除</a>
+                        <a class="op-1" @click="showClassify(item)">查看</a>
+                        <a class="op-2" @click="editClassify(item)">编辑</a>
+                        <a class="op-3" @click="delClassify(item)">删除</a>
                     </td>
                 </tr>
             </table>
@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-
+    import { mapState, mapActions } from 'vuex'
     export default {
         name: 'classify',
         props: {},
@@ -64,16 +64,31 @@
                 total: 5
             }
         },
-        computed: {},
+        computed: {
+            ...mapState('category', [
+                'classifyLists'
+            ])
+        },
         methods: {
+            ...mapActions('category', [
+                'ac_classify_list'
+            ]),
             classifyPage() {
                 this.$router.push({name: 'classification'})
             },
             tagsPage() {
                 this.$router.push({name: 'tags'})
             },
-            addClassify() {
-                this.dialogClassifyVisible = true
+            showClassify(item) {
+                this.$router.push({name: 'showClassify', params: {id: item.id}})
+            },
+            editClassify(item) {
+                if (item === -99) {
+                    this.$router.push({name: 'editClassify', params: {id: -1}})
+                } else {
+                    this.$router.push({name: 'editClassify', params: {id: item.id}})
+                }
+
             },
             delClassify() {
                 this.$confirm('确认删除分类?', '提示', {
@@ -92,36 +107,16 @@
                     });
                 });
             },
-            editClassify() {
-                this.dialogClassifyVisible = true
-            },
-            handleClose(tag) {
-                this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-            },
+            handleCurrentChange(va) {
 
-            showInput() {
-                this.inputVisible = true;
-                this.$nextTick(() => {
-                    this.$refs.saveTagInput.$refs.input.focus();
-                });
-            },
-
-            handleInputConfirm() {
-                let inputValue = this.inputValue;
-
-                if (inputValue) {
-                    this.dynamicTags.push(inputValue);
-                }
-                this.inputVisible = false;
-                this.inputValue = '';
-            },
-            handleCurrentChange() {
             }
+
         },
         components: {},
         beforeCreate(){
         },
         created() {
+            this.ac_classify_list()
         },
         beforeMount() {
         },
