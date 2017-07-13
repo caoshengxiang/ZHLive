@@ -11,7 +11,7 @@
              v-if="item.id === $route.params.id">
             <h3 class="cla-1">一级分类:</h3>
             <p class="cla-1-name">
-                <input type="text" v-model="addData.name">
+                <input type="text" v-model="modifyData.name">
             </p>
             <h3 class="cla-2">二级分类:</h3>
             <div class="cla-2-box">
@@ -19,27 +19,26 @@
                     <i class="el-icon-plus"></i>
                 </div>
                 <!-- 添加 -->
-                <div class="col" v-for="(item2, i) in addData.child" :key="i">
-                    <!-- 添加 -->
-                    <div v-if="!item2.id">
-                        <img
-                                v-if="item2.icon"
-                                :src="item2.icon" alt=""
-                                v-model="addData.child[i].icon">
-                        <div v-else class="default-img"><i class="el-icon-upload"></i></div>
+                <div class="col" v-for="(addItem, i) in addChild" :key="i">
+                    <img
+                            v-if="addItem.icon"
+                            :src="addItem.icon" alt=""
+                            v-model="addItem.icon">
+                    <div v-else class="default-img"><i class="el-icon-upload"></i></div>
 
-                        <p class="cla-2-name add-name">
-                            <input v-model="addData.child[i].name" placeholder="二级分类名">
-                        </p>
-                        <input type="file" class="file" @change="addClassifyImg($event, item2)">
-                        <div class="cover-del"><i class="el-icon-close" @click="delOldClassify(item2, i)"></i></div>
-                    </div>
-                    <!-- 修改 -->
+                    <p class="cla-2-name add-name">
+                        <input v-model="addItem.name" placeholder="二级分类名">
+                    </p>
+                    <input type="file" class="file" @change="addClassifyImg($event, addItem)">
+                    <div class="cover-del"><i class="el-icon-close" @click="delAddClassify2(addItem, i)"></i></div>
+                </div>
+                <!-- 修改 -->
+                <div class="col" v-for="(item2, i) in modifyData.child" :key="i">
                     <div v-if="item2.id">
                         <img class=".img" :src="item2.icon" v-model="item2.icon" alt="">
                         <p class="cla-2-name"><input @change="modifyClassify2Name(item2)" :placeholder="item2.name" v-model="item2.name"></p>
                         <input type="file" class="file" @change="addClassifyImg($event, item2)">
-                        <div class="cover-del" @click="delOldClassify(item2, i)"><i class="el-icon-close"></i></div>
+                        <div class="cover-del" @click="delOldClassify(item2)"><i class="el-icon-close"></i></div>
                     </div>
                 </div>
 
@@ -60,13 +59,14 @@
         props: {},
         data() {
             return {
-                addData: {
+                modifyData: {
                     id: '',
                     name: '',
 //                    icon: '',
                     delChild: [],
                     child: [],
-                }
+                },
+                addChild: []
             }
         },
         computed: {
@@ -91,18 +91,18 @@
                 'mut_edit_classify_success'
             ]),
             addClassifyHandle() {
-                this.addData.child.unshift({icon: '', name: ''})
+                this.addChild.unshift({icon: '', name: ''})
             },
             delAddClassify2(item, i) {
                 console.log('add',item, i)
-                this.addData.child.splice(i, 1)
+                this.addChild.splice(i, 1)
             },
-            delOldClassify(cla2, index) {
-                console.log('cla2',cla2, index)
-                this.addData.child.forEach((item, i, arr) => {
+            delOldClassify(cla2) {
+                console.log('cla2',cla2)
+                this.modifyData.child.forEach((item, i, arr) => {
                     if (item.id === cla2.id) {
                         arr.splice(i, 1);
-                        this.addData.delChild.push(cla2.id)
+                        this.modifyData.delChild.push(cla2.id)
                     }
                 })
 
@@ -120,7 +120,11 @@
 
             },
             saveClassify() {
-                this.ac_modify_classify(this.addData)
+                if (this.addChild.length) {
+                    this.modifyData.child.concat(this.addChild)
+                }
+
+//                this.ac_modify_classify(this.modifyData)
 
             },
             backList() {
@@ -145,9 +149,9 @@
             })
 
 //            console.log(editClassify)
-            this.addData.child = editClassify[0].child
-            this.addData.name = editClassify[0].name
-            this.addData.id = editClassify[0].id
+            this.modifyData.child = editClassify[0].child
+            this.modifyData.name = editClassify[0].name
+            this.modifyData.id = editClassify[0].id
         },
         beforeUpdate() {
         },

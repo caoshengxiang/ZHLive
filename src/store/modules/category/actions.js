@@ -59,7 +59,7 @@ export default {
             }
         })
         p.id = param.id;
-        console.log('修改分类', JSON.stringify(p))
+        console.log('修改分类', p)
 
         $axios({
             method: 'post',
