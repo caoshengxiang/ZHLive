@@ -10,7 +10,10 @@ import mutations from './mutations'
 export default {
     namespaced: true,
     state: {
-        classifyLists: []
+        classifyLists: [],
+        classifyTotal: 0,
+        editSuccess: false, // 编辑分类成功返回
+        delClassifySuccessBack: false, // 删除分类成功返回
     },
     getters,
     actions,

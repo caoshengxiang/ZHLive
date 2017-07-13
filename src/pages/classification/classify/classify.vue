@@ -16,7 +16,7 @@
                 </tr>
                 <tr class="border-bottom" v-for="(item, index) in classifyLists" :key="index">
                     <td>{{item.name}}</td>
-                    <td><span v-for="(cla2, i2) in item.child" :key="i2">{{cla2}}, </span></td>
+                    <td><span v-for="(cla2, i2) in item.child" :key="i2">{{cla2.name}}, </span></td>
                     <td class="op">
                         <a class="op-1" @click="showClassify(item)">查看</a>
                         <a class="op-2" @click="editClassify(item)">编辑</a>
@@ -43,35 +43,32 @@
         props: {},
         data() {
             return {
-                classify: [
-                    {
-                        id: 1,
-                        classify1: '一级分类',
-                        classify2: ['二级分类', '二级分类', '二级分类', '二级分类', '二级分类', '二级分类', '二级分类', '二级分类']
-                    },
-                    {
-                        id: 2,
-                        classify1: '一级分类',
-                        classify2: ['二级分类', '二级分类', '二级分类', '二级分类', '二级分类', '二级分类', '二级分类', '二级分类']
-                    },
-                    {
-                        id: 3,
-                        classify1: '一级分类',
-                        classify2: ['二级分类', '二级分类', '二级分类', '二级分类', '二级分类', '二级分类', '二级分类', '二级分类']
-                    },
-                ],
                 currentPage: 1,
                 total: 5
             }
         },
         computed: {
             ...mapState('category', [
-                'classifyLists'
+                'classifyLists',
+                'delClassifySuccessBack'
             ])
+        },
+        watch: {
+            delClassifySuccessBack(me) {
+                if (me) {
+                    this.ac_classify_list({pageIndex: 1, pageSize: 10}).then(()=>{
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    })
+                }
+            }
         },
         methods: {
             ...mapActions('category', [
-                'ac_classify_list'
+                'ac_classify_list',
+                'ac_del_classify'
             ]),
             classifyPage() {
                 this.$router.push({name: 'classification'})
@@ -84,22 +81,20 @@
             },
             editClassify(item) {
                 if (item === -99) {
-                    this.$router.push({name: 'editClassify', params: {id: -1}})
+                    this.$router.push({name: 'addClassify'})
                 } else {
                     this.$router.push({name: 'editClassify', params: {id: item.id}})
                 }
 
             },
-            delClassify() {
+            delClassify(item) {
                 this.$confirm('确认删除分类?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
+                    this.ac_del_classify({id: item.id})
+
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -116,7 +111,7 @@
         beforeCreate(){
         },
         created() {
-            this.ac_classify_list()
+            this.ac_classify_list({pageIndex: 1, pageSize: 10})
         },
         beforeMount() {
         },

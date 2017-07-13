@@ -2,74 +2,152 @@
     <div>
         <div class="con-top">
             <div class="con-col">
-                <span class="con-top-title">{{this.$route.params.id == -1?'添加分类':'编辑分类'}}</span>
+                <span class="con-top-title">编辑分类</span>
             </div>
         </div>
-        <div class="con">
+        <div class="con"
+             v-for="(item, i) in classifyLists"
+             :key="i"
+             v-if="item.id === $route.params.id">
             <h3 class="cla-1">一级分类:</h3>
-            <p class="cla-1-name"><input type="text" placeholder="一级分类名称"></p>
+            <p class="cla-1-name">
+                <input type="text" v-model="addData.name">
+            </p>
             <h3 class="cla-2">二级分类:</h3>
             <div class="cla-2-box">
                 <div class="add" @click="addClassifyHandle">
                     <i class="el-icon-plus"></i>
                 </div>
                 <!-- 添加 -->
-                <div class="col" v-for="(item, i) in addData" :key="i">
-                    <img
-                            v-if="item.icon"
-                            src="../../../assets/placeholder.png" alt=""
-                            v-model="addData[i].icon">
-                    <div v-else class="default-img"><i class="el-icon-upload"></i></div>
-                    <p class="cla-2-name add-name">
-                        <input v-model="addData[i].name" placeholder="二级分类名">
-                    </p>
-                    <div class="cover-del"><i class="el-icon-close" @click="delClassify2(i)"></i></div>
+                <div class="col" v-for="(item2, i) in addData.child" :key="i">
+                    <!-- 添加 -->
+                    <div v-if="!item2.id">
+                        <img
+                                v-if="item2.icon"
+                                :src="item2.icon" alt=""
+                                v-model="addData.child[i].icon">
+                        <div v-else class="default-img"><i class="el-icon-upload"></i></div>
+
+                        <p class="cla-2-name add-name">
+                            <input v-model="addData.child[i].name" placeholder="二级分类名">
+                        </p>
+                        <input type="file" class="file" @change="addClassifyImg($event, item2)">
+                        <div class="cover-del"><i class="el-icon-close" @click="delOldClassify(item2, i)"></i></div>
+                    </div>
+                    <!-- 修改 -->
+                    <div v-if="item2.id">
+                        <img class=".img" :src="item2.icon" v-model="item2.icon" alt="">
+                        <p class="cla-2-name"><input @change="modifyClassify2Name(item2)" :placeholder="item2.name" v-model="item2.name"></p>
+                        <input type="file" class="file" @change="addClassifyImg($event, item2)">
+                        <div class="cover-del" @click="delOldClassify(item2, i)"><i class="el-icon-close"></i></div>
+                    </div>
                 </div>
 
-                <!-- 修改 -->
-                <div class="col" v-for="i in 20" :key="i">
-                    <img class=".img" src="../../../assets/placeholder.png" alt="">
-                    <p class="cla-2-name"><input placeholder="二级分类名"></p>
-                    <div class="cover-del"><i class="el-icon-close"></i></div>
-                </div>
+
+
             </div>
             <div class="op">
-                <el-button class="save" type="danger">保存</el-button>
-                <el-button class="back">返回</el-button>
+                <el-button class="save" type="danger" @click="saveClassify">保存</el-button>
+                <el-button class="back" @click="backList">返回</el-button>
             </div>
         </div>
     </div>
 </template>
 <script>
-
+    import { mapState, mapMutations, mapActions } from 'vuex'
     export default {
         name: 'editClassify',
         props: {},
         data() {
             return {
-                addData: []
+                addData: {
+                    id: '',
+                    name: '',
+//                    icon: '',
+                    delChild: [],
+                    child: [],
+                }
             }
         },
-        computed: {},
-        methods: {
-            addClassifyHandle() {
-                this.addData.unshift({icon: '', name: ''})
+        computed: {
+            ...mapState('category', [
+                'editSuccess',
+                'classifyLists'
+            ])
+        },
+        watch: {
+            editSuccess(me) { // 保存成功返回列表
+                if (me) {
+                    this.backList()
+                }
             },
-            delClassify2(i) {
-                this.addData.splice(i, 1)
-            }
+        },
+        methods: {
+            ...mapActions('category', [
+                'ac_add_classify',
+                'ac_modify_classify'
+            ]),
+            ...mapMutations('category' ,[
+                'mut_edit_classify_success'
+            ]),
+            addClassifyHandle() {
+                this.addData.child.unshift({icon: '', name: ''})
+            },
+            delAddClassify2(item, i) {
+                console.log('add',item, i)
+                this.addData.child.splice(i, 1)
+            },
+            delOldClassify(cla2, index) {
+                console.log('cla2',cla2, index)
+                this.addData.child.forEach((item, i, arr) => {
+                    if (item.id === cla2.id) {
+                        arr.splice(i, 1);
+                        this.addData.delChild.push(cla2.id)
+                    }
+                })
+
+            },
+            addClassifyImg(e, item) {
+                let r = new FileReader();
+                let f = e.target.files[0];
+
+                r.readAsDataURL(f);
+                r.onload = function () {
+                    item.icon = r.result
+                }
+            },
+            modifyClassify2Name(cla2) {
+
+            },
+            saveClassify() {
+                this.ac_modify_classify(this.addData)
+
+            },
+            backList() {
+                this.$router.go(-1)
+            },
+
+
         },
         components: {},
         beforeCreate(){
         },
         created() {
-            if (this.$route.params.id === '-1') {
-
-            }
+            this.mut_edit_classify_success(false);
         },
         beforeMount() {
         },
         mounted() {
+            let editClassify = this.classifyLists.filter((item)=>{
+                if (item.id === this.$route.params.id) {
+                    return item
+                }
+            })
+
+//            console.log(editClassify)
+            this.addData.child = editClassify[0].child
+            this.addData.name = editClassify[0].name
+            this.addData.id = editClassify[0].id
         },
         beforeUpdate() {
         },
@@ -151,6 +229,15 @@
                         width: 100%;
                         box-sizing: border-box;
                     }
+                }
+                .file {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 84px;
+                    height: 84px;
+                    overflow: hidden;
+                    opacity: 0;
                 }
                 .cover-del {
                     position: absolute;

@@ -5,28 +5,36 @@
                 <a class="con-top-back" @click="backList">返回列表</a>
             </div>
         </div>
-        <div class="con">
+        <div class="con" v-for="item in edit_classify_detail" v-if="item.id === $route.params.id">
             <h3 class="cla-1">一级分类:</h3>
-            <p class="cla-1-name">名</p>
+            <p class="cla-1-name">{{item.name}}</p>
             <h3 class="cla-2">二级分类:</h3>
             <div class="cla-2-box">
-                <div class="col" v-for="i in 20" :key="i">
-                    <img src="../../../assets/placeholder.png" alt="">
-                    <p class="cla-2-name">二级分类名</p>
+                <div class="col" v-for="(cla2, i) in item.child" :key="i">
+                    <img :src="cla2.icon" alt="">
+                    <p class="cla-2-name">{{cla2.name}}</p>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-
+    import { mapState, mapGetters, mapActions } from 'vuex'
     export default {
         name: 'showClassify',
         props: {},
         data() {
             return {}
         },
-        computed: {},
+        computed: {
+            ...mapState('category', [
+                'classifyLists'
+            ]),
+            ...mapGetters('category', [
+                'edit_classify_detail'
+            ])
+
+        },
         methods: {
             backList() {
                 this.$router.go(-1)

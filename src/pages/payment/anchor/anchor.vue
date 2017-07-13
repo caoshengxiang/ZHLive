@@ -4,7 +4,7 @@
             <div class="con-col">
                 <div class="con-col-item" @click="userWealthPage">用户财富管理</div>
                 <div class="con-col-item  con-col-active" @click="anchorIncomePage">主播收入明细</div>
-                <div class="con-col-item" @click="userCashPage">账户提现申请</div>
+                <div class="con-col-item" @click="userCashPage">账号提现申请</div>
             </div>
 
             <div class="search">

@@ -27,6 +27,7 @@ const classification = resolve => require.ensure([], () => resolve(require('../p
 const showClassify = resolve => require.ensure([], () => resolve(require('../pages/classification/classify/show_classify.vue')), 'classification')
 const editClassify = resolve => require.ensure([], () => resolve(require('../pages/classification/classify/edit_classify.vue')), 'classification')
 const tags = resolve => require.ensure([], () => resolve(require('../pages/classification/tags/tags.vue')), 'classification')
+const addClassify = resolve => require.ensure([], () => resolve(require('../pages/classification/classify/add_classify.vue')), 'classification')
 
 
 // 直播管理
@@ -99,6 +100,10 @@ export default new Router({
                     path: 'classify/cla/detail/:id',
                     name: 'showClassify',
                     component: showClassify
+                }, {
+                    path: 'classify/cla/add',
+                    name: 'addClassify',
+                    component: addClassify
                 }, {
                     path: 'classify/cla/edit/:id',
                     name: 'editClassify',
