@@ -63,9 +63,7 @@
         beforeCreate(){
         },
         created() {
-            if (this.$route.params.id === '-1') {
 
-            }
         },
         beforeMount() {
         },

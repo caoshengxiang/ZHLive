@@ -11,14 +11,14 @@
             <p class="tips">注：单个标签内容不宜太长,标签总数不易过多</p>
             <div class="tags">
                 <el-tag
-                        :key="tag"
-                        v-for="tag in dynamicTags"
+                        :key="tag.id"
+                        v-for="tag in tags"
                         :closable="true"
                         :close-transition="false"
                         @close="handleClose(tag)"
                         class="tags-item"
                 >
-                    {{tag}}
+                    {{tag.name}}
                 </el-tag>
                 <span class="add-item">
                 <el-input
@@ -38,19 +38,36 @@
     </div>
 </template>
 <script>
-
+    import { mapState, mapActions } from 'vuex'
     export default {
         name: 'label',
         props: {},
         data() {
             return {
-                dynamicTags: ['标签一', '标签二', '标签三'],
+                dynamicTags: [],
                 inputVisible: false,
                 inputValue: ''
             }
         },
-        computed: {},
+        computed: {
+            ...mapState('category', [
+                'tags',
+                'tagsSuccessBack'
+            ])
+        },
+        watch: {
+            tagsSuccessBack(me) {
+                if (me) {
+                    this.ac_tags_list()
+                }
+            }
+        },
         methods: {
+            ...mapActions('category', [
+                'ac_add_tags',
+                'ac_tags_list',
+                'ac_del_tags'
+            ]),
             classifyPage() {
                 this.$router.push({name: 'classification'})
             },
@@ -58,7 +75,7 @@
                 this.$router.push({name: 'tags'})
             },
             handleClose(tag) {
-                this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+                this.ac_del_tags({id: tag.id})
             },
 
             showInput() {
@@ -72,7 +89,8 @@
                 let inputValue = this.inputValue;
 
                 if (inputValue) {
-                    this.dynamicTags.push(inputValue);
+                    this.ac_add_tags({name: inputValue})
+
                 }
                 this.inputVisible = false;
                 this.inputValue = '';
@@ -82,6 +100,7 @@
         beforeCreate(){
         },
         created() {
+            this.ac_tags_list()
         },
         beforeMount() {
         },

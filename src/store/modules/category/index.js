@@ -10,7 +10,9 @@ import mutations from './mutations'
 export default {
     namespaced: true,
     state: {
-        classifyLists: []
+        classifyLists: [],
+        tags: [],
+        tagsSuccessBack: false
     },
     getters,
     actions,
