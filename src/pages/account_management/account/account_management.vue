@@ -17,6 +17,7 @@
                 </el-dropdown>
 
                 <div class="message" @click="showMessagePage">系统消息</div>
+                <div class="message" @click="showChatroomPage">聊天室公共消息</div>
             </div>
 
             <div class="search">
@@ -219,6 +220,9 @@
             showMessagePage() { // 跳转系统消息页面
                 this.$router.push({name: 'message', params: {page: 1}})
             },
+            showChatroomPage() { // 跳转聊天室页面
+                this.$router.push({name: 'chatroom', params: {page: 1}})
+            }
         },
         components: {},
         beforeCreate(){

@@ -1,19 +1,23 @@
 /**
  * Created by allen on 17-4-14.
  */
-import { getUrl } from '../../../utils/utils'
-import axiosConfig from '../../../utils/axios_config'
+// import axiosConfig from '../../../utils/axios_config'
+//
+// let install = $axios.create(axiosConfig)
 
 export default {
+
     ac_classify_list({commit}, param) {
-         $axios.get(getUrl('/api/admin/category/list', param)).then((res)=>{
-             // console.log('分类列表',res)
-             return res.data.data
-         }).then( (d)=> {
-             commit('mut_classify_lists', d.data)
-             commit('mut_classify_total', d.total)
-             commit('del_classify_success_back', false)
-         })
+        $axios.get('/api/admin/category/list', {
+            params: param
+        }).then((res)=>{
+            // console.log('分类列表',res)
+            return res.data.data
+        }).then( (d)=> {
+            commit('mut_classify_lists', d.data)
+            commit('mut_classify_total', d.total)
+            commit('del_classify_success_back', false)
+        })
     },
 
     // 添加分类
@@ -39,7 +43,8 @@ export default {
 
         $axios({
             method: 'delete',
-            url: getUrl('/api/admin/category/remove', param),
+            url: '/api/admin/category/remove',
+            params: param,
             headers: {'Content-Type': 'application/json;charset=UTF-8'}
         }).then((res)=>{
             if (res.status === 200) {
@@ -84,7 +89,8 @@ export default {
         $axios({
             method: 'post',
             headers: {"Content-Type":"application/json"},
-            url: getUrl('/api/admin/label/add', param)
+            url: '/api/admin/label/add',
+            params: param
             // data: JSON.stringify(param)
         }).then((res)=>{
             if (res.status === 200) {
@@ -92,8 +98,9 @@ export default {
             }
         })
     },
+
     ac_tags_list({commit}) {
-        $axios.get(getUrl('/api/admin/label/list')).then((res)=>{
+        $axios.get('api/admin/label/list').then((res)=>{
             return res.data.data
         }).then((d)=>{
             commit('mut_tags', d)
@@ -104,7 +111,8 @@ export default {
         $axios({
             method: 'delete',
             headers: {"Content-Type": "application/json"},
-            url: getUrl('/api/admin/label/remove', param)
+            url: '/api/admin/label/remove',
+            params: param
         }).then((res)=>{
             if (res.status === 200) {
                 commit('mut_tags_success_back', true)

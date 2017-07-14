@@ -17,8 +17,8 @@
                     </el-dropdown-menu>
                 </el-dropdown>
 
-                <div class="con-col-item con-col-active">系统消息</div>
-                <div class="con-col-item" @click="showChatroomPage">聊天室公共消息</div>
+                <div class="con-col-item" @click="showMessagePage">系统消息</div>
+                <div class="con-col-item con-col-active">聊天室公共消息</div>
             </div>
             <div class="con-right-btn" @click="sendMessage">+ 发布新消息</div>
 
@@ -74,7 +74,7 @@
 <script>
 
     export default {
-        name: 'Message',
+        name: 'chatroom',
         props: {},
         data() {
             return {
@@ -108,7 +108,7 @@
                 this.$router.push({name: 'accountManagement', params: {type: va, page: 1}})
             },
             handleCurrentChange(item) { // 分页
-                this.$router.push({name: 'message', params: {page: item}})
+                this.$router.push({name: 'chatroom', params: {page: item}})
             },
             showMessage(item) {
                 this.dialogVisible1 = true
@@ -116,9 +116,9 @@
             sendMessage() {
                 this.dialogVisible2 = true
             },
-            showChatroomPage() { // 跳转聊天室页面
-                this.$router.push({name: 'chatroom', params: {page: 1}})
-            }
+            showMessagePage() { // 跳转系统消息页面
+                this.$router.push({name: 'message', params: {page: 1}})
+            },
         },
         components: {},
         beforeCreate(){

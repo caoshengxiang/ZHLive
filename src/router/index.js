@@ -10,6 +10,8 @@ Vue.use(Router)
 const test = resolve => require.ensure([], () => resolve(require('../pages/test.vue')), 'test')
 const signin = resolve => require.ensure([], () => resolve(require('../pages/sign/sign_in.vue')), 'sign')
 const bgIndex = resolve => require.ensure([], () => resolve(require('../pages/index.vue')), 'bgIndex')
+
+// 帐号管理
 const accountManagement = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/account_management.vue')), 'accountManagement')
 
 const accountShow = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/show.vue')), 'accountManagement')
@@ -18,6 +20,10 @@ const showLiveApply = resolve => require.ensure([], () => resolve(require('../pa
 const showLiveUser = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/showLiveUser.vue')), 'accountManagement')
 // 系统消息
 const message = resolve => require.ensure([], () => resolve(require('../pages/account_management/message/message.vue')), 'message')
+// 聊天室
+const chatroom = resolve => require.ensure([], () => resolve(require('../pages/account_management/chatroom/chatroom.vue')), 'message')
+
+
 
 // 帐号
 const accountEdit = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/edit.vue')), 'accountManagement')
@@ -64,7 +70,7 @@ export default new Router({
             name: 'bgIndex',
             component: bgIndex,
             children: [
-                {
+                { // 帐号管理
                     path: ':type/:page',
                     name: 'accountManagement',
                     component: accountManagement
@@ -92,6 +98,10 @@ export default new Router({
                     path: 'account/msg/:page',
                     name: 'message',
                     component: message
+                }, { // 聊天室
+                    path: 'account/c_r/:page',
+                    name: 'chatroom',
+                    component: chatroom
                 }, { // 分类
                     path: 'classify/cla/m',
                     name: 'classification',
