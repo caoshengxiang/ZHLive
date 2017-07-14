@@ -29,6 +29,8 @@
                         :on-icon-click="handleSearchClick">
                 </el-input>
             </div>
+
+            <div class="living">正在直播: <span class="live-num">50</span></div>
         </div>
         <div class="con">
             <div class="live-box">
@@ -183,6 +185,20 @@
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../../styles/common";
 
+    .con-top {
+
+        .living {
+            color: #fff;
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            .live-num {
+                color: #ff6100;
+                font-weight: bold;
+                font-size: 30px;
+            }
+        }
+    }
     .con {
         .live-box {
             display: flex;

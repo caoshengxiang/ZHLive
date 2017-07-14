@@ -14,6 +14,29 @@
                 </el-input>
             </div>
         </div>
+        <div class="con-table">
+            <table>
+                <tr>
+                    <th>用户编号</th>
+                    <th>头像</th>
+                    <th>昵称</th>
+                    <th>反馈时间</th>
+                    <th>联系方式(手机号/QQ/微信)</th>
+                    <th>操作</th>
+                </tr>
+                <tr class="border-bottom">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="td-op">
+                        <button class="b-1">查看</button>
+                        <button class="b-2">删除</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </template>
 <script>
@@ -59,4 +82,12 @@
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../../styles/common";
+    .td-op {
+        .b-1 {
+            background: #00c7ff;
+        }
+        .b-2 {
+            background: #ff2100;
+        }
+    }
 </style>

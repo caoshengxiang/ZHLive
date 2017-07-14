@@ -16,6 +16,36 @@
                 </el-input>
             </div>
         </div>
+        <div class="con-table">
+            <table>
+                <tr>
+                    <th>用户编号</th>
+                    <th>头像</th>
+                    <th>昵称</th>
+                    <th>手机</th>
+                    <th>余额(魂币)</th>
+                    <th>总充值(RMB)</th>
+                    <th>总收入(魂币)</th>
+                    <th>总支出(魂币)</th>
+                    <th>操作</th>
+                </tr>
+                <tr class="border-bottom">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="td-op">
+                        <button class="b-1">编辑余额</button>
+                        <button class="b-2">充值明细</button>
+                        <button class="b-3">消费明细</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </template>
 <script>
@@ -64,4 +94,15 @@
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../../styles/common";
+    .td-op {
+        .b-1 {
+            background: #ff5d00;
+        }
+        .b-2 {
+            background: #00bbff;
+        }
+        .b-3 {
+            background: forestgreen;
+        }
+    }
 </style>

@@ -16,6 +16,33 @@
                 </el-input>
             </div>
         </div>
+
+        <div class="con-table">
+            <table>
+                <tr>
+                    <th>用户编号</th>
+                    <th>头像</th>
+                    <th>昵称</th>
+                    <th>手机</th>
+                    <th>实名认证</th>
+                    <th>总收入(魂币)</th>
+                    <th>收入余额(魂豆)</th>
+                    <th>操作</th>
+                </tr>
+                <tr class="border-bottom">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="td-op">
+                        <button class="b-1">查看提现申请</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </template>
 <script>
@@ -64,4 +91,9 @@
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../../styles/common";
+    .td-op {
+        .b-1 {
+            background: #00aeff;
+        }
+    }
 </style>

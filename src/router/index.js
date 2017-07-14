@@ -53,6 +53,10 @@ const banner = resolve => require.ensure([], () => resolve(require('../pages/ban
 const report = resolve => require.ensure([], () => resolve(require('../pages/report/report/report.vue')), 'report')
 const feedback = resolve => require.ensure([], () => resolve(require('../pages/report/feedback/feedback.vue')), 'report')
 
+// 版本管理
+const version = resolve => require.ensure([], () => resolve(require('../pages/version/version/version.vue')), 'version')
+
+
 export default new Router({
     // mode: 'history', // 这个模式路由没有#
     routes: [
@@ -158,6 +162,10 @@ export default new Router({
                     path: 'feedback',
                     name: 'feedback',
                     component: feedback
+                }, { // 版本管理
+                    path: 'version',
+                    name: 'version',
+                    component: version
                 }
             ]
         }

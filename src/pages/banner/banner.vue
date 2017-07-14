@@ -18,6 +18,36 @@
                 </el-dropdown>
             </div>
         </div>
+        <div class="con-table">
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>封面图</th>
+                    <th>链接形式</th>
+                    <th>操作</th>
+                </tr>
+                <tr class="border-bottom">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="td-op">
+                        <button class="b-1">查看</button>
+                        <button class="b-2">编辑</button>
+                        <button class="b-3">隐藏</button>
+                    </td>
+                </tr>
+                <tr class="border-bottom">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="td-op">
+                        <button class="b-1">查看</button>
+                        <button class="b-2">编辑</button>
+                        <button class="b-3 b-3-h">显示</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </template>
 <script>
@@ -58,4 +88,18 @@
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../styles/common";
+    .td-op {
+        .b-1 {
+            background: #00c7ff;
+        }
+        .b-2 {
+            background: #ff5400;
+        }
+        .b-3 {
+            background: forestgreen;
+        }
+        .b-3-h {
+            opacity: 0.5;
+        }
+    }
 </style>

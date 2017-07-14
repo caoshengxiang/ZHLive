@@ -7,6 +7,7 @@
             <li @click="changeMenu(3)" :class="{active: isActive3}">支付管理</li>
             <li @click="changeMenu(4)" :class="{active: isActive4}">Banner管理</li>
             <li @click="changeMenu(5)" :class="{active: isActive5}">举报/反馈</li>
+            <li @click="changeMenu(6)" :class="{active: isActive6}">版本管理</li>
         </ul>
     </div>
 </template>
@@ -24,6 +25,7 @@
                 isActive3: false,
                 isActive4: false,
                 isActive5: false,
+                isActive6: false,
             }
         },
         computed: {},
@@ -34,9 +36,10 @@
                  * 0 帐号管理
                  * 1 分类管理
                  * 2 直播管理
-                 * ３ 支付管理
-                 * ４ banner管理
-                 * ５ 举报反馈
+                 * 3 支付管理
+                 * 4 banner管理
+                 * 5 举报反馈
+                 * 6 版本管理
                  * */
                 sessionStorage.menuIndex = i;
                 switch (i) {
@@ -70,6 +73,11 @@
                         this.setActive(5)
                         this.isActive5  = true
                         break;
+                    case 6:
+                        this.$router.push({name: 'version'})
+                        this.setActive(6)
+                        this.isActive6  = true
+                        break;
                     default:
 //                        this.$router.push({name: 'accountManagement'})
 //                        this.setActive(0)
@@ -94,6 +102,7 @@
                 this.isActive3 = false;
                 this.isActive4 = false;
                 this.isActive5 = false;
+                this.isActive6 = false;
 
             }
         },
