@@ -121,7 +121,7 @@
             },
             saveClassify() {
                 if (this.addChild.length) {
-                    this.modifyData.child = this.modifyData.child.concat(this.addChild)
+                    this.modifyData.child = [...this.modifyData.child, ...this.addChild]
                 }
                 this.ac_modify_classify(this.modifyData)
             },

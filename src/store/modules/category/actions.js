@@ -73,7 +73,7 @@ export default {
             headers: {'Content-Type': 'application/json;charset=UTF-8'},
             data: JSON.stringify(p)
         }).then((res)=>{
-            console.log(res)
+            // console.log(res)
             if (res.status === 200) {
                 // commit('mut_edit_classify_success', 616)
                 commit('mut_edit_classify_success', 1)
