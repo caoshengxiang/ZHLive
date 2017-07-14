@@ -14,6 +14,9 @@ export default {
         classifyTotal: 0,
         editSuccess: false, // 编辑分类成功返回
         delClassifySuccessBack: false, // 删除分类成功返回
+        classifyLists: [],
+        tags: [],
+        tagsSuccessBack: false
     },
     getters,
     actions,

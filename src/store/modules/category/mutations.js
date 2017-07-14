@@ -14,5 +14,11 @@ export default {
     },
     del_classify_success_back(st, data) {
         st.delClassifySuccessBack = data
+    },
+    mut_tags(st, data) {
+        st.tags = data
+    },
+    mut_tags_success_back(st, data) {
+        st.tagsSuccessBack = data
     }
 }
