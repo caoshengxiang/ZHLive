@@ -2,6 +2,7 @@
  * Created by allen on 17-4-14.
  */
 import { getUrl } from '../../../utils/utils'
+import axiosConfig from '../../../utils/axios_config'
 
 export default {
     ac_classify_list({commit}, param) {
@@ -26,9 +27,9 @@ export default {
             data: JSON.stringify(param)
         }).then((res)=>{
             if (res.status === 200) {
-                commit('mut_edit_classify_success', true)
+                commit('mut_edit_classify_success', 1)
             } else {
-                commit('mut_edit_classify_success', false)
+                commit('mut_edit_classify_success', 0)
             }
         })
     },
@@ -59,13 +60,23 @@ export default {
             }
         })
         p.id = param.id;
-        console.log('修改分类', p)
+        // console.log('修改分类', p)
 
         $axios({
             method: 'post',
             url: '/api/admin/category/modify',
             headers: {'Content-Type': 'application/json;charset=UTF-8'},
             data: JSON.stringify(p)
+        }).then((res)=>{
+            console.log(res)
+            if (res.status === 200) {
+                // commit('mut_edit_classify_success', 616)
+                commit('mut_edit_classify_success', 1)
+            }  else if (res.status === 500) {
+                commit('mut_edit_classify_success', 616)
+            } else {
+                commit('mut_edit_classify_success', 0)
+            }
         })
     },
     ac_add_tags({commit}, param) {
@@ -73,8 +84,8 @@ export default {
         $axios({
             method: 'post',
             headers: {"Content-Type":"application/json"},
-            url: '/api/admin/label/add',
-            data: JSON.stringify(param)
+            url: getUrl('/api/admin/label/add', param)
+            // data: JSON.stringify(param)
         }).then((res)=>{
             if (res.status === 200) {
                 commit('mut_tags_success_back', true)

@@ -35,8 +35,9 @@
                 <!-- 修改 -->
                 <div class="col" v-for="(item2, i) in modifyData.child" :key="i">
                     <div v-if="item2.id">
-                        <img class=".img" :src="item2.icon" v-model="item2.icon" alt="">
-                        <p class="cla-2-name"><input @change="modifyClassify2Name(item2)" :placeholder="item2.name" v-model="item2.name"></p>
+                        <img v-if="item2.icon" :src="item2.icon" v-model="item2.icon" alt="">
+                        <div v-else class="default-img old"><i class="el-icon-upload"></i></div>
+                        <p class="cla-2-name"><input placeholder="请输入" v-model="item2.name"></p>
                         <input type="file" class="file" @change="addClassifyImg($event, item2)">
                         <div class="cover-del" @click="delOldClassify(item2)"><i class="el-icon-close"></i></div>
                     </div>
@@ -72,13 +73,15 @@
         computed: {
             ...mapState('category', [
                 'editSuccess',
-                'classifyLists'
+                'classifyLists',
             ])
         },
         watch: {
             editSuccess(me) { // 保存成功返回列表
-                if (me) {
+                if (me === 1) {
                     this.backList()
+                } else if (me === 616) {
+                    this.$message.error('修改失败,图片错误')
                 }
             },
         },
@@ -94,11 +97,11 @@
                 this.addChild.unshift({icon: '', name: ''})
             },
             delAddClassify2(item, i) {
-                console.log('add',item, i)
+//                console.log('add',item, i)
                 this.addChild.splice(i, 1)
             },
             delOldClassify(cla2) {
-                console.log('cla2',cla2)
+//                console.log('cla2',cla2)
                 this.modifyData.child.forEach((item, i, arr) => {
                     if (item.id === cla2.id) {
                         arr.splice(i, 1);
@@ -116,28 +119,21 @@
                     item.icon = r.result
                 }
             },
-            modifyClassify2Name(cla2) {
-
-            },
             saveClassify() {
                 if (this.addChild.length) {
-                    this.modifyData.child.concat(this.addChild)
+                    this.modifyData.child = this.modifyData.child.concat(this.addChild)
                 }
-
-//                this.ac_modify_classify(this.modifyData)
-
+                this.ac_modify_classify(this.modifyData)
             },
             backList() {
                 this.$router.go(-1)
             },
-
-
         },
         components: {},
         beforeCreate(){
         },
         created() {
-            this.mut_edit_classify_success(false);
+            this.mut_edit_classify_success(0);
         },
         beforeMount() {
         },
@@ -218,6 +214,9 @@
                     i{
                         font-size: 34px;
                         color: #ffae00;
+                    }
+                    &.old {
+                        width: 80.5px;
                     }
                 }
                 .add-name {

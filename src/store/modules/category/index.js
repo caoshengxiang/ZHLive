@@ -12,9 +12,8 @@ export default {
     state: {
         classifyLists: [],
         classifyTotal: 0,
-        editSuccess: false, // 编辑分类成功返回
+        editSuccess: 0, // 编辑分类成功返回
         delClassifySuccessBack: false, // 删除分类成功返回
-        classifyLists: [],
         tags: [],
         tagsSuccessBack: false
     },

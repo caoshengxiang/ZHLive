@@ -100,7 +100,7 @@
         beforeCreate(){
         },
         created() {
-            this.mut_edit_classify_success(false);
+            this.mut_edit_classify_success(0);
         },
         beforeMount() {
         },

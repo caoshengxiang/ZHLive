@@ -287,6 +287,7 @@
                     font-size: 14px;
                     .head-img {
                         width: 24px;
+                        height: 24px;
                     }
                 }
                 .op {
