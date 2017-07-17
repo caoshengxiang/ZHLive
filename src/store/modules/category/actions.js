@@ -7,7 +7,7 @@
 
 export default {
 
-    ac_classify_list({commit}, param) {
+    ac_classify_list({commit}, param) { // 分类列表
         $axios.get('/api/admin/category/list', {
             params: param
         }).then((res)=>{
