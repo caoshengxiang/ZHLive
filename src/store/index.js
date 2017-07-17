@@ -10,6 +10,7 @@ import mutations from './mutations'
 
 import account from './modules/account'
 import category from './modules/category'
+import live from './modules/live'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -22,5 +23,6 @@ export default new Vuex.Store({
     modules: {
         account,
         category,
+        live,
     }
 })

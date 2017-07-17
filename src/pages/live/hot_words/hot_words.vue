@@ -27,13 +27,13 @@
             <div class="tags">
                 <el-tag
                         :key="tag"
-                        v-for="tag in dynamicTags"
+                        v-for="tag in hotWord"
                         :closable="true"
                         :close-transition="false"
                         @close="handleClose(tag)"
                         class="tags-item"
                 >
-                    {{tag}}
+                    {{tag.word}}
                 </el-tag>
                 <span class="add-item">
                 <el-input
@@ -53,7 +53,7 @@
     </div>
 </template>
 <script>
-
+    import {mapState, mapActions} from 'vuex'
     export default {
         name: 'hotWords',
         props: {},
@@ -61,13 +61,29 @@
             return {
                 dropDownMenu: ['全部用户', '禁用用户', '全部主播', '主播申请列表'],
                 dropDownMenuItem: 0,
-                dynamicTags: ['标签一', '标签二', '标签三'],
                 inputVisible: false,
                 inputValue: ''
             }
         },
-        computed: {},
+        computed: {
+            ...mapState('live', [
+                'hotWord',
+                'hotWordSuccess'
+            ])
+        },
+        watch: {
+            hotWordSuccess(me) {
+                if (me) {
+                    this.ac_hot_word_list()
+                }
+            }
+        },
         methods: {
+            ...mapActions('live', [
+                'ac_hot_word_add',
+                'ac_hot_word_list',
+                'ac_hot_word_remove',
+            ]),
             handleCommand(va) { // 下拉
                 this.dropDownMenuItem = parseInt(va, 10);
 
@@ -84,7 +100,8 @@
 
             },
             handleClose(tag) {
-                this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+//                this.hotWord.splice(this.hotWord.indexOf(tag), 1);
+                this.ac_hot_word_remove({id: tag.id})
             },
 
             showInput() {
@@ -98,7 +115,8 @@
                 let inputValue = this.inputValue;
 
                 if (inputValue) {
-                    this.dynamicTags.push(inputValue);
+//                    this.hotWord.push(inputValue);
+                    this.ac_hot_word_add({word: inputValue})
                 }
                 this.inputVisible = false;
                 this.inputValue = '';
@@ -108,6 +126,7 @@
         beforeCreate(){
         },
         created() {
+            this.ac_hot_word_list()
         },
         beforeMount() {
         },
