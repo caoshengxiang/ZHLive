@@ -31,8 +31,8 @@
                     <td></td>
                     <td></td>
                     <td class="td-op">
-                        <button class="b-1">查看</button>
-                        <button class="b-2">编辑</button>
+                        <button class="b-1" @click="bannerDetail">查看</button>
+                        <button class="b-2" @click="bannerEdit">编辑</button>
                         <button class="b-3">隐藏</button>
                     </td>
                 </tr>
@@ -41,8 +41,8 @@
                     <td></td>
                     <td></td>
                     <td class="td-op">
-                        <button class="b-1">查看</button>
-                        <button class="b-2">编辑</button>
+                        <button class="b-1" @click="bannerDetail">查看</button>
+                        <button class="b-2" @click="bannerEdit">编辑</button>
                         <button class="b-3 b-3-h">显示</button>
                     </td>
                 </tr>
@@ -65,6 +65,12 @@
         methods: {
             handleCommand(va) {
                 this.$router.push({name: 'bannerManage', params: {type: va, page: 1}})
+            },
+            bannerDetail() {
+                this.$router.push({name: 'bannerDetail'})
+            },
+            bannerEdit() {
+                this.$router.push({name: 'editBanner', params: {id: 1}})
             }
         },
         components: {},

@@ -48,6 +48,8 @@ const paymentCash = resolve => require.ensure([], () => resolve(require('../page
 
 // banner管理
 const banner = resolve => require.ensure([], () => resolve(require('../pages/banner/banner.vue')), 'banner')
+const bannerDetail = resolve => require.ensure([], () => resolve(require('../pages/banner/banner_detail.vue')), 'banner')
+const editBanner = resolve => require.ensure([], () => resolve(require('../pages/banner/edit_banner.vue')), 'banner')
 
 // 举报/反馈
 const report = resolve => require.ensure([], () => resolve(require('../pages/report/report/report.vue')), 'report')
@@ -154,6 +156,14 @@ export default new Router({
                     path: 'banner/:type/:page',
                     name: 'bannerManage',
                     component: banner
+                }, {
+                    path: 'banner/detail',
+                    name: 'bannerDetail',
+                    component: bannerDetail
+                }, {
+                    path: 'banner/edit/:id',
+                    name: 'editBanner',
+                    component: editBanner
                 }, { // 举报反馈
                     path: 'report',
                     name: 'reportManage',

@@ -41,20 +41,20 @@
                         <a>禁用聊天室</a><span> · </span>
                         <a>中断聊天室</a><span> · </span>
                         <a>禁播</a><span> · </span>
-                        <a @click="editLiveHandle(item)">编辑</a>
+                        <a @click="editLiveHandle(item)" class="edit">编辑</a>
                     </p>
                     <!-- 禁播频道 -->
-                    <p class="living" v-if="$route.params.type == 1">
+                    <p class="living disabled" v-if="$route.params.type == 1">
                         <a>解除频道禁播</a>
                     </p>
                     <!-- 聊天室禁用 -->
-                    <p class="living" v-if="$route.params.type == 2">
+                    <p class="living disabled" v-if="$route.params.type == 2">
                         <a>解除聊天室禁用</a>
                     </p>
                     <!-- 直播举报 -->
-                    <p class="living" v-if="$route.params.type == 3">
+                    <p class="living report" v-if="$route.params.type == 3">
                         <span> 用户昵称 </span>
-                        <a>查看</a>
+                        <a class="look" @click="lookReport">查看</a>
                     </p>
                 </div>
             </div>
@@ -146,6 +146,36 @@
                     <el-button @click="addTagsCancel">取 消</el-button>
                 </div>
             </el-dialog>
+
+            <el-dialog :visible.sync="lookReportDialogVisible" :show-close="false">
+                <div class="look">
+                    <el-table :data="reportData">
+                        <el-table-column property="time" label="举报时间" width="150"></el-table-column>
+                        <el-table-column property="name" label="举报用户" width="200"></el-table-column>
+                        <el-table-column property="content" label="举报内容"></el-table-column>
+                    </el-table>
+                    <div class="con-page">
+                        <el-pagination
+                                @size-change="lookDialogHandleSizeChange"
+                                @current-change="lookDialogHandleCurrentChange"
+                                :page-size="100"
+                                layout="prev, pager, next, jumper"
+                                :total="1000">
+                        </el-pagination>
+                    </div>
+                    <div class="op">
+                        <a >禁用聊天室</a>
+                        <a >中断直播</a>
+                        <a >禁播</a>
+                    </div>
+                </div>
+                <div slot="title" class="report-title">
+                    <h3>直播举报</h3>
+                    <p>主播: <span>主播昵称</span></p>
+                    <p>直播主题: <span>XXXXX</span></p>
+                    <i class="el-icon-close" @click="closeLookDialog"></i>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -192,9 +222,22 @@
                 total: 50,
                 editLiveDialogVisible: false, // 编辑dialog
                 addTagsDialogVisible: false, // 添加标签dialog
+                lookReportDialogVisible: false, // 直播举报查看dialog
                 manageInfo: {}, // 主播详细
                 childCate: [], // 一级对应的二级分类
-                tempAddTags: []
+                tempAddTags: [],
+                reportData: [
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
+                ]
             }
         },
         computed: {
@@ -331,6 +374,18 @@
                 for (let i = 0; i < allEl.length; i++) {
                     allEl[i].className = 'item tag-item'
                 }
+            },
+            lookReport() { // 查看直播举报
+                this.lookReportDialogVisible = true
+            },
+            lookDialogHandleSizeChange(val) { // 举报dialog分页
+                console.log(`每页 ${val} 条`);
+            },
+            lookDialogHandleCurrentChange(val) { // 举报dialog分页
+                console.log(`当前页: ${val}`);
+            },
+            closeLookDialog() {
+                this.lookReportDialogVisible = false
             }
         },
         components: {},
@@ -381,9 +436,35 @@
             font-size: 12px;
             margin-right: 10px;
             margin-bottom: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
             .cover-img {
                 width: 217.5px;
                 height: 217.5px;
+            }
+            .living {
+                padding: 0px 5px 4px 5px;
+                a {
+                    cursor: pointer;
+                }
+                .edit {
+                    font-weight: bold;
+                }
+                &.disabled {
+                    text-align: right;
+                    a {
+                        color: #ff3f00;
+                    }
+                }
+                &.report {
+                    display: flex;
+                    justify-content: space-between;
+                    padding-left: 14px;
+                    padding-right: 14px;
+                    .look {
+                        font-weight: bold;
+                    }
+                }
             }
         }
     }
@@ -499,6 +580,44 @@
                 i {
                     visibility: visible;
                 }
+            }
+        }
+    }
+    .dialog {
+        .look {
+            .op {
+                width: 100%;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                a {
+                    width: 33.3%;
+                    color: #ff8300;
+                    cursor: pointer;
+                    text-align: center;
+                    border: 1px solid #ccc;
+                    padding: 10px 0;
+                }
+            }
+
+        }
+        .report-title {
+            background-color: #ff5d00;
+            color: #fff;
+            position: relative;
+            padding: 10px 0;
+            p {
+                margin-top: 10px;
+            }
+            i {
+                padding: 5px;
+                color: #ff5d00;
+                background: #fff;
+                border-radius: 50%;
+                position: absolute;
+                right: 0;
+                top: 0;
             }
         }
     }

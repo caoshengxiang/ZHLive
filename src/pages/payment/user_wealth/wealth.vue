@@ -30,21 +30,91 @@
                     <th>操作</th>
                 </tr>
                 <tr class="border-bottom">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
                     <td class="td-op">
-                        <button class="b-1">编辑余额</button>
-                        <button class="b-2">充值明细</button>
-                        <button class="b-3">消费明细</button>
+                        <button class="b-1" @click="editOverage">编辑余额</button>
+                        <button class="b-2" @click="rechargeDetail">充值明细</button>
+                        <button class="b-3" @click="consumeDetail">消费明细</button>
                     </td>
                 </tr>
             </table>
+        </div>
+
+
+        <div class="dialog">
+            <!-- 编辑余额 -->
+            <el-dialog title="余额编辑" :visible.sync="overageDialogFormVisible">
+                <div class="overage">
+                    <el-input></el-input>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="overageDialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="overageDialogFormVisible = false">确 定</el-button>
+                </div>
+            </el-dialog>
+
+            <!-- 充值明细 -->
+            <el-dialog :visible.sync="rechargeDialogFormVisible" :show-close="false">
+                <div class="recharge">
+                    <el-table :data="rechargeDetailData.list">
+                        <el-table-column property="time" label="日期" width="150"></el-table-column>
+                        <el-table-column property="type" label="姓名" width="200"></el-table-column>
+                        <el-table-column property="rmb" label="地址"></el-table-column>
+                    </el-table>
+                </div>
+
+                <div class="con-page">
+                    <el-pagination
+                            @size-change="rechargeDialogHandleSizeChange"
+                            @current-change="rechargeDialogHandleCurrentChange"
+                            :page-size="100"
+                            layout="prev, pager, next, jumper"
+                            :total="1000">
+                    </el-pagination>
+                </div>
+
+                <div slot="title" class="recharge-title">
+                    <h1>用户昵称(1)充值明细</h1>
+                    <p>总充值: 8888</p>
+                    <i class="el-icon-close" @click="closeRechargeDialog"></i>
+                </div>
+            </el-dialog>
+
+            <!-- 消费明细 -->
+            <el-dialog :visible.sync="consumeDialogFormVisible" :show-close="false">
+                <div class="consume">
+                    <el-table :data="consumeDetailData.list">
+                        <el-table-column property="time" label="消费时间" width="150"></el-table-column>
+                        <el-table-column property="project" label="消费项目" width="100"></el-table-column>
+                        <el-table-column property="manageName" label="消费主播" width="100"></el-table-column>
+                        <el-table-column property="manageId" label="主播编号" width="100"></el-table-column>
+                        <el-table-column property="h" label="消费金额(魂币)"></el-table-column>
+                    </el-table>
+                </div>
+
+                <div class="con-page">
+                    <el-pagination
+                            @size-change="consumeDialogHandleSizeChange"
+                            @current-change="consumeDialogHandleCurrentChange"
+                            :page-size="100"
+                            layout="prev, pager, next, jumper"
+                            :total="1000">
+                    </el-pagination>
+                </div>
+
+                <div slot="title" class="consume-title">
+                    <h1>用户昵称 (1) 消费明细</h1>
+                    <p>总充值: 8888</p>
+                    <i class="el-icon-close" @click="closeConsumeDialog"></i>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -55,7 +125,28 @@
         props: {},
         data() {
             return {
-                searchValue: '',
+                searchValue: '', // 搜索
+                overageDialogFormVisible: false, // 编辑余额dialog
+                rechargeDialogFormVisible: false, // 充值明细dialog
+                consumeDialogFormVisible: false, // 消费明细dialog
+                rechargeDetailData: {
+                    total: 888,
+                    list: [
+                        {time: '2017-01-01 10:11', type: '支付宝', rmb: 3000},
+                        {time: '2017-01-01 10:11', type: '支付宝', rmb: 3000},
+                        {time: '2017-01-01 10:11', type: '支付宝', rmb: 3000},
+                        {time: '2017-01-01 10:11', type: '支付宝', rmb: 3000},
+                    ]
+                },
+                consumeDetailData: {
+                    total: 888,
+                    list: [
+                        {time: '2017-01-01 10:11', project: '打赏', manageName: 'nicheng', manageId: 1, h: 1},
+                        {time: '2017-01-01 10:11', project: '打赏', manageName: 'nicheng', manageId: 1, h: 1},
+                        {time: '2017-01-01 10:11', project: '打赏', manageName: 'nicheng', manageId: 1, h: 1},
+                        {time: '2017-01-01 10:11', project: '打赏', manageName: 'nicheng', manageId: 1, h: 1},
+                    ]
+                }
             }
         },
         computed: {},
@@ -70,6 +161,33 @@
                 this.$router.push({name: 'paymentCash'})
             },
             handleSearchClick() {
+
+            },
+            editOverage() {
+                this.overageDialogFormVisible = true
+            },
+            rechargeDetail() {
+                this.rechargeDialogFormVisible = true
+            },
+            closeRechargeDialog() {
+                this.rechargeDialogFormVisible = false
+            },
+            consumeDetail() {
+                this.consumeDialogFormVisible = true
+            },
+            closeConsumeDialog() {
+                this.consumeDialogFormVisible = false
+            },
+            rechargeDialogHandleSizeChange() {
+
+            },
+            rechargeDialogHandleCurrentChange() {
+
+            },
+            consumeDialogHandleSizeChange(){
+
+            },
+            consumeDialogHandleCurrentChange(){
 
             }
         },
@@ -94,6 +212,7 @@
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
     @import "../../../styles/common";
+
     .td-op {
         .b-1 {
             background: #ff5d00;
@@ -103,6 +222,27 @@
         }
         .b-3 {
             background: forestgreen;
+        }
+    }
+
+    .dialog {
+        .recharge-title {
+            text-align: center;
+            position: relative;
+        }
+        .consume-title {
+            text-align: center;
+            position: relative;
+        }
+        .el-icon-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ffb600;
+            color: #fff;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
         }
     }
 </style>

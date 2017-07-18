@@ -30,18 +30,35 @@
                     <th>操作</th>
                 </tr>
                 <tr class="border-bottom">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
                     <td class="td-op">
-                        <button class="b-1">查看提现申请</button>
+                        <button class="b-1" @click="showApply">查看提现申请</button>
                     </td>
                 </tr>
             </table>
+        </div>
+
+        <div class="dialog">
+            <!-- 提现申请 -->
+            <el-dialog title="提现申请" :visible.sync="applyDialogFormVisible" >
+                <div class="detail">　
+                    <p><label>申请用户: </label><span>用户昵称（123）</span></p>
+                    <p><label>申请时间: </label><span>2017-01-12 18:00</span></p>
+                    <p><label>提现金额: </label><span>2000魂豆（RMB 10）</span></p>
+                    <p><label>提现地址: </label><span>支付宝（123）</span></p>
+                </div>
+                <div class="op">
+                    <el-button type="success">同意提现</el-button>
+                    <el-button type="danger">拒绝</el-button>
+                    <el-button @click="backList">返回</el-button>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -53,6 +70,7 @@
         data() {
             return {
                 searchValue: '',
+                applyDialogFormVisible: false,
             }
         },
         computed: {},
@@ -68,6 +86,12 @@
             },
             handleSearchClick() {
 
+            },
+            showApply() {
+                this.applyDialogFormVisible = true
+            },
+            backList() {
+                this.applyDialogFormVisible = false
             }
         },
         components: {},
@@ -95,5 +119,23 @@
         .b-1 {
             background: #00aeff;
         }
+    }
+
+    .dialog {
+        .detail {
+            p {
+                margin-bottom: 14px;
+                label {
+                    font-weight: bold;
+                }
+            }
+        }
+        .op {
+            width: 100%;
+            margin-top: 30px;
+        }
+    }
+    .el-button {
+        width: 20%;
     }
 </style>
