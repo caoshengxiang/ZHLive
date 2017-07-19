@@ -12,7 +12,8 @@ export default {
     state: {
         total: 0,
         accountLists: [],
-        userInfo: {}
+        userInfo: {},
+        successBack: false, // 接口成功返回
     },
     getters,
     actions,

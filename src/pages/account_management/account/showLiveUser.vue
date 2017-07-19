@@ -1,49 +1,6 @@
 <template>
     <div>
-        <div class="top">
-            <a class="back" @click="backList">返回列表</a>
-        </div>
-        <div class="con">
-            <img class="head-img" src="../../../assets/placeholder.png" alt="">
-            <ul class="detail">
-                <li>
-                    <span>用户编号:</span>
-                    <span>1111</span>
-                </li>
-                <li>
-                    <span>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</span>
-                    <span></span>
-                </li>
-                <li>
-                    <span>手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机:</span>
-                    <span></span>
-                </li>
-                <li>
-                    <span>年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄:</span>
-                    <span></span>
-                </li>
-                <li>
-                    <span>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
-                    <span></span>
-                </li>
-                <li>
-                    <span>注册时间:</span>
-                    <span></span>
-                </li>
-                <li>
-                    <span>个人简介:</span>
-                </li>
-                <li class="line"></li>
-                <li>
-                    <span>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名:</span>
-                    <span></span>
-                </li>
-                <li>
-                    <span>身份证号:</span>
-                    <span></span>
-                </li>
-            </ul>
-        </div>
+
     </div>
 </template>
 <script>

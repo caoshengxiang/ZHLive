@@ -11,6 +11,7 @@ export default {
         }).then((d) => {
             commit('mut_total', d.total)
             commit('mut_account_Lists', d.data)
+            commit('mut_success_back', false)
         }).catch(e => {
             console.log(e)
         })
@@ -75,6 +76,55 @@ export default {
             url: '/api/admin/user/modify',
             headers: {"Content-Type":"application/json"},
             data: JSON.stringify(p)
+        })
+    },
+
+    // 提成比例
+    ac_modify_commission({commit}, param) {
+        $axios({
+            method: 'post',
+            url: '/api/admin/user/modifyCommission/'+param.userId+'_'+param.commission,
+            headers: {"Content-Type":"application/json"},
+        })
+    },
+
+    // 移除主播
+    ac_remove_anchor({commit}, param) {
+        $axios({
+            method: 'post',
+            url: '/api/admin/user/removeAnchor/'+param.userId,
+            headers: {"Content-Type":"application/json"},
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_success_back', true)
+            }
+        })
+    },
+
+    // 通过主播申请
+    ac_pass_apply({commit}, param) {
+        console.log(param)
+        $axios({
+            method: 'post',
+            url: '/api/admin/user/applyPass/'+param.userId,
+            headers: {"Content-Type":"application/json"},
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_success_back', true)
+            }
+        })
+    },
+
+    // 拒绝主播申请
+    ac_reject_apply({commit}, param) {
+        $axios({
+            method: 'post',
+            url: '/api/admin/user/applyReject/'+param.userId,
+            headers: {"Content-Type":"application/json"},
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_success_back', true)
+            }
         })
     }
 }

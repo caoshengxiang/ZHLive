@@ -11,5 +11,8 @@ export default {
     },
     mut_userInfo(st, data) {
         st.userInfo = data
+    },
+    mut_success_back(st, data) {
+        st.successBack = data
     }
 }

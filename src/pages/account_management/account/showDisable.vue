@@ -4,7 +4,7 @@
             禁用用户
         </div>
         <div class="con">
-            <img class="head-img" src="../../../assets/placeholder.png" alt="">
+            <img class="head-img" :src="userInfo.icon" alt="">
             <ul class="detail">
                 <li>
                     <span>用户编号:</span>

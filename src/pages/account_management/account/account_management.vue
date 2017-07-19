@@ -44,7 +44,7 @@
                     <th>操作</th>
                 </tr>
                 <tr class="d" v-for="(item, index) in tableData" :key="index">
-                    <td>{{index + 1 + (currentPage-1)*10 }}</td>
+                    <td>{{ item.userId }}</td>
                     <td><img class="head-img" :src="item.icon" alt="头像"></td>
                     <td>{{item.nickname}}</td>
                     <td>{{item.phoneNum}}</td>
@@ -67,12 +67,13 @@
                     </td>
                     <td class="op" v-if="dropDownMenuItem === 2">
                         <button class="item2" @click="showLiveAccount(item)">查看</button>
-                        <button class="item2-1" @click="delLiveAccount(item)"> 移除主播</button>
+                        <button class="item2-1" @click="editCommission(item)">提成比例{{item.commission}}%</button>
+                        <button class="item2-2" @click="delLiveAccount(item)"> 移除主播</button>
                     </td>
                     <td class="op" v-if="dropDownMenuItem === 3">
                         <button class="item3" @click="showApplyLiveAccount(item)">查看</button>
                         <button class="item3-1" @click="passApply(item)"> 通过</button>
-                        <button class="item3-2" @click="refuseApply(item)"> 拒绝</button>
+                        <button class="item3-2" @click="rejectApply(item)"> 拒绝</button>
                     </td>
                 </tr>
             </table>
@@ -86,10 +87,32 @@
                 </el-pagination>
             </div>
         </div>
+
+        <!-- 编辑提成比例 -->
+        <div class="dialog">
+            <el-dialog :visible.sync="commissionDialogFormVisible" :show-close="false">
+                <div class="commission">
+                    <input type="number" v-model="commissionData.commission"><span>%</span>
+                </div>
+                <div slot="title">
+                    <div class="title">
+                        <h3>{{commissionData.nickname}}</h3>
+                        <h3>提成比例</h3>
+                    </div>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <div class="footer">
+                        <el-button @click="commissionDialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="commissionSave">确 定</el-button>
+                    </div>
+                </div>
+            </el-dialog>
+        </div>
+
     </div>
 </template>
 <script>
-
+    import {mapState, mapActions} from 'vuex'
     export default {
         name: 'accountManagement',
         props: {},
@@ -98,25 +121,43 @@
                 dropDownMenu: ['全部用户', '禁用用户', '全部主播', '主播申请列表'],
                 dropDownMenuItem: 0,
                 searchValue: '',
+                commissionDialogFormVisible: false,
+                commissionData: {}
             }
         },
         watch: {
             '$route.params.type'(va) {
                 console.log('请求数据' + va)
+            },
+            successBack(me) {
+                if (me) {
+                    this.getUserLists(parseInt(this.$route.params.type, 10) + 1, this.$route.params.page, 10)
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }
             }
         },
         computed: {
+            ...mapState('account', [
+                'successBack',
+                'total'
+            ]),
             tableData() {
                 return this.$store.state.account.accountLists;
-            },
-            total() {
-                return this.$store.state.account.total;
             },
             currentPage() {
                 return parseInt(this.$route.params.page, 10)
             }
         },
         methods: {
+            ...mapActions('account', [
+                'ac_modify_commission',
+                'ac_remove_anchor',
+                'ac_pass_apply',
+                'ac_reject_apply'
+            ]),
             handleCurrentChange(item) { // 分页
                 this.$router.push({name: 'accountManagement', params: {page: item}})
                 console.log('请求数据第' + item + '页');
@@ -185,14 +226,32 @@
             showLiveAccount(item) {
                 this.$router.push({name: 'accountShow', params: {id: item.userId}})
             },
-            delLiveAccount() {
+            delLiveAccount(item) {
+                this.$confirm('确认移除主播, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.ac_remove_anchor(item)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            editCommission(item) {
+                this.commissionDialogFormVisible = true
+                this.commissionData = item
             },
             showApplyLiveAccount(item) {
                 this.$router.push({name: 'showLiveApply', params: {id: item.userId}})
             },
-            passApply() {
+            passApply(item) { // 通过主播申请
+                this.ac_pass_apply(item)
             },
-            refuseApply() {
+            rejectApply(item) { // 拒绝主播申请
+                this.ac_reject_apply(item)
             },
             handleCommand(va) {
                 this.dropDownMenuItem = parseInt(va, 10);
@@ -222,6 +281,11 @@
             },
             showChatroomPage() { // 跳转聊天室页面
                 this.$router.push({name: 'chatroom', params: {page: 1}})
+            },
+            commissionSave() { // 修改比例
+                this.ac_modify_commission(this.commissionData)
+                this.commissionData = {}
+                this.commissionDialogFormVisible = false
             }
         },
         components: {},
@@ -315,6 +379,10 @@
                             background: #9b9393;
                         }
                         &.item2-1 {
+                            background: #ffbb00;
+                            width: 100px;
+                        }
+                        &.item2-2 {
                             background: red;
                         }
                         &.item3-1 {
@@ -345,6 +413,32 @@
         }
         .el-input__inner:focus {
             border-color: #ccc !important;
+        }
+    }
+
+    .dialog {
+        .title {
+            text-align: center;
+            h3 {
+                margin-bottom: 10px;
+            }
+        }
+        .commission {
+            text-align: center;
+            input {
+                font-size: 24px;
+                padding: 20px 10px;
+                width: 100px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                margin-right: 8px;
+            }
+            span {
+                font-size: 24px;
+            }
+        }
+        .footer {
+            text-align: center;
         }
     }
 </style>

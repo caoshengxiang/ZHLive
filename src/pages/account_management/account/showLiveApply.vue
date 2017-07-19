@@ -45,8 +45,8 @@
                 </li>
             </ul>
             <div class="btn-group">
-                <a class="btn b-1">通过</a>
-                <a class="btn b-2">拒绝</a>
+                <a class="btn b-1" @click="passApply">通过</a>
+                <a class="btn b-2" @click="rejectApply">拒绝</a>
                 <a class="btn b-3" @click="backList">返回</a>
             </div>
         </div>
@@ -55,7 +55,7 @@
 <script>
     import { mapState, mapActions } from 'vuex'
     export default {
-        name: 'show',
+        name: 'showLiveApply',
         props: {},
         data() {
             return {}
@@ -67,11 +67,21 @@
         },
         methods: {
             ...mapActions('account', [
-               'ac_userInfo'
+               'ac_userInfo',
+                'ac_pass_apply',
+                'ac_reject_apply'
             ]),
             backList() {
                 this.$router.go(-1);
-            }
+            },
+            passApply() { // 通过主播申请
+                this.ac_pass_apply(this.userInfo)
+                this.$router.go(-1);
+            },
+            rejectApply() { // 拒绝主播申请
+                this.ac_reject_apply(this.userInfo)
+                this.$router.go(-1);
+            },
         },
         components: {},
         beforeCreate(){

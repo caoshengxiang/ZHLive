@@ -8,5 +8,11 @@ export default {
     },
     mut_hotWord_success(st, data) {
         st.hotWordSuccess = data
+    },
+    mut_gift_list(st, data) {
+        st.giftsList = data
+    },
+    mut_gift_success_back(st, data) {
+        st.gitEditSuccess = data
     }
 }

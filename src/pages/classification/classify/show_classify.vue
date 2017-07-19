@@ -2,7 +2,7 @@
     <div>
         <div class="con-top">
             <div class="con-col">
-                <a class="con-top-back" @click="backList">Banner编辑</a>
+                <a class="con-top-back" @click="backList">返回列表</a>
             </div>
         </div>
         <div class="con" v-for="item in edit_classify_detail" v-if="item.id === $route.params.id">

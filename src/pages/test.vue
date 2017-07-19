@@ -5,15 +5,22 @@
         {{te}}
         <input type="file" id="file" @change="handleFile">
         <img :src="imgUrl" alt="">
+
+        <!-- vue2-editor -->
+        <div style="width: 600px;">
+            <vue-editor v-model="content"></vue-editor>
+        </div>
     </div>
 </template>
 <script>
+    import { VueEditor } from 'vue2-editor'
     export default {
         name: 'Test',
         data() {
             return {
                 te: 1,
-                imgUrl: ''
+                imgUrl: '',
+                content: ''
             }
         },
         methods: {
@@ -35,7 +42,10 @@
             te(va) {
                 console.log(va)
             }
-        }
+        },
+        components: {
+            VueEditor
+        },
     }
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>

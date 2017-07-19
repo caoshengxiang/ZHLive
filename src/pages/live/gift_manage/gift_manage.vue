@@ -24,16 +24,16 @@
         <div class="con">
             <p class="tips">注意：礼物默认按价格排序，前端仅显示前８个礼物</p>
             <div class="gift-box">
-                <div class="add" @click="editGiftHandle"><i class="el-icon-plus"></i></div>
-                <div class="gift-item" v-for="i in 10">
+                <div class="add" @click="editGiftHandle({})"><i class="el-icon-plus"></i></div>
+                <div class="gift-item" v-for="item in giftsList">
                     <div class="gift-detail">
-                        <img src="../../../assets/placeholder.png" alt="">
-                        <p>魂币x9</p>
-                        <p>礼物名称</p>
+                        <img :src="item.icon" alt="">
+                        <p>魂币x{{item.soulCurrency}}</p>
+                        <p>{{item.name}}</p>
                     </div>
                     <div class="op">
-                        <a class="dot del">删除</a>
-                        <a class="edit" @click="editGiftHandle">编辑</a>
+                        <a class="dot del" @click="delGift(item)">删除</a>
+                        <a class="edit" @click="editGiftHandle(item)">编辑</a>
                     </div>
                 </div>
             </div>
@@ -44,12 +44,12 @@
             <el-dialog :visible.sync="giftEditDialogVisible" :show-close="false">
                 <div class="gift-edit">
                     <h3>礼物名称</h3>
-                    <input class="text" type="text" placeholder="单行输入">
-                    <h3>礼物名称</h3>
-                    <input class="text" type="text" placeholder="单行输入">
+                    <input class="text" type="text" placeholder="单行输入" v-model="editGiftData.name">
+                    <h3>魂币</h3>
+                    <input class="text" type="text" placeholder="单行输入" v-model="editGiftData.soulCurrency">
                     <h3>礼物图片</h3>
                     <div class="img">
-                        <img id="giftImg" src="../../../assets/placeholder.png" alt="">
+                        <img id="giftImg" :src="editGiftData.icon" v-model="editGiftData.icon" alt="">
                         <div class="upload">
                             <el-button icon="upload2">上传</el-button>
                             <input type="file" class="file" @change="fileUpload">
@@ -60,15 +60,15 @@
                     添加/编辑礼物信息
                 </div>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="danger" @click="giftEditDialogVisible = false">保　存</el-button>
-                    <el-button @click="giftEditDialogVisible = false">取 消</el-button>
+                    <el-button type="danger" @click="giftEditSave">保　存</el-button>
+                    <el-button @click="giftEditCancel">取 消</el-button>
                 </div>
             </el-dialog>
         </div>
     </div>
 </template>
 <script>
-
+    import {mapState, mapActions} from 'vuex'
     export default {
         name: 'giftManage',
         props: {},
@@ -76,11 +76,30 @@
             return {
                 dropDownMenu: ['全部用户', '禁用用户', '全部主播', '主播申请列表'],
                 dropDownMenuItem: 0,
-                giftEditDialogVisible: false
+                giftEditDialogVisible: false,
+                editGiftData: {}
             }
         },
-        computed: {},
+        computed: {
+            ...mapState('live', [
+                'giftsList',
+                'gitEditSuccess'
+            ])
+        },
+        watch: {
+            gitEditSuccess(me) {
+                if (me) {
+                    this.giftEditDialogVisible = false
+                    this.ac_gift_list()
+                }
+            }
+        },
         methods: {
+            ...mapActions('live', [
+                'ac_gift_list',
+                'ac_gift_remove',
+                'ac_gift_save'
+            ]),
             handleCommand(va) { // 下拉
                 this.dropDownMenuItem = parseInt(va, 10);
 
@@ -96,8 +115,9 @@
             handleSearchClick() {
 
             },
-            editGiftHandle() {
+            editGiftHandle(item) {
                 this.giftEditDialogVisible = true
+                this.editGiftData = item
             },
             fileUpload(e) {
                 let f = e.target.files[0];
@@ -108,13 +128,44 @@
                 r.readAsDataURL(f)
                 r.onload = function () {
                     imgDom.src = r.result
+                    that.editGiftData.icon = r.result
                 }
+            },
+            giftEditSave() { // 编辑保存
+                this.ac_gift_save(this.editGiftData).then(()=>{
+
+                })
+
+            },
+            giftEditCancel() { // 编辑取消
+                this.giftEditDialogVisible = false
+                this.editGiftData = []
+            },
+            delGift(item) { // 删除礼物
+                this.$confirm('此操作将永久删除该礼物, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.ac_gift_remove({id: item.id}).then(()=>{
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             }
         },
         components: {},
         beforeCreate(){
         },
         created() {
+            this.ac_gift_list()
         },
         beforeMount() {
         },
@@ -135,7 +186,8 @@
 
     .con {
         .tips {
-            margin: 10px 0;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
         .gift-box {
             display: flex;
@@ -175,9 +227,16 @@
                 .op {
                     text-align: right;
                     padding-right: 20px;
-                    height: 30px;
+                    height: 24px;
+                    font-size: 12px;
+                    padding-top: 3px;
                     .edit {
                         font-weight: bold;
+                        cursor: pointer;
+                    }
+                    .del {
+                        cursor: pointer;
+                        margin-right: 5px;
                     }
                 }
             }
@@ -205,6 +264,7 @@
             .upload {
                 position: relative;
                 display: inline-block;
+                top: -10px;
             }
             .file {
                 width: 80px;

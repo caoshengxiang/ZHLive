@@ -31,11 +31,27 @@
                     <td></td>
                     <td></td>
                     <td class="td-op">
-                        <button class="b-1">查看</button>
+                        <button class="b-1" @click="showDetail">查看</button>
                         <button class="b-2">删除</button>
                     </td>
                 </tr>
             </table>
+        </div>
+
+        <div class="dialog">
+            <!-- 查看 -->
+            <el-dialog title="用户举报" :visible.sync="detailDialogFormVisible" >
+                <div class="detail">　
+                    <p><label>举报用户: </label><span>用户昵称（123）</span></p>
+                    <p><label>举报事项: </label><span>录像</span></p>
+                    <p><label>被举报人: </label><span>用户昵称（10）</span></p>
+                    <p><label>举报内容: </label><span>支付宝（123）</span></p>
+                </div>
+                <div class="op">
+                    <el-button type="danger">删除</el-button>
+                    <el-button @click="backList">返回</el-button>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -46,7 +62,8 @@
         props: {},
         data() {
             return {
-                searchValue: ''
+                searchValue: '',
+                detailDialogFormVisible: false
             }
         },
         computed: {},
@@ -59,6 +76,12 @@
             },
             handleSearchClick() {
 
+            },
+            showDetail() {
+                this.detailDialogFormVisible = true
+            },
+            backList() {
+                this.detailDialogFormVisible = false
             }
         },
         components: {},
@@ -89,5 +112,24 @@
         .b-2 {
             background: #ff2100;
         }
+
+    }
+
+    .dialog {
+        .detail {
+            p {
+                margin-bottom: 14px;
+                label {
+                    font-weight: bold;
+                }
+            }
+        }
+        .op {
+            width: 100%;
+            margin-top: 30px;
+        }
+    }
+    .el-button {
+        width: 30%;
     }
 </style>

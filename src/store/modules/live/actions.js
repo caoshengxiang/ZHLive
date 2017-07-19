@@ -36,5 +36,36 @@ export default {
                 commit('mut_hotWord_success', true)
             }
         })
+    },
+    ac_gift_list({commit}, param) { // 礼物列表获取
+        $axios.get('/api/admin/present/list').then((res)=>{
+            return res.data
+        }).then((d)=>{
+            commit('mut_gift_list', d.data)
+            commit('mut_gift_success_back', false)
+        })
+    },
+    ac_gift_remove({commit}, param) { // 礼物删除
+        $axios.delete('/api/admin/present/remove', {
+            params: {
+                id: param.id
+            }
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_gift_success_back', true)
+            }
+        })
+    },
+    ac_gift_save({commit}, param) {
+        $axios({
+            method: 'post',
+            url: '/api/admin/present/save',
+            data: JSON.stringify(param),
+            headers: {"Content-Type": "application/json"}
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_gift_success_back', true)
+            }
+        })
     }
 }
