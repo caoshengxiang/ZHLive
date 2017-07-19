@@ -72,7 +72,7 @@
     </div>
 </template>
 <script>
-
+    import {mapState, mapActions} from 'vuex'
     export default {
         name: 'chatroom',
         props: {},
@@ -98,11 +98,17 @@
         },
         watch: {},
         computed: {
+            ...mapState('account',[
+                'chatRoomMsg'
+            ]),
             currentPage() {
                 return parseInt(this.$route.params.page, 10)
             }
         },
         methods: {
+            ...mapActions('account', [
+                'ac_msg_list'
+            ]),
             handleCommand(va) {
                 this.dropDownMenuItem = parseInt(va, 10);
                 this.$router.push({name: 'accountManagement', params: {type: va, page: 1}})
@@ -124,7 +130,7 @@
         beforeCreate(){
         },
         created() {
-
+            this.ac_msg_list({type: 'CHATROOMPUBLIC', pageIndex: 1, pageSize: 10})
         },
         beforeMount() {
         },

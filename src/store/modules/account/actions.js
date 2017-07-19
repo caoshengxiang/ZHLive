@@ -19,7 +19,7 @@ export default {
 
     // 禁用
     ac_disableUser ({commit}, param) {
-        $axios.get(getUrl('/api/admin/user/disableUser', param.param1)).then(res=>{
+        $axios.get(getUrl('/api/admin/user/disableUser', param.param1)).then(res => {
             if (res.status === 200) {
                 $axios.get(getUrl('/api/admin/user/list', param.param2)).then((res2) => {
                     // console.log('ok:', res2);
@@ -36,7 +36,7 @@ export default {
 
     // 解禁
     ac_enableUser ({commit}, param) {
-        $axios.get(getUrl('/api/admin/user/enableUser', param.param1)).then(res=>{
+        $axios.get(getUrl('/api/admin/user/enableUser', param.param1)).then(res => {
             if (res.status === 200 && param.param2) {
                 $axios.get(getUrl('/api/admin/user/list', param.param2)).then((res2) => {
                     // console.log('ok:', res2);
@@ -53,9 +53,9 @@ export default {
 
     // 用户详细
     ac_userInfo ({commit}, param) {
-        $axios.get(getUrl('/api/admin/user/getUser', param)).then(res=>{
+        $axios.get(getUrl('/api/admin/user/getUser', param)).then(res => {
             return res.data.data
-        }).then(d=>{
+        }).then(d => {
             commit('mut_userInfo', d)
         })
     },
@@ -64,8 +64,8 @@ export default {
     ac_modify_user ({commit}, param) {
         let p = {};
 
-        param.gender === '男' ? param.gender='MALE' : param.gender='FEMALE'
-        Object.keys(param).forEach(key=>{
+        param.gender === '男' ? param.gender = 'MALE' : param.gender = 'FEMALE'
+        Object.keys(param).forEach(key => {
             if (param[key]) {
                 p[key] = param[key]
             }
@@ -74,7 +74,7 @@ export default {
         $axios({
             method: 'post',
             url: '/api/admin/user/modify',
-            headers: {"Content-Type":"application/json"},
+            headers: {"Content-Type": "application/json"},
             data: JSON.stringify(p)
         })
     },
@@ -83,8 +83,8 @@ export default {
     ac_modify_commission({commit}, param) {
         $axios({
             method: 'post',
-            url: '/api/admin/user/modifyCommission/'+param.userId+'_'+param.commission,
-            headers: {"Content-Type":"application/json"},
+            url: '/api/admin/user/modifyCommission/' + param.userId + '_' + param.commission,
+            headers: {"Content-Type": "application/json"},
         })
     },
 
@@ -92,9 +92,9 @@ export default {
     ac_remove_anchor({commit}, param) {
         $axios({
             method: 'post',
-            url: '/api/admin/user/removeAnchor/'+param.userId,
-            headers: {"Content-Type":"application/json"},
-        }).then(res=>{
+            url: '/api/admin/user/removeAnchor/' + param.userId,
+            headers: {"Content-Type": "application/json"},
+        }).then(res => {
             if (res.status === 200) {
                 commit('mut_success_back', true)
             }
@@ -106,9 +106,9 @@ export default {
         console.log(param)
         $axios({
             method: 'post',
-            url: '/api/admin/user/applyPass/'+param.userId,
-            headers: {"Content-Type":"application/json"},
-        }).then(res=>{
+            url: '/api/admin/user/applyPass/' + param.userId,
+            headers: {"Content-Type": "application/json"},
+        }).then(res => {
             if (res.status === 200) {
                 commit('mut_success_back', true)
             }
@@ -119,12 +119,52 @@ export default {
     ac_reject_apply({commit}, param) {
         $axios({
             method: 'post',
-            url: '/api/admin/user/applyReject/'+param.userId,
-            headers: {"Content-Type":"application/json"},
-        }).then(res=>{
+            url: '/api/admin/user/applyReject/' + param.userId,
+            headers: {"Content-Type": "application/json"},
+        }).then(res => {
             if (res.status === 200) {
                 commit('mut_success_back', true)
             }
         })
+    },
+
+    // 添加消息
+    ac_msg_add({commit}, param) {
+        $axios({
+            method: 'post',
+            url: '/api/admin/msg/add',
+            headers: {"Content-Type": "application/json"},
+            data: JSON.stringify(param)
+        }).then((res) => {
+            console.log(res)
+            return res.data
+        }).then(d => {
+
+        })
+    },
+
+    // 获取消息列表
+    ac_msg_list({commit}, param) {
+        $axios({
+            method: 'get',
+            url: '/api/admin/msg/list/' + param.type,
+            headers: {"Content-Type": "application/json"},
+            data: JSON.stringify(param),
+            params: {
+                pageIndex: param.pageIndex,
+                pageSize: param.pageSize
+            }
+        }).then((res) => {
+            console.log(res)
+            return res.data.data
+        }).then(d => {
+            if (param.type === 'SYSTEM') {
+                commit('mut_sys_msg', d.data)
+            } else {
+                commit('mut_chatroom_msg', d.data)
+            }
+            commit('mut_msg_total', d.total)
+        })
     }
+
 }

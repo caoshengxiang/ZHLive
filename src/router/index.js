@@ -19,7 +19,7 @@ const showDisable = resolve => require.ensure([], () => resolve(require('../page
 const showLiveApply = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/showLiveApply.vue')), 'accountManagement')
 const showLiveUser = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/showLiveUser.vue')), 'accountManagement')
 // 系统消息
-const message = resolve => require.ensure([], () => resolve(require('../pages/account_management/message/message.vue')), 'message')
+const message = resolve => require.ensure([], () => resolve(require('../pages/account_management/sys_message/message.vue')), 'message')
 // 聊天室
 const chatroom = resolve => require.ensure([], () => resolve(require('../pages/account_management/chatroom/chatroom.vue')), 'message')
 

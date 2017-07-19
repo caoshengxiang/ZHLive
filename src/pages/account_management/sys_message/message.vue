@@ -20,7 +20,7 @@
                 <div class="con-col-item con-col-active">系统消息</div>
                 <div class="con-col-item" @click="showChatroomPage">聊天室公共消息</div>
             </div>
-            <div class="con-right-btn" @click="sendMessage">+ 发布新消息</div>
+            <div class="con-right-btn" @click="openSendMessage">+ 发布新消息</div>
 
         </div>
         <div class="con-table">
@@ -30,9 +30,9 @@
                     <th class="th-msg">消息内容</th>
                     <th>操作</th>
                 </tr>
-                <tr class="border-bottom" v-for="(item, index) in tableData" :key="index">
-                    <td>{{ item.time }}</td>
-                    <td style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;text-align: left">{{ item.msg
+                <tr class="border-bottom" v-for="(item, index) in sysMsg" :key="index">
+                    <td>{{ item.createTime }}</td>
+                    <td style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;text-align: left">{{ item.content
                         }}
                     </td>
                     <td class="op">
@@ -43,7 +43,7 @@
             <div class="con-page">
                 <el-pagination
                         layout="prev, pager, next, jumper"
-                        :total="total"
+                        :total="msgTotal"
                         @current-change="handleCurrentChange"
                         :current-page="currentPage"
                 >
@@ -56,15 +56,15 @@
             <!-- 查看消息 -->
             <el-dialog :title="messageDetail.time" :visible.sync="dialogVisible1">
                 <div class="detail-msg">
-                    {{messageDetail.msg}}
+                    {{messageDetail.content}}
                 </div>
             </el-dialog>
 
             <!--　发布新消息　-->
             <el-dialog title="发布系统消息" :visible.sync="dialogVisible2">
-                <textarea class="msg-input" name="" id="edit" placeholder="输入消息"></textarea>
+                <textarea class="msg-input" name="" id="edit" placeholder="输入消息" v-model="addMsg.content"></textarea>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="">发　布</el-button>
+                    <el-button type="primary" @click="sendMessage">发　布</el-button>
                     <el-button @click="dialogVisible2 = false">取 消</el-button>
                 </div>
             </el-dialog>
@@ -72,7 +72,7 @@
     </div>
 </template>
 <script>
-
+    import {mapState, mapActions} from 'vuex'
     export default {
         name: 'Message',
         props: {},
@@ -81,28 +81,30 @@
                 dropDownMenu: ['全部用户', '禁用用户', '全部主播', '主播申请列表'],
                 dropDownMenuItem: 0,
                 searchValue: '',
-                tableData: [
-                    {
-                        time: '2017-02-01 11:50',
-                        msg: '消息消息消息消息,消息消息消息消息消息消息消息消息,消息消息消息消息,消息消息消息消息消息消息消息消息消息消息消息消息,消息消息.息消息消息消息消息,消息消息'
-                    },
-                    {time: '2017-02-01 11:50', msg: '消息消息消息消息,消息消息消息消息消息消息消息消息'},
-                    {time: '2017-02-01 11:50', msg: '消息消息消息消息,消息消息消息消息消息消息消息消息'},
-                ],
-                total: 50,
                 dialogVisible1: false,
                 dialogVisible2: false,
-                messageDetail: {time: '2017-02-01 11:50', msg: '消息消息消息消息,消息消息消息消息消息消息消息消息'},
-
+                messageDetail: {},
+                addMsg: {
+                    type: 'SYSTEM',
+                    content: ''
+                }
             }
         },
         watch: {},
         computed: {
+            ...mapState('account',[
+                'sysMsg',
+                'msgTotal',
+            ]),
             currentPage() {
                 return parseInt(this.$route.params.page, 10)
             }
         },
         methods: {
+            ...mapActions('account', [
+                'ac_msg_list',
+                'ac_msg_add',
+            ]),
             handleCommand(va) {
                 this.dropDownMenuItem = parseInt(va, 10);
                 this.$router.push({name: 'accountManagement', params: {type: va, page: 1}})
@@ -112,9 +114,15 @@
             },
             showMessage(item) {
                 this.dialogVisible1 = true
+                this.messageDetail = item
+            },
+            openSendMessage() {
+                this.dialogVisible2 = true
             },
             sendMessage() {
-                this.dialogVisible2 = true
+                this.ac_msg_add(this.addMsg)
+                this.dialogVisible2 = false
+                this.ac_msg_list({type: 'SYSTEM', pageIndex: this.$route.params.page, pageSize: 10})
             },
             showChatroomPage() { // 跳转聊天室页面
                 this.$router.push({name: 'chatroom', params: {page: 1}})
@@ -124,7 +132,7 @@
         beforeCreate(){
         },
         created() {
-
+            this.ac_msg_list({type: 'SYSTEM', pageIndex: 1, pageSize: 10})
         },
         beforeMount() {
         },
