@@ -123,6 +123,7 @@
         padding: 10px 20px;
         .tips {
             margin: 10px 0;
+            font-weight: bold;
         }
         .tags {
             .tags-item {

@@ -54,7 +54,7 @@
         <!-- 弹窗 -->
         <div class="dialog">
             <!-- 查看消息 -->
-            <el-dialog :title="messageDetail.time" :visible.sync="dialogVisible1">
+            <el-dialog :title="messageDetail.createTime" :visible.sync="dialogVisible1">
                 <div class="detail-msg">
                     {{messageDetail.content}}
                 </div>
@@ -90,14 +90,27 @@
                 }
             }
         },
-        watch: {},
         computed: {
             ...mapState('account',[
                 'sysMsg',
                 'msgTotal',
+                'sendMsgBack'
             ]),
             currentPage() {
                 return parseInt(this.$route.params.page, 10)
+            }
+        },
+        watch: {
+            sendMsgBack(me) {
+                if (me) {
+                    this.ac_msg_list({type: 'SYSTEM', pageIndex: this.$route.params.page, pageSize: 10}).then(()=>{
+                        this.dialogVisible2 = false
+                        this.addMsg = {
+                            type: 'SYSTEM',
+                            content: ''
+                        }
+                    })
+                }
             }
         },
         methods: {
@@ -111,6 +124,7 @@
             },
             handleCurrentChange(item) { // 分页
                 this.$router.push({name: 'message', params: {page: item}})
+                this.ac_msg_list({type: 'SYSTEM', pageIndex: item, pageSize: 10})
             },
             showMessage(item) {
                 this.dialogVisible1 = true
@@ -121,8 +135,6 @@
             },
             sendMessage() {
                 this.ac_msg_add(this.addMsg)
-                this.dialogVisible2 = false
-                this.ac_msg_list({type: 'SYSTEM', pageIndex: this.$route.params.page, pageSize: 10})
             },
             showChatroomPage() { // 跳转聊天室页面
                 this.$router.push({name: 'chatroom', params: {page: 1}})
@@ -132,7 +144,7 @@
         beforeCreate(){
         },
         created() {
-            this.ac_msg_list({type: 'SYSTEM', pageIndex: 1, pageSize: 10})
+            this.ac_msg_list({type: 'SYSTEM', pageIndex: this.$route.params.page, pageSize: 10})
         },
         beforeMount() {
         },

@@ -10,6 +10,19 @@
         <div style="width: 600px;">
             <vue-editor v-model="content"></vue-editor>
         </div>
+
+        <!-- table -->
+        <table style="table-layout: fixed;" width="100%" border="1">
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td width="10%">3</td>
+            </tr>
+        </table>
+        <!---->
+        <select name="" id="">
+            <option value="1"></option>
+        </select>
     </div>
 </template>
 <script>

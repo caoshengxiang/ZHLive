@@ -17,10 +17,10 @@
                 <tr class="border-bottom" v-for="(item, index) in classifyLists" :key="index">
                     <td>{{item.name}}</td>
                     <td><span v-for="(cla2, i2) in item.child" :key="i2">{{cla2.name}}, </span></td>
-                    <td class="op">
-                        <a class="op-1" @click="showClassify(item)">查看</a>
-                        <a class="op-2" @click="editClassify(item)">编辑</a>
-                        <a class="op-3" @click="delClassify(item)">删除</a>
+                    <td class="td-op">
+                        <button class="op-1" @click="showClassify(item)">查看</button>
+                        <button class="op-2" @click="editClassify(item)">编辑</button>
+                        <button class="op-3" @click="delClassify(item)">删除</button>
                     </td>
                 </tr>
             </table>
@@ -143,27 +143,16 @@
         }
     }
     .con-table {
-        .op {
+        .td-op {
             color: #fff;
             .op-1 {
                 background: #00c7ff;
-                border-radius: 5px;
-                padding: 5px 10px;
-                cursor: pointer;
             }
             .op-2 {
                 background: #ff7b00;
-                margin-left: 10px;
-                border-radius: 5px;
-                padding: 5px 10px;
-                cursor: pointer;
             }
             .op-3 {
                 background: #000000;
-                margin-left: 10px;
-                border-radius: 5px;
-                padding: 5px 10px;
-                cursor: pointer;
             }
         }
     }

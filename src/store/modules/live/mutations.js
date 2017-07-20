@@ -14,5 +14,14 @@ export default {
     },
     mut_gift_success_back(st, data) {
         st.gitEditSuccess = data
+    },
+    mut_live_list(st, data) {
+        st.liveList = data
+    },
+    mut_live_total(st, data) {
+        st.liveTotal = data
+    },
+    mut_live_success_back(st, data) {
+        st.liveSuccessBack = data
     }
 }

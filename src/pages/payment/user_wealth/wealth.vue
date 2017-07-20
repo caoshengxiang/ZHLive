@@ -27,7 +27,7 @@
                     <th>总充值(RMB)</th>
                     <th>总收入(魂币)</th>
                     <th>总支出(魂币)</th>
-                    <th>操作</th>
+                    <th width="30%">操作</th>
                 </tr>
                 <tr class="border-bottom">
                     <td>1</td>

@@ -56,7 +56,7 @@
     .con {
         padding-top: 36px;
         min-height: 810px;
-        background:#c1b8b8;
+        background: url("../assets/bg.jpg");
     }
     .menu-box {
         width: 200px;

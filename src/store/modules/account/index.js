@@ -17,6 +17,7 @@ export default {
         sysMsg: [], // 系统消息
         chatRoomMsg: [], // 聊天室消息,
         msgTotal: 0, // 消息总数
+        sendMsgBack: false, // 消息发送成功返回
     },
     getters,
     actions,

@@ -23,7 +23,7 @@
                     <th>手机</th>
                     <th>举报时间</th>
                     <th>举报类型</th>
-                    <th>操作</th>
+                    <th width="170px">操作</th>
                 </tr>
                 <tr class="border-bottom">
                     <td>１</td>

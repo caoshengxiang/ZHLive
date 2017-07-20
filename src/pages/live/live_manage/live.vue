@@ -30,17 +30,17 @@
                 </el-input>
             </div>
 
-            <div class="living">正在直播: <span class="live-num">50</span></div>
+            <div class="living">正在直播: <span class="live-num">{{liveTotal}}</span></div>
         </div>
         <div class="con">
             <div class="live-box">
-                <div class="live-item" v-for="(item, i) in liveData" :key="i">
-                    <img class="cover-img" src="../../../assets/placeholder.png" alt="">
+                <div class="live-item" v-for="(item, i) in liveList" :key="i">
+                    <img class="cover-img" :src="item.videoPic" alt="">
                     <!-- 正在直播 -->
                     <p class="living" v-if="$route.params.type == 0">
-                        <a>禁用聊天室</a><span> · </span>
-                        <a>中断聊天室</a><span> · </span>
-                        <a>禁播</a><span> · </span>
+                        <a @click="disableChatRoom(item)">禁用聊天室</a><span> · </span>
+                        <a @click="disableLive(item)">中断直播</a><span> · </span>
+                        <a @click="disablePlay(item)">禁播</a><span> · </span>
                         <a @click="editLiveHandle(item)" class="edit">编辑</a>
                     </p>
                     <!-- 禁播频道 -->
@@ -61,7 +61,7 @@
             <div class="con-page" id="page">
                 <el-pagination
                         layout="prev, pager, next, jumper"
-                        :total="total"
+                        :total="liveTotal"
                         @current-change="handleCurrentChange"
                         :current-page="currentPage"
                 >
@@ -74,12 +74,12 @@
             <el-dialog :visible.sync="editLiveDialogVisible" :show-close="false">
                 <div class="manage-edit">
                     <h3>主播</h3>
-                    <input class="text" type="text" :placeholder="manageInfo.name" disabled>
+                    <input class="text" type="text" :placeholder="liveInfo.anchor" disabled>
                     <h3>直播标题</h3>
-                    <input class="text" type="text" :placeholder="manageInfo.title" v-model="manageInfo.title">
+                    <input class="text" type="text" :placeholder="liveInfo.title" v-model="liveInfo.title">
                     <h3>直播封面</h3>
                     <div class="img">
-                        <img id="coverImg" src="../../../assets/placeholder.png" alt="">
+                        <img id="coverImg" :src="liveInfo.videoPic" alt="">
                         <div class="upload">
                             <el-button icon="upload2">上传</el-button>
                             <input type="file" class="file" @change="fileUpload">
@@ -88,19 +88,21 @@
                     <h3>分类</h3>
                     <div class="cla">
                         <select id="category-1" class="sel" @change="changeCate1Handle">
+                            <option>未分类</option>
                             <option
                                     v-for="cate in classifyLists"
                                     :value="cate.name">{{cate.name}}
                             </option>
                         </select>
                         <span class="cate2">-- <select id="category-2" class="sel" @change="changeCage2Handle">
+                            <option value="-1">未分类</option>
                             <option v-for="cate2 in childCate" :value="cate2.name">{{cate2.name}}</option>
                         </select></span>
                     </div>
                     <h3>标签</h3>
                     <div class="tags-con">
                         <el-tag
-                                v-for="tag in manageInfo.tags"
+                                v-for="tag in liveInfo.labelNames"
                                 :key="tag.name"
                                 :closable="true"
                                 :type="tag.type"
@@ -122,7 +124,7 @@
                         <i class="el-icon-plus" @click="addTags">标签</i>
                     </div>
                     <h3>置顶（1－10）</h3>
-                    <input class="text" type="text" placeholder="无">
+                    <input class="text" type="text" v-model="liveInfo.hot" placeholder="无">
                 </div>
                 <div slot="title" class="dialog-title">
                     编辑直播信息
@@ -189,41 +191,11 @@
                 dropDownMenu: ['正在直播', '禁播频道', '聊天室禁用', '直播举报'],
                 dropDownMenuItem: 0,
                 searchValue: '',
-                liveData: [
-                    {
-                        name: '主播',
-                        title: '表器',
-                        icon: '',
-                        cate1: '一级分类',
-                        cate2: '二级分类',
-                        tags: [{id: 1, name: 'qwe'}],
-                        top: 0,
-                    },
-                    {
-                        name: '主播1',
-                        title: '表器1',
-                        icon: '',
-                        cate1: '一级分类',
-                        cate2: '二级分类',
-                        tags: [{id: 1, name: 'qwe'}],
-                        top: 0,
-                    },
-                    {
-                        name: '主播2',
-                        title: '表器3',
-                        icon: '',
-                        cate1: '一级分类',
-                        cate2: '二级分类',
-                        tags: [{id: 1, name: 'qwe'}],
-                        top: 0,
-                    }
-                ],
-                currentPage: 1,
-                total: 50,
+
                 editLiveDialogVisible: false, // 编辑dialog
                 addTagsDialogVisible: false, // 添加标签dialog
                 lookReportDialogVisible: false, // 直播举报查看dialog
-                manageInfo: {}, // 主播详细
+                liveInfo: {}, // 主播详细
                 childCate: [], // 一级对应的二级分类
                 tempAddTags: [],
                 reportData: [
@@ -245,11 +217,25 @@
                 'classifyLists',
                 'tags',
             ]),
+            ...mapState('live', [
+                'liveList',
+                'liveTotal',
+                'liveSuccessBack',
+            ]),
+            currentPage() {
+                return parseInt(this.$route.params.page, 10)
+            }
         },
         methods: {
             ...mapActions('category', [
                 'ac_classify_list',
-                'ac_tags_list'
+                'ac_tags_list',
+            ]),
+            ...mapActions('live', [
+                'ac_live_list',
+                'ac_disable_chartroom',
+                'ac_disable_live',
+                'ac_disable_play',
             ]),
             handleCommand(va) { // 下拉
                 this.dropDownMenuItem = parseInt(va, 10);
@@ -271,23 +257,79 @@
             },
             editLiveHandle(item) { // 点击编辑
                 this.editLiveDialogVisible = true
-                this.manageInfo = item
+                this.liveInfo = item
                 this.$nextTick(() => {
+                    document.getElementById('category-2').selectedIndex = -1
+                    document.getElementById('category-1').selectedIndex = -1
                     this.classifyLists.forEach((ca, i) => {
-                        if (ca.name === item.cate1) {
-                            document.getElementById('category-1').selectedIndex = i
+                        if (ca.name === item.levelOneCategoryName) {
+                            document.getElementById('category-1').selectedIndex = i+1
                             this.childCate = ca.child
                         }
                     })
                     this.$nextTick(() => {
                         this.childCate.forEach((ca2, j) => {
-                            if (ca2.name === item.cate2) {
-                                document.getElementById('category-2').selectedIndex = j
+                            if (ca2.name === item.levelTwoCategoryName) {
+                                document.getElementById('category-2').selectedIndex = j+1
                             }
                         })
                     })
                 })
 
+            },
+            disableChatRoom(item) { // 禁用聊天室
+                this.$confirm('确认禁用聊天室, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.ac_disable_chartroom(item)
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            disableLive(item) { // 中断直播
+                this.$confirm('确认中断直播, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.ac_disable_live(item)
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作成功'
+                    });
+                });
+            },
+            disablePlay(item) { // 禁播
+                this.$confirm('确认禁播, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.ac_disable_play(item)
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             changeCate1Handle(e) { // 点击一级分类
 //                console.log(e.target.value)
@@ -299,11 +341,11 @@
                 })
 
                 this.childCate = cate2[0].child // 设置对应的二级分类
-                this.manageInfo.cate1 = e.target.value // 修改一级
-                this.manageInfo.cate2 = this.childCate[0].name // 默认二级
+                this.liveInfo.cate1 = e.target.value // 修改一级
+                this.liveInfo.cate2 = this.childCate[0].name // 默认二级
             },
             changeCage2Handle(e) {
-                this.manageInfo.cate2 = e.target.value
+                this.liveInfo.cate2 = e.target.value
             },
             fileUpload(e) {
                 let f = e.target.files[0];
@@ -314,7 +356,7 @@
                 r.readAsDataURL(f)
                 r.onload = function () {
                     imgDom.src = r.result
-                    that.manageInfo.icon = r.result
+                    that.liveInfo.icon = r.result
                 }
             },
             addTags() {
@@ -325,7 +367,7 @@
                     this.initClass()
 
                     this.tags.forEach((item, i) => {
-                        this.manageInfo.tags.forEach((info) => {
+                        this.liveInfo.tags.forEach((info) => {
                             if (item.name === info.name) {
                                 document.getElementsByClassName('tag-item')[i].className = 'item tag-item active'
                             }
@@ -335,11 +377,11 @@
                 })
             },
             delThisTag(tag) {
-                this.manageInfo.tags.splice(this.manageInfo.tags.indexOf(tag), 1)
+                this.liveInfo.tags.splice(this.liveInfo.tags.indexOf(tag), 1)
             },
             saveManageInfo() { // 保存
-                console.log('保存', this.manageInfo)
-                this.manageInfo.tags = [...this.manageInfo.tags, ...this.tempAddTags]
+                console.log('保存', this.liveInfo)
+                this.liveInfo.tags = [...this.liveInfo.tags, ...this.tempAddTags]
                 this.tempAddTags = []
             },
             cancelManageInfo() { // 取消
@@ -349,7 +391,7 @@
             addThisTag(tag, i) {
                 let isExist = false
 
-                this.manageInfo.tags.forEach((info) => {
+                this.liveInfo.tags.forEach((info) => {
                     if (tag.name === info.name) {
                         isExist = true
                     }
@@ -394,6 +436,7 @@
         created() {
             this.ac_classify_list()
             this.ac_tags_list()
+            this.ac_live_list({pageIndex: this.$route.params.page, pageSize: 10})
         },
         beforeMount() {
         },

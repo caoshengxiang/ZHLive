@@ -20,7 +20,7 @@
                 <div class="con-col-item" @click="showMessagePage">系统消息</div>
                 <div class="con-col-item con-col-active">聊天室公共消息</div>
             </div>
-            <div class="con-right-btn" @click="sendMessage">+ 发布新消息</div>
+            <div class="con-right-btn" @click="openSendMessage">+ 发布新消息</div>
 
         </div>
         <div class="con-table">
@@ -30,9 +30,10 @@
                     <th class="th-msg">消息内容</th>
                     <th>操作</th>
                 </tr>
-                <tr class="border-bottom" v-for="(item, index) in tableData" :key="index">
-                    <td>{{ item.time }}</td>
-                    <td style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;text-align: left">{{ item.msg
+                <tr class="border-bottom" v-for="(item, index) in chatRoomMsg" :key="index">
+                    <td>{{ item.createTime }}</td>
+                    <td style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;">{{
+                        item.content
                         }}
                     </td>
                     <td class="op">
@@ -43,7 +44,7 @@
             <div class="con-page">
                 <el-pagination
                         layout="prev, pager, next, jumper"
-                        :total="total"
+                        :total="msgTotal"
                         @current-change="handleCurrentChange"
                         :current-page="currentPage"
                 >
@@ -54,17 +55,17 @@
         <!-- 弹窗 -->
         <div class="dialog">
             <!-- 查看消息 -->
-            <el-dialog :title="messageDetail.time" :visible.sync="dialogVisible1">
+            <el-dialog :title="messageDetail.createTime" :visible.sync="dialogVisible1">
                 <div class="detail-msg">
-                    {{messageDetail.msg}}
+                    {{messageDetail.content}}
                 </div>
             </el-dialog>
 
             <!--　发布新消息　-->
             <el-dialog title="发布系统消息" :visible.sync="dialogVisible2">
-                <textarea class="msg-input" name="" id="edit" placeholder="输入消息"></textarea>
+                <textarea class="msg-input" name="" id="edit" placeholder="输入消息" v-model="addMsg.content"></textarea>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="">发　布</el-button>
+                    <el-button type="primary" @click="sendMessage">发　布</el-button>
                     <el-button @click="dialogVisible2 = false">取 消</el-button>
                 </div>
             </el-dialog>
@@ -81,33 +82,42 @@
                 dropDownMenu: ['全部用户', '禁用用户', '全部主播', '主播申请列表'],
                 dropDownMenuItem: 0,
                 searchValue: '',
-                tableData: [
-                    {
-                        time: '2017-02-01 11:50',
-                        msg: '消息消息消息消息,消息消息消息消息消息消息消息消息,消息消息消息消息,消息消息消息消息消息消息消息消息消息消息消息消息,消息消息.息消息消息消息消息,消息消息'
-                    },
-                    {time: '2017-02-01 11:50', msg: '消息消息消息消息,消息消息消息消息消息消息消息消息'},
-                    {time: '2017-02-01 11:50', msg: '消息消息消息消息,消息消息消息消息消息消息消息消息'},
-                ],
-                total: 50,
                 dialogVisible1: false,
                 dialogVisible2: false,
-                messageDetail: {time: '2017-02-01 11:50', msg: '消息消息消息消息,消息消息消息消息消息消息消息消息'},
+                messageDetail: {},
+                addMsg: {
+                    type: 'CHATROOMPUBLIC',
+                    content: ''
+                }
 
             }
         },
-        watch: {},
         computed: {
-            ...mapState('account',[
-                'chatRoomMsg'
+            ...mapState('account', [
+                'chatRoomMsg',
+                'msgTotal',
+                'sendMsgBack'
             ]),
             currentPage() {
                 return parseInt(this.$route.params.page, 10)
             }
         },
+        watch: {
+            sendMsgBack(me) {
+                if (me) {
+                    this.ac_msg_list({type: 'CHATROOMPUBLIC', pageIndex: this.$route.params.page, pageSize: 10})
+                    this.addMsg = {
+                        type: 'CHATROOMPUBLIC',
+                        content: ''
+                    }
+                    this.dialogVisible2 = false
+                }
+            }
+        },
         methods: {
             ...mapActions('account', [
-                'ac_msg_list'
+                'ac_msg_list',
+                'ac_msg_add'
             ]),
             handleCommand(va) {
                 this.dropDownMenuItem = parseInt(va, 10);
@@ -115,12 +125,17 @@
             },
             handleCurrentChange(item) { // 分页
                 this.$router.push({name: 'chatroom', params: {page: item}})
+                this.ac_msg_list({type: 'CHATROOMPUBLIC', pageIndex: item, pageSize: 10})
             },
             showMessage(item) {
                 this.dialogVisible1 = true
+                this.messageDetail = item
+            },
+            openSendMessage() {
+                this.dialogVisible2 = true
             },
             sendMessage() {
-                this.dialogVisible2 = true
+                this.ac_msg_add(this.addMsg)
             },
             showMessagePage() { // 跳转系统消息页面
                 this.$router.push({name: 'message', params: {page: 1}})
@@ -130,7 +145,7 @@
         beforeCreate(){
         },
         created() {
-            this.ac_msg_list({type: 'CHATROOMPUBLIC', pageIndex: 1, pageSize: 10})
+            this.ac_msg_list({type: 'CHATROOMPUBLIC', pageIndex: this.$route.params.page, pageSize: 10})
         },
         beforeMount() {
         },

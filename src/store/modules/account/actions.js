@@ -136,7 +136,9 @@ export default {
             headers: {"Content-Type": "application/json"},
             data: JSON.stringify(param)
         }).then((res) => {
-            console.log(res)
+            if (res.status === 200) {
+                commit('mut_msg_back', true)
+            }
             return res.data
         }).then(d => {
 
@@ -164,6 +166,7 @@ export default {
                 commit('mut_chatroom_msg', d.data)
             }
             commit('mut_msg_total', d.total)
+            commit('mut_msg_back', false)
         })
     }
 

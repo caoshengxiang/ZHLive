@@ -56,7 +56,7 @@ export default {
             }
         })
     },
-    ac_gift_save({commit}, param) {
+    ac_gift_save({commit}, param) { // 礼物添加
         $axios({
             method: 'post',
             url: '/api/admin/present/save',
@@ -65,6 +65,50 @@ export default {
         }).then(res=>{
             if (res.status === 200) {
                 commit('mut_gift_success_back', true)
+            }
+        })
+    },
+    ac_live_list({commit}, param) { // 直播列表
+        $axios.get('/api/admin/play/list', {
+            params: param
+        }).then((res)=>{
+            return res.data
+        }).then(d=>{
+            commit('mut_live_list', d.data.data)
+            commit('mut_live_total', d.data.total)
+            commit('mut_live_success_back', false)
+        })
+    },
+    ac_disable_chartroom({commit}, param) { // 禁用聊天室
+        $axios({
+            method: 'post',
+            url: '/api/admin/play/disableChatRoom/'+param.id,
+            headers: {"Content-Type": "application/json"},
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_live_success_back', true)
+            }
+        })
+    },
+    ac_disable_live({cmomit}, param) { // 中断直播
+        $axios({
+            method: 'post',
+            url: '/api/admin/play/disableLive/'+param.id,
+            headers: {"Content-Type": "application/json"},
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_live_success_back', true)
+            }
+        })
+    },
+    ac_disable_play({commit}, param) { // 禁播
+        $axios({
+            method: 'post',
+            url: '/api/admin/play/disablePlay/'+param.id,
+            headers: {"Content-Type": "application/json"},
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_live_success_back', true)
             }
         })
     }

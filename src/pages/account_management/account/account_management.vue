@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="top">
-            <div class="drop-down">
+        <div class="con-top">
+            <div class="con-col">
                 <el-dropdown
                         trigger="click"
                         @command="handleCommand">
@@ -16,8 +16,8 @@
                     </el-dropdown-menu>
                 </el-dropdown>
 
-                <div class="message" @click="showMessagePage">系统消息</div>
-                <div class="message" @click="showChatroomPage">聊天室公共消息</div>
+                <div class="con-col-item" @click="showMessagePage">系统消息</div>
+                <div class="con-col-item" @click="showChatroomPage">聊天室公共消息</div>
             </div>
 
             <div class="search">
@@ -29,7 +29,7 @@
                 </el-input>
             </div>
         </div>
-        <div class="con">
+        <div class="con-table">
             <table>
                 <tr>
                     <th>用户编号</th>
@@ -41,9 +41,9 @@
                     <th>性别</th>
                     <th>实名认证</th>
                     <th>个人简历</th>
-                    <th>操作</th>
+                    <th width="25%">操作</th>
                 </tr>
-                <tr class="d" v-for="(item, index) in tableData" :key="index">
+                <tr class="border-bottom" v-for="(item, index) in tableData" :key="index">
                     <td>{{ item.userId }}</td>
                     <td><img class="head-img" :src="item.icon" alt="头像"></td>
                     <td>{{item.nickname}}</td>
@@ -52,8 +52,8 @@
                     <td>{{item.age}}</td>
                     <td>{{item.gender === 'MALE'? '男':'女'}}</td>
                     <td>{{item.name}}</td>
-                    <td>{{item.signature}}</td>
-                    <td class="op" v-if="dropDownMenuItem === 0">
+                    <td style="white-space:nowrap;overflow:hidden;text-overflow: ellipsis;text-align: left">{{item.signature}}</td>
+                    <td class="td-op" v-if="dropDownMenuItem === 0">
                         <button class="item0" @click="showAccount(item)">查看</button>
                         <button class="item0-1" @click="editAccount(item)">编辑</button>
                         <button class="item0-2" @click="disableAccount(item)"
@@ -61,16 +61,16 @@
                             {{item.status === 'ACTIVE' ? '禁用':'解禁'}}
                         </button>
                     </td>
-                    <td class="op" v-if="dropDownMenuItem === 1">
+                    <td class="td-op" v-if="dropDownMenuItem === 1">
                         <button class="item1" @click="showDisableAccount(item)">查看</button>
                         <button class="item1-1" @click="endDisableAccount(item)"> 解禁</button>
                     </td>
-                    <td class="op" v-if="dropDownMenuItem === 2">
+                    <td class="td-op" v-if="dropDownMenuItem === 2">
                         <button class="item2" @click="showLiveAccount(item)">查看</button>
                         <button class="item2-1" @click="editCommission(item)">提成比例{{item.commission}}%</button>
                         <button class="item2-2" @click="delLiveAccount(item)"> 移除主播</button>
                     </td>
-                    <td class="op" v-if="dropDownMenuItem === 3">
+                    <td class="td-op" v-if="dropDownMenuItem === 3">
                         <button class="item3" @click="showApplyLiveAccount(item)">查看</button>
                         <button class="item3-1" @click="passApply(item)"> 通过</button>
                         <button class="item3-2" @click="rejectApply(item)"> 拒绝</button>
@@ -294,7 +294,7 @@
         created() {
             // 初始请求所用用户列表数据
             this.getUserLists(parseInt(this.$route.params.type, 10) + 1, parseInt(this.$route.params.page, 10), 10)
-            this.dropDownMenuItem  = parseInt(this.$route.params.type, 10)
+            this.dropDownMenuItem = parseInt(this.$route.params.type, 10)
         },
         beforeMount() {
         },
@@ -311,109 +311,68 @@
     }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-    @import "../../../styles/mixin";
+    @import "../../../styles/common";
 
-    .top {
-        @include top-box;
-        display: flex;
-        align-items: center;
-        .drop-down {
-            margin-left: 20px;
-            .message {
-                display: inline-block;
-                background: #9b9090;
-                padding: 7px 40px;
-                margin-left: 10px;
-                border-radius: 5px;
-                color: #e2dcdc;
-                cursor: pointer;
+    .con-table {
+        .head-img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .td-op {
+            button {
+                &.item0, &.item1, &.item2, &.item3 {
+                    background: #00d4ff;
+                }
+                &.item0-1 {
+                    background: #ff6e00;
+                }
+                &.item0-2 {
+                    background: #000000;
+                    &.able {
+                        background: #9b9393;
+                    }
+                }
+                &.item1-1 {
+                    background: #9b9393;
+                }
+                &.item2-1 {
+                    background: #ffbb00;
+                    width: 100px;
+                    padding: 3px 3px;
+                }
+                &.item2-2 {
+                    background: red;
+                    padding: 3px 6px;
+                }
+                &.item3-1 {
+                    background: green;
+                }
+                &.item3-2 {
+                    background: red;
+                }
             }
         }
-        .search {
-            width: 150px;
-            /*height: 25px;*/
-            margin: 0 auto;
 
-        }
     }
 
-    .con {
-        color: #756f6f;
-        table {
-            padding: 20px;
-            width: 100%;
-            tr {
-                th {
-                    @include table-tr;
-                    text-align: center;
-                    font-size: 14px;
-                }
-                td {
-                    @include table-tr;
-                    text-align: center;
-                    overflow: hidden;
-                    font-size: 14px;
-                    .head-img {
-                        width: 24px;
-                        height: 24px;
-                    }
-                }
-                .op {
-                    button {
-                        margin: 0 3px;
-                        font-size: 14px;
-                        @include table-button;
-                        &.item0, &.item1, &.item2, &.item3 {
-                            background: #00d4ff;
-                        }
-                        &.item0-1 {
-                            background: #ff6e00;
-                        }
-                        &.item0-2 {
-                            background: #000000;
-                            &.able {
-                                background: #9b9393;
-                            }
-                        }
-                        &.item1-1 {
-                            background: #9b9393;
-                        }
-                        &.item2-1 {
-                            background: #ffbb00;
-                            width: 100px;
-                        }
-                        &.item2-2 {
-                            background: red;
-                        }
-                        &.item3-1 {
-                            background: green;
-                        }
-                        &.item3-2 {
-                            background: red;
-                        }
-                    }
-                }
-            }
-            .d {
-                border-bottom: 1px solid #ccc;
-            }
-        }
-        .page {
-            text-align: center;
-            margin-top: 30px;
-        }
+    .page {
+        text-align: center;
+        margin-top: 30px;
+    }
 
-        .el-button--primary {
-            background: #605d5d;
-            border-color: #605d5d;
-        }
-        .el-button {
-            padding: 10px 20px;
-            width: 150px;
-        }
-        .el-input__inner:focus {
-            border-color: #ccc !important;
-        }
+    .el-button--primary {
+        background: #605d5d;
+        border-color: #605d5d;
+    }
+
+    .el-button {
+        padding: 10px 20px;
+        width: 150px;
+    }
+
+    .el-input__inner:focus {
+        border-color: #ccc !important;
     }
 
     .dialog {

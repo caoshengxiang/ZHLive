@@ -23,5 +23,8 @@ export default {
     },
     mut_msg_total(st, data) {
         st.msgTotal = data
-    }
+    },
+    mut_msg_back(st, data) {
+      st.sendMsgBack = data
+    },
 }

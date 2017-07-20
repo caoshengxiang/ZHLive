@@ -91,31 +91,38 @@
 .con-table {
   color: #756f6f;
   table {
-    padding: 20px;
+    table-layout: fixed;
     width: 100%;
     tr {
       th {
         @include table-tr;
-        text-align: center;
+        text-align: left;
         font-size: 14px;
+        color: #000000;
+        &:nth-child(1) {
+          padding-left: 10px;
+        }
       }
       td {
         @include table-tr;
-        text-align: center;
+        text-align: left;
         overflow: hidden;
         font-size: 14px;
+        &:nth-child(1) {
+          padding-left: 10px;
+        }
       }
       .td-op {
-         button {
-           margin: 0 3px;
-           font-size: 14px;
-           //width: 75px;
-           border-radius: 5px;
-           border: 0;
-           padding: 3px 20px;
-           color: #fff;
-           cursor: pointer;
-         }
+        button {
+          margin: 0 3px;
+          font-size: 14px;
+          //width: 75px;
+          border-radius: 5px;
+          border: 0;
+          padding: 3px 20px;
+          color: #fff;
+          cursor: pointer;
+        }
       }
     }
     .border-bottom {
