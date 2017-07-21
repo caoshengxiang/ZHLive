@@ -135,7 +135,14 @@
                 this.dialogVisible2 = true
             },
             sendMessage() {
-                this.ac_msg_add(this.addMsg)
+                if (this.addMsg.content) {
+                    this.ac_msg_add(this.addMsg)
+                } else {
+                    this.$message({
+                        type: 'warning',
+                        message: '请输入消息内容!'
+                    })
+                }
             },
             showMessagePage() { // 跳转系统消息页面
                 this.$router.push({name: 'message', params: {page: 1}})
@@ -207,6 +214,9 @@
             min-height: 400px;
             border: 1px solid #ccc;
             padding: 5px;
+        }
+        .msg-input {
+            border: 1px solid #ccc;
         }
 
         #edit {

@@ -120,10 +120,27 @@
                 }
             },
             saveClassify() {
-                if (this.addChild.length) {
-                    this.modifyData.child = [...this.modifyData.child, ...this.addChild]
+                let isAddImg = true
+
+                if (this.addChild.length) { // 有添加有修改,添加需要验证图片是否添加
+                    this.addChild.forEach((item)=>{
+                        if (!item.icon) {
+                            isAddImg = false
+                        }
+                    })
+                    if (isAddImg) { // 验证图片是否上传
+                        this.modifyData.child = [...this.modifyData.child, ...this.addChild]
+                        this.ac_modify_classify(this.modifyData)
+                    } else {
+                        this.$message({
+                            message: '请上传分类图片!',
+                            type: 'warning'
+                        });
+                    }
+
+                } else { // 之修改
+                    this.ac_modify_classify(this.modifyData)
                 }
-                this.ac_modify_classify(this.modifyData)
             },
             backList() {
                 this.$router.go(-1)

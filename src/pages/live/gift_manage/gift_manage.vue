@@ -282,6 +282,8 @@
         color: #fff;
         font-weight: bold;
         font-size: 18px;
+        padding: 10px;
+        border-radius: 5px;
     }
     .el-dialog__header {
         padding: 0 !important;

@@ -32,11 +32,11 @@
         <div class="con-table">
             <table>
                 <tr>
-                    <th>用户编号</th>
-                    <th>头像</th>
+                    <th width="70px">用户编号</th>
+                    <th width="50px">头像</th>
                     <th>昵称</th>
                     <th>手机</th>
-                    <th>注册时间</th>
+                    <th width="120px">注册时间</th>
                     <th>年龄</th>
                     <th>性别</th>
                     <th>实名认证</th>
@@ -79,6 +79,7 @@
             </table>
             <div class="page">
                 <el-pagination
+                        v-if="total > 10"
                         layout="prev, pager, next, jumper"
                         :total="total"
                         @current-change="handleCurrentChange"

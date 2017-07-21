@@ -9,7 +9,7 @@ export default {
     ac_hot_word_add({commit}, param) { // 热词添加
         $axios({
             method: 'post',
-            url: 'api/admin/hotWord/add',
+            url: '/api/admin/hotWord/add',
             headers: {"Content-Type": "application/json"},
             params: param
         }).then((res)=>{
@@ -20,7 +20,7 @@ export default {
         })
     },
     ac_hot_word_list({commit}) { // 热词列表
-        $axios.get('api/admin/hotWord/list').then((res)=>{
+        $axios.get('/api/admin/hotWord/list').then((res)=>{
             // console.log('热词列表',res)
             return res.data.data
         }).then((d)=>{
@@ -29,7 +29,7 @@ export default {
         })
     },
     ac_hot_word_remove({commit}, param) {
-        $axios.delete('api/admin/hotWord/remove', {
+        $axios.delete('/api/admin/hotWord/remove', {
             params: param
         }).then((res)=>{
             if (res.status === 200) {
@@ -106,6 +106,18 @@ export default {
             method: 'post',
             url: '/api/admin/play/disablePlay/'+param.id,
             headers: {"Content-Type": "application/json"},
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_live_success_back', true)
+            }
+        })
+    },
+    ac_live_edit({commit}, param) {
+        $axios({
+            method: 'post',
+            url: '/api/admin/play/modify',
+            headers: {"Content-Type": "application/json"},
+            data: JSON.stringify(param)
         }).then(res=>{
             if (res.status === 200) {
                 commit('mut_live_success_back', true)

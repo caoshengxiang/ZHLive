@@ -10,7 +10,8 @@ import mutations from './mutations'
 export default {
     namespaced: true,
     state: {
-
+        reportList: [], // 举报数据列表
+        feedbackList: [], // 反馈数据列表
     },
     getters,
     actions,

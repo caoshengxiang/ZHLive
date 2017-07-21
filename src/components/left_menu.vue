@@ -133,7 +133,7 @@
     .menu {
         min-height: 300px;
         ul {
-            width: 110px;
+            width: 150px;
             margin: 0 auto;
             text-align: center;
             li {

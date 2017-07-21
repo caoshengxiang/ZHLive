@@ -35,7 +35,9 @@
         <div class="con">
             <div class="live-box">
                 <div class="live-item" v-for="(item, i) in liveList" :key="i">
+                    <div class="img-box">
                     <img class="cover-img" :src="item.videoPic" alt="">
+                    </div>
                     <!-- 正在直播 -->
                     <p class="living" v-if="$route.params.type == 0">
                         <a @click="disableChatRoom(item)">禁用聊天室</a><span> · </span>
@@ -60,6 +62,7 @@
             </div>
             <div class="con-page" id="page">
                 <el-pagination
+                        v-if="liveTotal > 10"
                         layout="prev, pager, next, jumper"
                         :total="liveTotal"
                         @current-change="handleCurrentChange"
@@ -72,7 +75,7 @@
 <!-- 弹窗 -->
         <div class="dialog">
             <el-dialog :visible.sync="editLiveDialogVisible" :show-close="false">
-                <div class="manage-edit">
+                <div class="live-edit">
                     <h3>主播</h3>
                     <input class="text" type="text" :placeholder="liveInfo.anchor" disabled>
                     <h3>直播标题</h3>
@@ -109,7 +112,7 @@
                                 class="item-tag"
                                 @close="delThisTag"
                         >
-                            {{tag.name}}
+                            {{tag}}
                         </el-tag>
                         <el-tag
                                 v-for="tag in tempAddTags"
@@ -119,7 +122,7 @@
                                 class="item-tag"
                                 @close="delThisTag"
                         >
-                            {{tag.name}}
+                            {{tag}}
                         </el-tag>
                         <i class="el-icon-plus" @click="addTags">标签</i>
                     </div>
@@ -226,6 +229,14 @@
                 return parseInt(this.$route.params.page, 10)
             }
         },
+        watch: {
+            liveSuccessBack(me){
+                if (me) {
+                    this.ac_live_list({pageIndex: this.$route.params.page, pageSize: 10})
+                    this.editLiveDialogVisible = false
+                }
+            }
+        },
         methods: {
             ...mapActions('category', [
                 'ac_classify_list',
@@ -236,6 +247,7 @@
                 'ac_disable_chartroom',
                 'ac_disable_live',
                 'ac_disable_play',
+                'ac_live_edit',
             ]),
             handleCommand(va) { // 下拉
                 this.dropDownMenuItem = parseInt(va, 10);
@@ -286,7 +298,7 @@
                     this.ac_disable_chartroom(item)
                     this.$message({
                         type: 'success',
-                        message: '删除成功!'
+                        message: '操作成功!'
                     });
                 }).catch(() => {
                     this.$message({
@@ -309,7 +321,7 @@
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '操作成功'
+                        message: '已取消删除!'
                     });
                 });
             },
@@ -341,11 +353,11 @@
                 })
 
                 this.childCate = cate2[0].child // 设置对应的二级分类
-                this.liveInfo.cate1 = e.target.value // 修改一级
-                this.liveInfo.cate2 = this.childCate[0].name // 默认二级
+                this.liveInfo.levelOneCategoryName = e.target.value // 修改一级
+//                this.liveInfo.levelTwoCategoryName = this.childCate[0].name // 默认二级
             },
             changeCage2Handle(e) {
-                this.liveInfo.cate2 = e.target.value
+                this.liveInfo.levelTwoCategoryName = e.target.value
             },
             fileUpload(e) {
                 let f = e.target.files[0];
@@ -356,7 +368,8 @@
                 r.readAsDataURL(f)
                 r.onload = function () {
                     imgDom.src = r.result
-                    that.liveInfo.icon = r.result
+                    that.liveInfo.videoPic = r.result
+                    console.log(r.result)
                 }
             },
             addTags() {
@@ -366,49 +379,60 @@
 
                     this.initClass()
 
-                    this.tags.forEach((item, i) => {
-                        this.liveInfo.tags.forEach((info) => {
-                            if (item.name === info.name) {
-                                document.getElementsByClassName('tag-item')[i].className = 'item tag-item active'
-                            }
+                    if (this.liveInfo.labelNames && this.liveInfo.labelNames.length) {
+                        this.tags.forEach((item, i) => {
+                            this.liveInfo.labelNames.forEach((info) => {
+                                if (item.name === info.name) {
+                                    document.getElementsByClassName('tag-item')[i].className = 'item tag-item active'
+                                }
+                            })
                         })
-                    })
+                    }
 
                 })
             },
             delThisTag(tag) {
-                this.liveInfo.tags.splice(this.liveInfo.tags.indexOf(tag), 1)
+                this.liveInfo.labelNames.splice(this.liveInfo.labelNames.indexOf(tag), 1)
             },
-            saveManageInfo() { // 保存
+            saveManageInfo() { // 保存编辑
                 console.log('保存', this.liveInfo)
-                this.liveInfo.tags = [...this.liveInfo.tags, ...this.tempAddTags]
+                if (!this.liveInfo.labelNames) {
+                    this.liveInfo.labelNames = []
+                }
+                this.liveInfo.labelNames = [...this.liveInfo.labelNames, ...this.tempAddTags]
                 this.tempAddTags = []
+
+                this.ac_live_edit(this.liveInfo)
             },
-            cancelManageInfo() { // 取消
+            cancelManageInfo(item) { // 取消编辑
                 this.tempAddTags = []
                 this.editLiveDialogVisible = false
+                this.ac_live_list({pageIndex: this.$route.params.page, pageSize: 10})
             },
             addThisTag(tag, i) {
                 let isExist = false
 
-                this.liveInfo.tags.forEach((info) => {
-                    if (tag.name === info.name) {
-                        isExist = true
-                    }
-                })
+                if (this.liveInfo.labelNames && this.liveInfo.labelNames.length) {
+                    this.liveInfo.labelNames.forEach((info) => {
+                        if (tag.name === info.name) {
+                            isExist = true
+                        }
+                    })
+                }
+
                 if (!isExist) {
                     document.getElementsByClassName('tag-item')[i].className = 'item tag-item active'
                     this.tempAddTags.push(tag)
                 }
             },
-            addTagsSave() {
+            addTagsSave() { // 添加标签保存
                 this.addTagsDialogVisible = false
                 this.editLiveDialogVisible = true
             },
-            addTagsCancel() {
+            addTagsCancel() { // 添加标签取消
                 this.addTagsDialogVisible = false
                 this.editLiveDialogVisible = true
-
+                this.tempAddTags = []
             },
             initClass() {
                 let allEl = document.getElementsByClassName('tag-item')
@@ -481,9 +505,13 @@
             margin-bottom: 10px;
             border: 1px solid #ccc;
             box-sizing: border-box;
-            .cover-img {
+            .img-box {
                 width: 217.5px;
                 height: 217.5px;
+                overflow: hidden;
+                .cover-img {
+                    width: 100%;
+                }
             }
             .living {
                 padding: 0px 5px 4px 5px;
@@ -512,7 +540,7 @@
         }
     }
 
-    .manage-edit {
+    .live-edit {
         h3 {
             margin-bottom: 10px;
         }
@@ -671,6 +699,8 @@
         color: #fff;
         font-weight: bold;
         font-size: 18px;
+        padding: 10px;
+        border-radius: 5px;
     }
 
     .el-dialog__header {

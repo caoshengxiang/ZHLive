@@ -51,21 +51,21 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
     .page {
-        min-height: 810px;
+        height: 100%;
     }
     .con {
         padding-top: 36px;
-        min-height: 810px;
+        height: 100%;
         background: url("../assets/bg.jpg");
     }
     .menu-box {
-        width: 200px;
+        width: 260px;
         float: left;
     }
     .container-r {
-        margin-left: 200px;
+        margin-left: 260px;
         background: #fff;
-        margin-right: 20px;
-        min-height: 680px;
+        margin-right: 60px;
+        min-height: 760px;
     }
 </style>

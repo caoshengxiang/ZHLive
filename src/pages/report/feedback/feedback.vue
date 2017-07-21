@@ -21,8 +21,8 @@
                     <th>头像</th>
                     <th>昵称</th>
                     <th>反馈时间</th>
-                    <th>联系方式(手机号/QQ/微信)</th>
-                    <th>操作</th>
+                    <th width="178px">联系方式(手机号/QQ/微信)</th>
+                    <th width="170px">操作</th>
                 </tr>
                 <tr class="border-bottom">
                     <td></td>

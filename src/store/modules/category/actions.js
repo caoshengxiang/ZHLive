@@ -100,7 +100,7 @@ export default {
     },
 
     ac_tags_list({commit}) {
-        $axios.get('api/admin/label/list').then((res)=>{
+        $axios.get('/api/admin/label/list').then((res)=>{
             return res.data.data
         }).then((d)=>{
             commit('mut_tags', d)

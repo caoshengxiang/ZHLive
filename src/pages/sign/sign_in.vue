@@ -54,6 +54,8 @@
 <style lang="sass" rel="stylesheet/scss" scoped>
     .sign-in {
         text-align: center;
+        height: 100%;
+        background: url("../../assets/bg.jpg");
         .title {
             padding-top: 200px;
             padding-bottom: 100px;
