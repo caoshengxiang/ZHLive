@@ -10,7 +10,9 @@ import mutations from './mutations'
 export default {
     namespaced: true,
     state: {
-
+        bannerList: [],
+        successBack: false, // banner操作成功返回
+        bannerDetail: {}
     },
     getters,
     actions,

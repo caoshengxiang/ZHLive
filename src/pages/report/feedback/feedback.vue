@@ -24,18 +24,29 @@
                     <th width="178px">联系方式(手机号/QQ/微信)</th>
                     <th width="170px">操作</th>
                 </tr>
-                <tr class="border-bottom">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr class="border-bottom" v-for="item in feedbackList" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.userIcon}}</td>
+                    <td>{{item.userNickname}}</td>
+                    <td>{{item.createTime}}</td>
+                    <td>{{item.contact}}</td>
                     <td class="td-op">
-                        <button class="b-1" @click="showDetail">查看</button>
-                        <button class="b-2">删除</button>
+                        <button class="b-1" @click="showDetail(item)">查看</button>
+                        <button class="b-2" @click="delFeedbackInfo(item)">删除</button>
                     </td>
                 </tr>
             </table>
+
+            <div class="con-page">
+                <el-pagination
+                        v-if="feedbackTotal > 10"
+                        layout="prev, pager, next, jumper"
+                        :total="feedbackTotal"
+                        @current-change="handleCurrentPageChange"
+                        :current-page="currentPage"
+                >
+                </el-pagination>
+            </div>
         </div>
 
         <div class="dialog">
@@ -56,9 +67,9 @@
     </div>
 </template>
 <script>
-
+    import {mapState, mapActions} from 'vuex'
     export default {
-        name: '',
+        name: 'feedback',
         props: {},
         data() {
             return {
@@ -66,28 +77,48 @@
                 detailDialogFormVisible: false
             }
         },
-        computed: {},
+        computed: {
+            ...mapState('report', [
+                'feedbackList',
+                'feedbackTotal'
+            ]),
+            currentPage() {
+                return this.$route.params.page
+            }
+        },
         methods: {
+            ...mapActions('report', [
+                'ac_feedback_list',
+                'ac_report_remove'
+            ]),
             userReportPage() {
-                this.$router.push({name: 'reportManage'})
+                this.$router.push({name: 'reportManage', params: {page: 1}})
             },
             userFeedbackPage() {
-                this.$router.push({name: 'feedback'})
+//                this.$router.push({name: 'feedback'})
             },
             handleSearchClick() {
-
+                this.ac_feedback_list({pageIndex:this.$route.params.page, pageSize:10, search: this.searchValue})
             },
-            showDetail() {
+            showDetail(item) { // 显示反馈详细
                 this.detailDialogFormVisible = true
+            },
+            delFeedbackInfo(item){ // 删除反馈信息
+                this.ac_report_remove({id: item.id})
             },
             backList() {
                 this.detailDialogFormVisible = false
+            },
+            handleCurrentPageChange(p) {
+                this.$router.push({name: 'feedback', params: {page: p}})
+                this.ac_feedback_list({pageIndex: p, pageSize: 10})
             }
         },
         components: {},
         beforeCreate(){
         },
         created() {
+            this.ac_feedback_list({pageIndex: 1, pageSize: 10})
         },
         beforeMount() {
         },

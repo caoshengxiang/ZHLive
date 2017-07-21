@@ -77,7 +77,7 @@
                     </td>
                 </tr>
             </table>
-            <div class="page">
+            <div class="con-page">
                 <el-pagination
                         v-if="total > 10"
                         layout="prev, pager, next, jumper"
@@ -357,10 +357,6 @@
 
     }
 
-    .page {
-        text-align: center;
-        margin-top: 30px;
-    }
 
     .el-button--primary {
         background: #605d5d;

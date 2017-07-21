@@ -69,7 +69,7 @@
                         this.isActive4  = true
                         break;
                     case 5:
-                        this.$router.push({name: 'reportManage'})
+                        this.$router.push({name: 'reportManage', params: {page: 1}})
                         this.setActive(5)
                         this.isActive5  = true
                         break;

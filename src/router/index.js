@@ -164,12 +164,12 @@ export default new Router({
                     path: 'banner/edit/:id',
                     name: 'editBanner',
                     component: editBanner
-                }, { // 举报反馈
-                    path: 'report',
+                }, { // 举报
+                    path: 'report/u/:page',
                     name: 'reportManage',
                     component: report
-                }, {
-                    path: 'feedback',
+                }, { // 反馈
+                    path: 'feedback/u/:page',
                     name: 'feedback',
                     component: feedback
                 }, { // 版本管理

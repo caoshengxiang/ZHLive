@@ -71,10 +71,10 @@
         computed: {},
         methods: {
             userReportPage() {
-                this.$router.push({name: 'reportManage'})
+//                this.$router.push({name: 'reportManage', params: {page: 1}})
             },
             userFeedbackPage() {
-                this.$router.push({name: 'feedback'})
+                this.$router.push({name: 'feedback', params: {page: 1}})
             },
             handleSearchClick() {
 
