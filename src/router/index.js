@@ -157,11 +157,11 @@ export default new Router({
                     name: 'bannerManage',
                     component: banner
                 }, {
-                    path: 'banner/detail',
+                    path: 'banner/detail/:type:num',
                     name: 'bannerDetail',
                     component: bannerDetail
                 }, {
-                    path: 'banner/edit/:id',
+                    path: 'banner/edit/:type:num',
                     name: 'editBanner',
                     component: editBanner
                 }, { // 举报

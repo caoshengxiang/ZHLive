@@ -7,7 +7,7 @@
         </div>
         <div class="con">
             <h3>封面图</h3>
-            <img class="head-img" id="img" src="../../assets/placeholder.png" alt="">
+            <img class="head-img" id="img" :src="bannerDetail.pic" alt="">
             <div class="upload-file">
                 <el-button icon="upload2">重新上传</el-button>
                 <input type="file" class="file" id="file" @change="uploadImg">
@@ -15,39 +15,39 @@
             <ul class="detail">
                 <h3>链接形式</h3>
                 <li>
-                    <el-radio-group v-model="linkType.type">
+                    <el-radio-group v-model="bannerDetail.type" @change="radioChange">
                         <div class="item">
-                            <el-radio :label="1">无链接</el-radio>
+                            <el-radio label="NONE">无链接</el-radio>
                         </div>
                         <div class="item">
-                            <div v-if="linkType.type === 2">
-                                <el-radio :label="2">内部直播　<input type="text" v-model="linkType.content"
+                            <div v-if="bannerDetail.type === 'TOLIVE'">
+                                <el-radio label="TOLIVE">内部直播　<input type="text" v-model="bannerDetail.content"
                                                                  placeholder="请输入正在直播用户的编号"></el-radio>
                             </div>
                             <div v-else>
-                                <el-radio :label="2">内部直播</el-radio>
+                                <el-radio label="TOLIVE">内部直播</el-radio>
                             </div>
                         </div>
                         <div class="item">
-                            <div v-if="linkType.type === 3">
-                                <el-radio :label="3">外部链接　
-                                    <input v-model="linkType.content"
+                            <div v-if="bannerDetail.type === 'TOLINK'">
+                                <el-radio label="TOLINK">外部链接　
+                                    <input v-model="bannerDetail.content"
                                            type="text"
                                            placeholder="请输入链接地址"></el-radio>
                             </div>
                             <div v-else>
-                                <el-radio :label="3">外部链接</el-radio>
+                                <el-radio label="TOLINK">外部链接</el-radio>
                             </div>
                         </div>
                         <div class="item">
-                            <div v-if="linkType.type === 4">
-                                <el-radio :label="4">内部H5: 请在下方编辑器中编辑H5页面</el-radio>
+                            <div v-if="bannerDetail.type === 'TOH5'">
+                                <el-radio label="TOH5">内部H5: 请在下方编辑器中编辑H5页面</el-radio>
                                 <div class="editor">
-                                    <vue-editor v-model="linkType.content"></vue-editor>
+                                    <vue-editor v-model="bannerDetail.content"></vue-editor>
                                 </div>
                             </div>
                             <div v-else>
-                                <el-radio :label="4">内部H5</el-radio>
+                                <el-radio label="TOH5">内部H5</el-radio>
                             </div>
                         </div>
                     </el-radio-group>
@@ -55,14 +55,14 @@
             </ul>
 
             <div class="btn-group">
-                <a class="save">保存</a>
+                <a class="save" @click="saveBanner">保存</a>
                 <a class="cancel" @click="backList">取消</a>
             </div>
         </div>
     </div>
 </template>
 <script>
-    import { mapActions } from 'vuex'
+    import { mapState, mapActions } from 'vuex'
     import { VueEditor } from 'vue2-editor'
 
     export default {
@@ -70,31 +70,78 @@
         props: {},
         data() {
             return {
-                banner: {
-                    icon: '',
-
+                bannerInfo: {
+                    bannerNum: '',
+                    content: '',
+                    pic: '',
+                    show: '',
+                    type: ''
                 },
-                linkType: {
-                    type: 1,
-                    content: ''
+                category: '',
+            }
+        },
+        computed: {
+            ...mapState('banner', [
+                'bannerDetail',
+                'successBack'
+            ])
+        },
+        watch:{
+            successBack(me) {
+                if (me) {
+                    this.backList()
                 }
             }
         },
-        computed: {},
         methods: {
-            ...mapActions({}),
+            ...mapActions('banner', [
+                'ac_banner_detail',
+                'ac_banner_edit',
+            ]),
             backList() {
                 this.$router.go(-1);
             },
-            uploadImg(e) {
+            uploadImg() {
                 let f = document.getElementById('file').files[0];
                 let r = new FileReader()
+                let that = this
 
                 r.readAsDataURL(f);
                 r.onload = function () {
                     document.getElementById('img').src = r.result
+                    that.bannerDetail.pic = r.result
                 }
             },
+            getBannerDetail() { // 请求banner详细
+                let routeParams = this.$route.params
+
+                switch (parseInt(routeParams.type, 10)) {
+                    case 0:
+                        this.category = 'HOT'
+                        break;
+                    case 1:
+                        this.category = 'NEW'
+                        break;
+                    case 2:
+                        this.category = 'NEARBY'
+                        break;
+                    case 3:
+                        this.category = 'CARE'
+                        break;
+                    default:
+                        this.category = 'HOT'
+                }
+                this.ac_banner_detail({category: this.category, bannerNum: routeParams.num})
+            },
+            radioChange(label) { // 链接形式改变的回调
+                this.bannerDetail.content = ''
+            },
+            saveBanner() {
+                this.ac_banner_edit({
+                    category: this.category,
+                    d: this.bannerDetail
+                })
+            }
         },
         components: {
             VueEditor
@@ -102,7 +149,7 @@
         beforeCreate(){
         },
         created() {
-
+            this.getBannerDetail()
         },
         beforeMount() {
         },

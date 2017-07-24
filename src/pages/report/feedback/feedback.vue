@@ -51,15 +51,14 @@
 
         <div class="dialog">
             <!-- 查看 -->
-            <el-dialog title="用户举报" :visible.sync="detailDialogFormVisible" >
+            <el-dialog title="用户反馈" :visible.sync="detailDialogFormVisible" >
                 <div class="detail">　
-                    <p><label>举报用户: </label><span>用户昵称（123）</span></p>
-                    <p><label>举报事项: </label><span>录像</span></p>
-                    <p><label>被举报人: </label><span>用户昵称（10）</span></p>
-                    <p><label>举报内容: </label><span>支付宝（123）</span></p>
+                    <p><label>反馈用户: </label><span>{{feedbackDetail.userNickname}}（{{feedbackDetail.userId}}）</span></p>
+
+                    <p><label>反馈内容: </label><span>{{feedbackDetail.content}}</span></p>
                 </div>
                 <div class="op">
-                    <el-button type="danger">删除</el-button>
+                    <el-button type="danger" @click="delFeedback">删除</el-button>
                     <el-button @click="backList">返回</el-button>
                 </div>
             </el-dialog>
@@ -74,16 +73,25 @@
         data() {
             return {
                 searchValue: '',
-                detailDialogFormVisible: false
+                detailDialogFormVisible: false,
+                feedbackDetail: {}
             }
         },
         computed: {
             ...mapState('report', [
                 'feedbackList',
-                'feedbackTotal'
+                'feedbackTotal',
+                'successBack',
             ]),
             currentPage() {
                 return this.$route.params.page
+            }
+        },
+        watch: {
+            successBack(me) {
+                if (me) {
+                    this.ac_feedback_list({pageIndex: this.$route.params.page, pageSize: 10})
+                }
             }
         },
         methods: {
@@ -102,6 +110,10 @@
             },
             showDetail(item) { // 显示反馈详细
                 this.detailDialogFormVisible = true
+                this.feedbackDetail = item
+            },
+            delFeedback() { // 查看框删除反馈
+                this.delFeedbackInfo(this.feedbackDetail)
             },
             delFeedbackInfo(item){ // 删除反馈信息
                 this.ac_report_remove({id: item.id})

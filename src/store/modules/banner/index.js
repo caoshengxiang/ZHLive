@@ -12,7 +12,7 @@ export default {
     state: {
         bannerList: [],
         successBack: false, // banner操作成功返回
-        bannerDetail: {}
+        bannerDetail: {}, // banner详细
     },
     getters,
     actions,

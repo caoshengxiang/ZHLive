@@ -21,15 +21,18 @@
         <div class="con-table">
             <table>
                 <tr>
-                    <th>序号</th>
+                    <th width="80px">序号</th>
                     <th>封面图</th>
                     <th>链接形式</th>
                     <th>操作</th>
                 </tr>
-                <tr class="border-bottom" v-for="item in bannerList" :key="item.id">
-                    <td>{{item.id}}</td>
-                    <td><img :src="item.pic" alt=""></td>
-                    <td>{{item.type}}
+                <tr class="border-bottom banner-item" v-for="item in bannerList" :key="item.bannerNum">
+                    <td>{{item.bannerNum}}</td>
+                    <td>
+                        <img class="img" v-if="item.pic" :src="item.pic" alt="">
+                        <span v-else>未设置</span>
+                    </td>
+                    <td>
                         <span v-if="item.type === 'NONE'">无链接</span>
                         <span v-if="item.type === 'TOLIVE'">内部直播</span>
                         <span v-if="item.type === 'TOLINK'">外部链接</span>
@@ -88,22 +91,34 @@
             handleCommand(va) {
                 this.$router.push({name: 'bannerManage', params: {type: va, page: 1}})
                 this.ac_banner_list({category: this.type[va]})
+                this.dropDownMenuItem = va
             },
-            bannerDetail() {
-                this.$router.push({name: 'bannerDetail'})
+            bannerDetail(item) {
+                this.$router.push({name: 'bannerDetail', params: {type: this.$route.params.type, num: item.bannerNum}})
             },
-            bannerEdit() {
-                this.$router.push({name: 'editBanner', params: {id: 1}})
+            bannerEdit(item) {
+                this.$router.push({name: 'editBanner', params: {type: this.$route.params.type, num: item.bannerNum}})
             },
             bannerDisable(item) { // banner显示隐藏
-                this.ac_banner_disable({id: item.id, show: !item.show})
+                if (item.type && item.pic) {
+                    this.ac_banner_disable({category: this.type[this.$route.params.type],bannerNum: item.bannerNum, show: !item.show})
+                } else {
+                    this.$message({
+                        type: "warning",
+                        message: "banner未设置!!!"
+                    })
+                }
+
             }
         },
         components: {},
         beforeCreate(){
         },
         created() {
-            this.ac_banner_list({category: this.type[0]})
+            let typeIndex = parseInt(this.$route.params.type, 10)
+
+            this.ac_banner_list({category: this.type[typeIndex]})
+            this.dropDownMenuItem = typeIndex
         },
         beforeMount() {
         },
@@ -133,6 +148,12 @@
         }
         .b-3-h {
             opacity: 0.5;
+        }
+    }
+    .banner-item {
+        .img {
+            width: 236px;
+            height: 91px;
         }
     }
 </style>

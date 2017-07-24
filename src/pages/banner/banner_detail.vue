@@ -6,18 +6,22 @@
             </div>
         </div>
         <div class="con">
-            <img class="head-img" src="../../assets/placeholder.png" alt="">
+            <img class="head-img" :src="bannerDetail.pic" alt="">
             <ul class="detail">
                 <li>
                     <span>链接类型:</span>
-                    <span>{{}}</span>
+                    <span v-if="bannerDetail.type === 'NONE'">无链接</span>
+                    <span v-if="bannerDetail.type === 'TOLIVE'">内部直播 ({{bannerDetail.userNickname}}-{{bannerDetail.content}})</span>
+                    <span v-if="bannerDetail.type === 'TOLINK'">外部直播 ({{bannerDetail.content}})</span>
+                    <span v-if="bannerDetail.type === 'TOH5'">内部H5 <div v-html="bannerDetail.content" class="h5-page"></div></span>
+                    <span v-if="!bannerDetail.type">未设置</span>
                 </li>
             </ul>
         </div>
     </div>
 </template>
 <script>
-    import { mapActions } from 'vuex'
+    import { mapState, mapActions } from 'vuex'
     export default {
         name: 'bannerDetail',
         props: {},
@@ -25,21 +29,45 @@
             return {}
         },
         computed: {
-
+            ...mapState('banner', [
+                'bannerDetail'
+            ])
         },
         methods: {
-            ...mapActions({
-
-            }),
+            ...mapActions('banner', [
+                'ac_banner_detail'
+            ]),
             backList() {
                 this.$router.go(-1);
+            },
+            getBannerDetail() { // 请求banner详细
+                let routeParams = this.$route.params
+                let category = ''
+
+                switch (parseInt(routeParams.type, 10)) {
+                    case 0:
+                        category = 'HOT'
+                        break;
+                    case 1:
+                        category = 'NEW'
+                        break;
+                    case 2:
+                        category = 'NEARBY'
+                        break;
+                    case 3:
+                        category = 'CARE'
+                        break;
+                    default:
+                        category = 'HOT'
+                }
+                this.ac_banner_detail({category: category, bannerNum: routeParams.num})
             }
         },
         components: {},
         beforeCreate(){
         },
         created() {
-
+            this.getBannerDetail()
         },
         beforeMount() {
         },
@@ -61,8 +89,8 @@
     .con {
         padding: 30px;
         .head-img {
-            width: 110px;
-            height: 110px;
+            width: 423px;
+            height: 165px;
         }
         .detail {
             li {

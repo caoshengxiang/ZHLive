@@ -15,7 +15,7 @@
         width: 100%;
         height: 100%;
         min-width: 950px;
-        overflow: hidden;
+        overflow: auto;
         margin: 0 auto;
     }
 </style>
