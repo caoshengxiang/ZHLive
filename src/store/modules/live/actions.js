@@ -77,10 +77,17 @@ export default {
             commit('mut_live_success_back', false)
         })
     },
+    ac_live_detail({commit}, param) { // 单个直播信息
+        $axios.get('/api/admin/play/get/'+param.videoId).then(res=>{
+            return res.data
+        }).then(d=>{
+            commit('mut_live_detail', d.data)
+        })
+    },
     ac_disable_chartroom({commit}, param) { // 禁用聊天室
         $axios({
             method: 'post',
-            url: '/api/admin/play/disableChatRoom/'+param.id,
+            url: '/api/admin/play/disableChatRoom/'+param.videoId,
             headers: {"Content-Type": "application/json"},
         }).then(res=>{
             if (res.status === 200) {
@@ -91,7 +98,7 @@ export default {
     ac_disable_live({cmomit}, param) { // 中断直播
         $axios({
             method: 'post',
-            url: '/api/admin/play/disableLive/'+param.id,
+            url: '/api/admin/play/disableLive/'+param.videoId,
             headers: {"Content-Type": "application/json"},
         }).then(res=>{
             if (res.status === 200) {
@@ -102,7 +109,7 @@ export default {
     ac_disable_play({commit}, param) { // 禁播
         $axios({
             method: 'post',
-            url: '/api/admin/play/disablePlay/'+param.id,
+            url: '/api/admin/play/disablePlay/'+param.videoId,
             headers: {"Content-Type": "application/json"},
         }).then(res=>{
             if (res.status === 200) {
@@ -110,7 +117,7 @@ export default {
             }
         })
     },
-    ac_live_edit({commit}, param) {
+    ac_live_edit({commit}, param) { // 修改
         $axios({
             method: 'post',
             url: '/api/admin/play/modify',
@@ -121,5 +128,6 @@ export default {
                 commit('mut_live_success_back', true)
             }
         })
-    }
+    },
+
 }

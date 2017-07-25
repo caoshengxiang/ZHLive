@@ -104,4 +104,15 @@
         }
 
     }
+
+    .h5-page {
+        width: 750px;
+        padding: 20px;
+        overflow: hidden;
+        border: 1px solid #ccc;
+        box-sizing: content-box;
+        img {
+            max-width: 100%;
+        }
+    }
 </style>

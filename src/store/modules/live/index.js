@@ -16,6 +16,7 @@ export default {
         gitEditSuccess: false, // 编辑礼物成功返回
         liveList: [], // 直播列表
         liveTotal: 0, // 直播总数
+        liveDetail: {}, // 直播详情
         liveSuccessBack: false, // 直播列表操作的成功返回
     },
     getters,

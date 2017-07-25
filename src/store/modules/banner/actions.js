@@ -27,13 +27,14 @@ export default {
         $axios.get('/api/admin/banner/get/'+param.category+'/'+param.bannerNum).then(res=>{
             return res.data
         }).then(d=>{
+            // console.log('banner', d)
             commit('mut_banner_detail', d.data)
             commit('mut_banner_success_back', false)
         })
     },
     ac_banner_edit({commit}, param) { // banner编辑
 
-        console.log('tt', param)
+        // console.log('tt', param)
         $axios({
             method: 'post',
             url: '/api/admin/banner/modify/'+param.category,

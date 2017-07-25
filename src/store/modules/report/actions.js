@@ -15,7 +15,7 @@ export default {
             commit('mut_success_back', false)
         })
     },
-    ac_report_remove({commit}, param) { // 删除反馈
+    ac_feedback_remove({commit}, param) { // 删除反馈
         $axios({
             method: 'delete',
             url: '/api/admin/feedback/remove/'+param.id,
@@ -28,7 +28,7 @@ export default {
     },
 
     ac_report_list({commit}, param) { // 举报
-        $axios.get('/api', {
+        $axios.get('/api/admin/expose/list', {
             params: param
         }).then(res=>{
             return res.data
@@ -38,5 +38,15 @@ export default {
             commit('mut_success_back', false)
         })
     },
-
+    ac_report_remove({commit}, param) {
+        $axios({
+            method: 'delete',
+            url: '/api/admin/expose/remove/' + param.id,
+            headers: {"Content-Type": "application/json"}
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_success_back', true)
+            }
+        })
+    }
 }

@@ -37,8 +37,8 @@
                     <th>昵称</th>
                     <th>手机</th>
                     <th width="120px">注册时间</th>
-                    <th>年龄</th>
-                    <th>性别</th>
+                    <th width="50px">年龄</th>
+                    <th width="50px">性别</th>
                     <th>实名认证</th>
                     <th>个人简历</th>
                     <th width="25%">操作</th>
@@ -133,10 +133,10 @@
             successBack(me) {
                 if (me) {
                     this.getUserLists(parseInt(this.$route.params.type, 10) + 1, this.$route.params.page, 10)
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
+//                    this.$message({
+//                        type: 'success',
+//                        message: '删除成功!'
+//                    });
                 }
             }
         },

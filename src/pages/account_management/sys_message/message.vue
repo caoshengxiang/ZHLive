@@ -24,11 +24,11 @@
 
         </div>
         <div class="con-table">
-            <table width="100%" style="table-layout: fixed">
+            <table>
                 <tr>
-                    <th>发布时间</th>
-                    <th class="th-msg">消息内容</th>
-                    <th>操作</th>
+                    <th width="24%">发布时间</th>
+                    <th width="56%" class="th-msg">消息内容</th>
+                    <th width="20%">操作</th>
                 </tr>
                 <tr class="border-bottom" v-for="(item, index) in sysMsg" :key="index">
                     <td>{{ item.createTime }}</td>

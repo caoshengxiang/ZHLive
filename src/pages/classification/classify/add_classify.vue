@@ -89,7 +89,29 @@
                 }
             },
             saveClassify() {
+                let isSave = true
+
+                if (this.addData.name) {
+                    if (this.addData.addChild) {
+                        this.addData.addChild.forEach(item=>{
+                            if (!item.icon || !item.name) {
+                            isSave = false
+                            }
+                        })
+                    }
+
+                } else {
+                    isSave = false
+                }
+                if (isSave) {
                     this.ac_add_classify(this.addData)
+                } else {
+                    this.$message({
+                        message: '请输入分类名称,并上传分类图片!',
+                        type: 'warning'
+                    });
+                }
+
             },
             backList() {
                 this.$router.go(-1)

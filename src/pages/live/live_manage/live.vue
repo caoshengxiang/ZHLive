@@ -30,7 +30,10 @@
                 </el-input>
             </div>
 
-            <div class="living">正在直播: <span class="live-num">{{liveTotal}}</span></div>
+            <div class="living" v-if="$route.params.type === '0'">正在直播: <span class="live-num">{{liveTotal}}</span></div>
+            <div class="living" v-if="$route.params.type === '1'">禁播频道: <span class="live-num">{{liveTotal}}</span></div>
+            <div class="living" v-if="$route.params.type === '2'">聊天室禁用: <span class="live-num">{{liveTotal}}</span></div>
+            <div class="living" v-if="$route.params.type === '3'">直播举报: <span class="live-num">{{liveTotal}}</span></div>
         </div>
         <div class="con">
             <div class="live-box">
@@ -77,12 +80,12 @@
             <el-dialog :visible.sync="editLiveDialogVisible" :show-close="false">
                 <div class="live-edit">
                     <h3>主播</h3>
-                    <input class="text" type="text" :placeholder="liveInfo.anchor" disabled>
+                    <input class="text" type="text" :placeholder="liveDetail.anchor" disabled>
                     <h3>直播标题</h3>
-                    <input class="text" type="text" :placeholder="liveInfo.title" v-model="liveInfo.title">
+                    <input class="text" type="text" :placeholder="liveDetail.title" v-model="liveDetail.title">
                     <h3>直播封面</h3>
                     <div class="img">
-                        <img id="coverImg" :src="liveInfo.videoPic" alt="">
+                        <img id="coverImg" :src="liveDetail.videoPic" alt="">
                         <div class="upload">
                             <el-button icon="upload2">上传</el-button>
                             <input type="file" class="file" @change="fileUpload">
@@ -91,24 +94,22 @@
                     <h3>分类</h3>
                     <div class="cla">
                         <select id="category-1" class="sel" @change="changeCate1Handle">
-                            <option>未分类</option>
                             <option
                                     v-for="cate in classifyLists"
+                                    :key="cate.id"
                                     :value="cate.name">{{cate.name}}
                             </option>
                         </select>
                         <span class="cate2">-- <select id="category-2" class="sel" @change="changeCage2Handle">
-                            <option value="-1">未分类</option>
                             <option v-for="cate2 in childCate" :value="cate2.name">{{cate2.name}}</option>
                         </select></span>
                     </div>
                     <h3>标签</h3>
                     <div class="tags-con">
                         <el-tag
-                                v-for="tag in liveInfo.labelNames"
+                                v-for="tag in liveDetail.labelNames"
                                 :key="tag.name"
                                 :closable="true"
-                                :type="tag.type"
                                 class="item-tag"
                                 @close="delThisTag"
                         >
@@ -118,7 +119,6 @@
                                 v-for="tag in tempAddTags"
                                 :key="tag.name"
                                 :closable="true"
-                                :type="tag.type"
                                 class="item-tag"
                                 @close="delThisTag"
                         >
@@ -127,7 +127,7 @@
                         <i class="el-icon-plus" @click="addTags">标签</i>
                     </div>
                     <h3>置顶（1－10）</h3>
-                    <input class="text" type="text" v-model="liveInfo.hot" placeholder="无">
+                    <input class="text" type="text" v-model="liveDetail.hot" placeholder="无">
                 </div>
                 <div slot="title" class="dialog-title">
                     编辑直播信息
@@ -212,7 +212,8 @@
                     {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
                     {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
                     {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                ]
+                ],
+                liveType: ['LIVING', 'DISUSER', 'DISCHATROOM', 'EXPOSELIVE']
             }
         },
         computed: {
@@ -224,6 +225,7 @@
                 'liveList',
                 'liveTotal',
                 'liveSuccessBack',
+                'liveDetail',
             ]),
             currentPage() {
                 return parseInt(this.$route.params.page, 10)
@@ -232,9 +234,35 @@
         watch: {
             liveSuccessBack(me){
                 if (me) {
-                    this.ac_live_list({pageIndex: this.$route.params.page, pageSize: 10})
+                    this.ac_live_list({
+                        type: this.liveType[this.$route.params.type],
+                        pageIndex: this.$route.params.page,
+                        pageSize: 10})
                     this.editLiveDialogVisible = false
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功!'
+                    });
                 }
+            },
+            liveDetail() {
+                this.$nextTick(() => {
+//                    document.getElementById('category-2').selectedIndex = -1
+//                    document.getElementById('category-1').selectedIndex = -1
+                    this.classifyLists.forEach((ca, i) => {
+                        if (ca.name === this.liveDetail.levelOneCategoryName) {
+                            document.getElementById('category-1').selectedIndex = i
+                            this.childCate = ca.child
+                        }
+                    })
+                    this.$nextTick(() => {
+                        this.childCate.forEach((ca2, j) => {
+                            if (ca2.name === this.liveDetail.levelTwoCategoryName) {
+                                document.getElementById('category-2').selectedIndex = j
+                            }
+                        })
+                    })
+                })
             }
         },
         methods: {
@@ -248,12 +276,16 @@
                 'ac_disable_live',
                 'ac_disable_play',
                 'ac_live_edit',
+                'ac_live_detail'
             ]),
             handleCommand(va) { // 下拉
                 this.dropDownMenuItem = parseInt(va, 10);
 
                 this.$router.push({name: 'liveManage', params: {type: va, page: 1}})
-                // pull数据
+                this.ac_live_list({
+                    type: this.liveType[this.$route.params.type],
+                    pageIndex: this.$route.params.page,
+                    pageSize: 10})
             },
             hotWordsPage() { // 热词设置
                 this.$router.push({name: 'hotWords'})
@@ -262,31 +294,23 @@
                 this.$router.push({name: 'giftManage', params: {page: 1}})
             },
             handleSearchClick() {
-
+                this.ac_live_list({
+                    type: this.liveType[this.$route.params.type],
+                    search: this.searchValue,
+                    pageIndex: this.$route.params.page,
+                    pageSize: 10})
             },
             handleCurrentChange(val) {
                 this.$router.push({name: 'liveManage', params: {type: this.$route.params.type, page: val}})
+                this.ac_live_list({
+                    type: this.liveType[this.$route.params.type],
+                    pageIndex: this.$route.params.page,
+                    pageSize: 10})
             },
             editLiveHandle(item) { // 点击编辑
                 this.editLiveDialogVisible = true
-                this.liveInfo = item
-                this.$nextTick(() => {
-                    document.getElementById('category-2').selectedIndex = -1
-                    document.getElementById('category-1').selectedIndex = -1
-                    this.classifyLists.forEach((ca, i) => {
-                        if (ca.name === item.levelOneCategoryName) {
-                            document.getElementById('category-1').selectedIndex = i+1
-                            this.childCate = ca.child
-                        }
-                    })
-                    this.$nextTick(() => {
-                        this.childCate.forEach((ca2, j) => {
-                            if (ca2.name === item.levelTwoCategoryName) {
-                                document.getElementById('category-2').selectedIndex = j+1
-                            }
-                        })
-                    })
-                })
+//                this.liveInfo = item
+                this.ac_live_detail(item)
 
             },
             disableChatRoom(item) { // 禁用聊天室
@@ -296,10 +320,10 @@
                     type: 'warning'
                 }).then(() => {
                     this.ac_disable_chartroom(item)
-                    this.$message({
+                    /*this.$message({
                         type: 'success',
                         message: '操作成功!'
-                    });
+                    });*/
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -314,10 +338,10 @@
                     type: 'warning'
                 }).then(() => {
                     this.ac_disable_live(item)
-                    this.$message({
+                    /*this.$message({
                         type: 'success',
                         message: '操作成功!'
-                    });
+                    });*/
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -332,10 +356,10 @@
                     type: 'warning'
                 }).then(() => {
                     this.ac_disable_play(item)
-                    this.$message({
+                    /*this.$message({
                         type: 'success',
                         message: '操作成功!'
-                    });
+                    });*/
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -353,11 +377,11 @@
                 })
 
                 this.childCate = cate2[0].child // 设置对应的二级分类
-                this.liveInfo.levelOneCategoryName = e.target.value // 修改一级
-//                this.liveInfo.levelTwoCategoryName = this.childCate[0].name // 默认二级
+                this.liveDetail.levelOneCategoryName = e.target.value // 修改一级
+                this.liveDetail.levelTwoCategoryName = this.childCate[0].name // 默认二级
             },
             changeCage2Handle(e) {
-                this.liveInfo.levelTwoCategoryName = e.target.value
+                this.liveDetail.levelTwoCategoryName = e.target.value
             },
             fileUpload(e) {
                 let f = e.target.files[0];
@@ -368,8 +392,8 @@
                 r.readAsDataURL(f)
                 r.onload = function () {
                     imgDom.src = r.result
-                    that.liveInfo.videoPic = r.result
-                    console.log(r.result)
+                    that.liveDetail.videoPic = r.result
+//                    console.log(r.result)
                 }
             },
             addTags() {
@@ -379,9 +403,9 @@
 
                     this.initClass()
 
-                    if (this.liveInfo.labelNames && this.liveInfo.labelNames.length) {
+                    if (this.liveDetail.labelNames && this.liveDetail.labelNames.length) {
                         this.tags.forEach((item, i) => {
-                            this.liveInfo.labelNames.forEach((info) => {
+                            this.liveDetail.labelNames.forEach((info) => {
                                 if (item.name === info.name) {
                                     document.getElementsByClassName('tag-item')[i].className = 'item tag-item active'
                                 }
@@ -392,28 +416,31 @@
                 })
             },
             delThisTag(tag) {
-                this.liveInfo.labelNames.splice(this.liveInfo.labelNames.indexOf(tag), 1)
+                this.liveDetail.labelNames.splice(this.liveDetail.labelNames.indexOf(tag), 1)
             },
             saveManageInfo() { // 保存编辑
-                console.log('保存', this.liveInfo)
-                if (!this.liveInfo.labelNames) {
-                    this.liveInfo.labelNames = []
+                console.log('保存', this.liveDetail)
+                if (!this.liveDetail.labelNames) {
+                    this.liveDetail.labelNames = []
                 }
-                this.liveInfo.labelNames = [...this.liveInfo.labelNames, ...this.tempAddTags]
+                this.liveDetail.labelNames = [...this.liveDetail.labelNames, ...this.tempAddTags]
                 this.tempAddTags = []
 
-                this.ac_live_edit(this.liveInfo)
+                this.ac_live_edit(this.liveDetail)
             },
             cancelManageInfo(item) { // 取消编辑
                 this.tempAddTags = []
                 this.editLiveDialogVisible = false
-                this.ac_live_list({pageIndex: this.$route.params.page, pageSize: 10})
+                this.ac_live_list({
+                    type: this.liveType[this.$route.params.type],
+                    pageIndex: this.$route.params.page,
+                    pageSize: 10})
             },
             addThisTag(tag, i) {
                 let isExist = false
 
-                if (this.liveInfo.labelNames && this.liveInfo.labelNames.length) {
-                    this.liveInfo.labelNames.forEach((info) => {
+                if (this.liveDetail.labelNames && this.liveDetail.labelNames.length) {
+                    this.liveDetail.labelNames.forEach((info) => {
                         if (tag.name === info.name) {
                             isExist = true
                         }
@@ -445,7 +472,10 @@
                 this.lookReportDialogVisible = true
             },
             lookDialogHandleSizeChange(val) { // 举报dialog分页
-                console.log(`每页 ${val} 条`);
+                this.ac_live_list({
+                    type: this.liveType[this.$route.params.type],
+                    pageIndex: val,
+                    pageSize: 10})
             },
             lookDialogHandleCurrentChange(val) { // 举报dialog分页
                 console.log(`当前页: ${val}`);
@@ -460,7 +490,10 @@
         created() {
             this.ac_classify_list()
             this.ac_tags_list()
-            this.ac_live_list({pageIndex: this.$route.params.page, pageSize: 10})
+            this.ac_live_list({
+                type: this.liveType[this.$route.params.type],
+                pageIndex: this.$route.params.page,
+                pageSize: 10})
         },
         beforeMount() {
         },

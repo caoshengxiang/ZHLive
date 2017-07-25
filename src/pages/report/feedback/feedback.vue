@@ -84,7 +84,7 @@
                 'successBack',
             ]),
             currentPage() {
-                return this.$route.params.page
+                return parseInt(this.$route.params.page, 10)
             }
         },
         watch: {
@@ -97,7 +97,7 @@
         methods: {
             ...mapActions('report', [
                 'ac_feedback_list',
-                'ac_report_remove'
+                'ac_feedback_remove'
             ]),
             userReportPage() {
                 this.$router.push({name: 'reportManage', params: {page: 1}})
@@ -116,7 +116,7 @@
                 this.delFeedbackInfo(this.feedbackDetail)
             },
             delFeedbackInfo(item){ // 删除反馈信息
-                this.ac_report_remove({id: item.id})
+                this.ac_feedback_remove({id: item.id})
             },
             backList() {
                 this.detailDialogFormVisible = false

@@ -18,6 +18,9 @@ export default {
     mut_live_list(st, data) {
         st.liveList = data
     },
+    mut_live_detail(st, data) {
+        st.liveDetail = data
+    },
     mut_live_total(st, data) {
         st.liveTotal = data
     },

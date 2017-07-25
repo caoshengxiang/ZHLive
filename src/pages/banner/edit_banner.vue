@@ -43,7 +43,10 @@
                             <div v-if="bannerDetail.type === 'TOH5'">
                                 <el-radio label="TOH5">内部H5: 请在下方编辑器中编辑H5页面</el-radio>
                                 <div class="editor">
-                                    <vue-editor v-model="bannerDetail.content"></vue-editor>
+                                    <vue-editor
+                                            :editorToolbar="customToolbar"
+                                            v-model="bannerDetail.content"
+                                            placeholder="请输入内容..."></vue-editor>
                                 </div>
                             </div>
                             <div v-else>
@@ -78,6 +81,26 @@
                     type: ''
                 },
                 category: '',
+                customToolbar: [
+                    ['bold','italic','underline','strike'],        // toggled buttons
+//                    ['blockquote','code-block'],
+
+//                    [{'header':1},{'header':2}],               // custom button values
+                    [{'list':'ordered'},{'list':'bullet'}],
+//                    [{'script':'sub'},{'script':'super'}],      // superscript/subscript
+                    [{'indent':'-1'},{'indent':'+1'}],          // outdent/indent
+//                    [{'direction':'rtl'}],                        // text direction
+
+                    ['image', 'link'],
+                    [{'size':['small',false,'large','huge']}],  // custom dropdown
+                    [{'header':[1,2,3,4,5,6,false]}],
+
+                    [{'color':[]},{'background':[]}],          // dropdown with defaults from theme
+                    [{'font':[]}],
+                    [{'align':[]}],
+
+                    ['clean']                                         // remove formatting button
+                ]
             }
         },
         computed: {
@@ -141,6 +164,14 @@
                     category: this.category,
                     d: this.bannerDetail
                 })
+            },
+            handleImageAdded(file, Editor, cursorLocation) { // 处理编辑器图片上传
+//                console.log(file, Editor, cursorLocation)
+                let formData = new FormData();
+
+                formData.append('image', file)
+
+
             }
         },
         components: {
