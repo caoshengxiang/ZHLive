@@ -36,7 +36,7 @@
                     <th width="50px">头像</th>
                     <th>昵称</th>
                     <th>手机</th>
-                    <th width="120px">注册时间</th>
+                    <th width="130px">注册时间</th>
                     <th width="50px">年龄</th>
                     <th width="50px">性别</th>
                     <th>实名认证</th>

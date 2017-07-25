@@ -129,5 +129,37 @@ export default {
             }
         })
     },
-
+    ac_live_enable({commit}, param) { // 解除禁播
+        $axios({
+            method: 'post',
+            url: '/api/admin/play/enablePlay/'+param.videoId,
+            headers: {"Content-Type": "application/json"},
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_live_success_back', true)
+            }
+        })
+    },
+    ac_chatroom_enable({commit}, param) { // 解禁聊天室
+        $axios({
+            method: 'post',
+            url: '/api/admin/play/ebableChatRoom/'+param.videoId,
+            headers: {"Content-Type": "application/json"},
+        }).then(res=>{
+            if (res.status === 200) {
+                commit('mut_live_success_back', true)
+            }
+        })
+    },
+    ac_live_report_list({commit}, param) { // 获取对单个直播的举报列表
+        $axios({
+            method: 'post',
+            url: '/api/admin/expose/listByLive/'+param.videoId,
+            headers: {"Content-Type": "application/json"},
+        }).then(res=>{
+            /*if (res.status === 200) {
+                commit('mut_live_success_back', true)
+            }*/
+        })
+    }
 }

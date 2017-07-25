@@ -50,7 +50,7 @@
                     </p>
                     <!-- 禁播频道 -->
                     <p class="living disabled" v-if="$route.params.type == 1">
-                        <a>解除频道禁播</a>
+                        <a >解除频道禁播</a>
                     </p>
                     <!-- 聊天室禁用 -->
                     <p class="living disabled" v-if="$route.params.type == 2">
@@ -77,6 +77,7 @@
 
 <!-- 弹窗 -->
         <div class="dialog">
+            <!--编辑-->
             <el-dialog :visible.sync="editLiveDialogVisible" :show-close="false">
                 <div class="live-edit">
                     <h3>主播</h3>
@@ -107,22 +108,22 @@
                     <h3>标签</h3>
                     <div class="tags-con">
                         <el-tag
-                                v-for="tag in liveDetail.labelNames"
-                                :key="tag.name"
+                                v-for="(tag, index) in liveDetail.labelNames"
+                                :key="index"
                                 :closable="true"
                                 class="item-tag"
-                                @close="delThisTag"
+                                @close="delThisTag(tag)"
                         >
                             {{tag}}
                         </el-tag>
                         <el-tag
                                 v-for="tag in tempAddTags"
-                                :key="tag.name"
+                                :key="tag.id"
                                 :closable="true"
                                 class="item-tag"
-                                @close="delThisTag"
+                                @close="delThisAddTag(tag)"
                         >
-                            {{tag}}
+                            {{tag.name}}
                         </el-tag>
                         <i class="el-icon-plus" @click="addTags">标签</i>
                     </div>
@@ -138,7 +139,7 @@
                 </div>
             </el-dialog>
 
-
+<!--标签-->
             <el-dialog :visible.sync="addTagsDialogVisible" :show-close="false">
                 <div class="add-tags">
                     <div v-for="(tag, i) in tags" class="item tag-item" @click="addThisTag(tag, i)">
@@ -152,6 +153,7 @@
                 </div>
             </el-dialog>
 
+            <!--举报-->
             <el-dialog :visible.sync="lookReportDialogVisible" :show-close="false">
                 <div class="look">
                     <el-table :data="reportData">
@@ -198,7 +200,6 @@
                 editLiveDialogVisible: false, // 编辑dialog
                 addTagsDialogVisible: false, // 添加标签dialog
                 lookReportDialogVisible: false, // 直播举报查看dialog
-                liveInfo: {}, // 主播详细
                 childCate: [], // 一级对应的二级分类
                 tempAddTags: [],
                 reportData: [
@@ -226,6 +227,7 @@
                 'liveTotal',
                 'liveSuccessBack',
                 'liveDetail',
+                'ac_live_enable',
             ]),
             currentPage() {
                 return parseInt(this.$route.params.page, 10)
@@ -309,7 +311,6 @@
             },
             editLiveHandle(item) { // 点击编辑
                 this.editLiveDialogVisible = true
-//                this.liveInfo = item
                 this.ac_live_detail(item)
 
             },
@@ -396,7 +397,7 @@
 //                    console.log(r.result)
                 }
             },
-            addTags() {
+            addTags() { // 添加标签图标按钮
                 this.editLiveDialogVisible = false
                 this.addTagsDialogVisible = true
                 this.$nextTick(() => {
@@ -405,8 +406,8 @@
 
                     if (this.liveDetail.labelNames && this.liveDetail.labelNames.length) {
                         this.tags.forEach((item, i) => {
-                            this.liveDetail.labelNames.forEach((info) => {
-                                if (item.name === info.name) {
+                            this.liveDetail.labelNames.forEach((tagName) => {
+                                if (item.name === tagName) {
                                     document.getElementsByClassName('tag-item')[i].className = 'item tag-item active'
                                 }
                             })
@@ -415,15 +416,40 @@
 
                 })
             },
-            delThisTag(tag) {
+            delThisTag(tag) { // 删除已有标签
                 this.liveDetail.labelNames.splice(this.liveDetail.labelNames.indexOf(tag), 1)
+                this.tags.forEach(item=>{
+                    console.info(item, tag)
+                    if (item.name === tag) {
+                        if (!this.liveDetail.removeLabelIds) {
+                            this.liveDetail.removeLabelIds = []
+                        }
+                        this.liveDetail.removeLabelIds.push(item.id)
+                    }
+                })
+            },
+            delThisAddTag(tag) { // 删除添加的标签
+                this.tempAddTags.forEach((item,index)=>{
+                    if (item.name === tag.name) {
+                        this.tempAddTags.splice(index, 1)
+                    }
+                })
             },
             saveManageInfo() { // 保存编辑
                 console.log('保存', this.liveDetail)
                 if (!this.liveDetail.labelNames) {
                     this.liveDetail.labelNames = []
                 }
-                this.liveDetail.labelNames = [...this.liveDetail.labelNames, ...this.tempAddTags]
+//                this.liveDetail.labelNames = [...this.liveDetail.labelNames, ...this.tempAddTags]
+
+                if (!this.liveDetail.addLabelIds) {
+                    this.liveDetail.addLabelIds = []
+                }
+                if (this.tempAddTags) {
+                    this.tempAddTags.forEach(tag=>{
+                        this.liveDetail.addLabelIds.push(tag.id)
+                    })
+                }
                 this.tempAddTags = []
 
                 this.ac_live_edit(this.liveDetail)
@@ -441,7 +467,7 @@
 
                 if (this.liveDetail.labelNames && this.liveDetail.labelNames.length) {
                     this.liveDetail.labelNames.forEach((info) => {
-                        if (tag.name === info.name) {
+                        if (tag.name === info) {
                             isExist = true
                         }
                     })
@@ -640,9 +666,7 @@
         min-height: 200px;
         border: 1px solid #ccc;
         padding: 10px 20px;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
+
         .item {
             background: #c1bbbb;
             display: inline-block;

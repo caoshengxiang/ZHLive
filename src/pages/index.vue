@@ -52,6 +52,7 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
     .page {
         height: 100%;
+        min-width: 1100px;
     }
     .con {
         padding-top: 36px;
