@@ -3,6 +3,7 @@
  */
 import Vue from 'vue'
 import 'element-ui/lib/theme-default/index.css'
+import '../styles/element.css'
 import {
   Pagination,
   Dialog,

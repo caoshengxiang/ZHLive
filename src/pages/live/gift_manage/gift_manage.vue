@@ -283,7 +283,7 @@
         font-weight: bold;
         font-size: 18px;
         padding: 10px;
-        border-radius: 5px;
+        border-radius: 0px;
     }
     .el-dialog__header {
         padding: 0 !important;

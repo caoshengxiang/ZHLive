@@ -43,6 +43,7 @@
                     </div>
                     <!-- 正在直播 -->
                     <p class="living" v-if="$route.params.type == 0">
+                        <a class="number">{{item.userId}}</a>
                         <a @click="disableChatRoom(item)">禁用聊天室</a><span> · </span>
                         <a @click="disableLive(item)">中断直播</a><span> · </span>
                         <a @click="disablePlay(item)">禁播</a><span> · </span>
@@ -50,16 +51,16 @@
                     </p>
                     <!-- 禁播频道 -->
                     <p class="living disabled" v-if="$route.params.type == 1">
-                        <a >解除频道禁播</a>
+                        <a @click="liveEnable(item)">解除频道禁播</a>
                     </p>
                     <!-- 聊天室禁用 -->
                     <p class="living disabled" v-if="$route.params.type == 2">
-                        <a>解除聊天室禁用</a>
+                        <a @click="chatroomEnable(item)">解除聊天室禁用</a>
                     </p>
                     <!-- 直播举报 -->
                     <p class="living report" v-if="$route.params.type == 3">
                         <span> 用户昵称 </span>
-                        <a class="look" @click="lookReport">查看</a>
+                        <a class="look" @click="lookReport(item)">查看</a>
                     </p>
                 </div>
             </div>
@@ -156,30 +157,29 @@
             <!--举报-->
             <el-dialog :visible.sync="lookReportDialogVisible" :show-close="false">
                 <div class="look">
-                    <el-table :data="reportData">
-                        <el-table-column property="time" label="举报时间" width="150"></el-table-column>
-                        <el-table-column property="name" label="举报用户" width="200"></el-table-column>
+                    <el-table :data="liveReportList">
+                        <el-table-column property="createTime" label="举报时间" width="150"></el-table-column>
+                        <el-table-column property="userNickname" label="举报用户" width="200"></el-table-column>
                         <el-table-column property="content" label="举报内容"></el-table-column>
                     </el-table>
-                    <div class="con-page">
+                    <div class="con-page" v-if="liveReportListTotal > 10">
                         <el-pagination
-                                @size-change="lookDialogHandleSizeChange"
                                 @current-change="lookDialogHandleCurrentChange"
-                                :page-size="100"
+                                :page-size="10"
                                 layout="prev, pager, next, jumper"
-                                :total="1000">
+                                :total="liveReportListTotal">
                         </el-pagination>
                     </div>
                     <div class="op">
-                        <a >禁用聊天室</a>
-                        <a >中断直播</a>
-                        <a >禁播</a>
+                        <a @click="disableChatRoom({videoId: videoId})">禁用聊天室</a>
+                        <a @click="disableLive({videoId: videoId})">中断直播</a>
+                        <a @click="disablePlay({videoId: videoId})">禁播</a>
                     </div>
                 </div>
                 <div slot="title" class="report-title">
                     <h3>直播举报</h3>
-                    <p>主播: <span>主播昵称</span></p>
-                    <p>直播主题: <span>XXXXX</span></p>
+                    <p>主播: <span>{{liveReportDetail.anchor}}</span></p>
+                    <p>直播主题: <span>{{liveReportDetail.title}}</span></p>
                     <i class="el-icon-close" @click="closeLookDialog"></i>
                 </div>
             </el-dialog>
@@ -187,7 +187,7 @@
     </div>
 </template>
 <script>
-    import {mapState, mapActions} from 'vuex'
+    import {mapState, mapGetters, mapActions} from 'vuex'
     export default {
         name: 'liveManage',
         props: {},
@@ -202,19 +202,8 @@
                 lookReportDialogVisible: false, // 直播举报查看dialog
                 childCate: [], // 一级对应的二级分类
                 tempAddTags: [],
-                reportData: [
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                    {time: '2017-01-02 11:15', name: '用户名', content: '广告欺骗'},
-                ],
-                liveType: ['LIVING', 'DISUSER', 'DISCHATROOM', 'EXPOSELIVE']
+                liveType: ['LIVING', 'DISUSER', 'DISCHATROOM', 'EXPOSELIVE'],
+                videoId: '', // 直播举报videoid
             }
         },
         computed: {
@@ -227,7 +216,12 @@
                 'liveTotal',
                 'liveSuccessBack',
                 'liveDetail',
-                'ac_live_enable',
+                'liveReportList',
+                'liveReportListTotal',
+                'liveReportDetail',
+            ]),
+            ...mapGetters('live', [
+                'getter_liveReportList'
             ]),
             currentPage() {
                 return parseInt(this.$route.params.page, 10)
@@ -245,6 +239,7 @@
                         type: 'success',
                         message: '操作成功!'
                     });
+                    this.lookReportDialogVisible = false
                 }
             },
             liveDetail() {
@@ -278,7 +273,11 @@
                 'ac_disable_live',
                 'ac_disable_play',
                 'ac_live_edit',
-                'ac_live_detail'
+                'ac_live_detail',
+                'ac_live_play_enable',
+                'ac_chatroom_enable',
+                'ac_live_report_list',
+                'ac_live_report_detail'
             ]),
             handleCommand(va) { // 下拉
                 this.dropDownMenuItem = parseInt(va, 10);
@@ -302,7 +301,7 @@
                     pageIndex: this.$route.params.page,
                     pageSize: 10})
             },
-            handleCurrentChange(val) {
+            handleCurrentChange(val) { // 直播分页
                 this.$router.push({name: 'liveManage', params: {type: this.$route.params.type, page: val}})
                 this.ac_live_list({
                     type: this.liveType[this.$route.params.type],
@@ -367,6 +366,12 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            liveEnable(item) { // 解除禁播
+                this.ac_live_play_enable(item)
+            },
+            chatroomEnable(item) { // 解除聊天室禁用
+                this.ac_chatroom_enable(item)
             },
             changeCate1Handle(e) { // 点击一级分类
 //                console.log(e.target.value)
@@ -494,17 +499,28 @@
                     allEl[i].className = 'item tag-item'
                 }
             },
-            lookReport() { // 查看直播举报
+            lookReport(item) { // 查看直播举报
                 this.lookReportDialogVisible = true
+                this.ac_live_report_list({
+                    videoId: item.videoId,
+                    pageIndex: 1,
+                    pageSize: 10
+                })
+                this.ac_live_report_detail(item)
+                this.videoId = item.videoId
             },
-            lookDialogHandleSizeChange(val) { // 举报dialog分页
-                this.ac_live_list({
-                    type: this.liveType[this.$route.params.type],
-                    pageIndex: val,
-                    pageSize: 10})
-            },
+//            lookDialogHandleSizeChange(val) { // 举报dialog分页
+//                this.ac_live_list({
+//                    type: this.liveType[this.$route.params.type],
+//                    pageIndex: val,
+//                    pageSize: 10})
+//            },
             lookDialogHandleCurrentChange(val) { // 举报dialog分页
-                console.log(`当前页: ${val}`);
+                this.ac_live_report_list({
+                    videoId: this.videoId,
+                    pageIndex: val,
+                    pageSize: 10
+                })
             },
             closeLookDialog() {
                 this.lookReportDialogVisible = false
@@ -550,6 +566,7 @@
                 font-weight: bold;
                 font-size: 30px;
             }
+
         }
     }
 
@@ -565,8 +582,8 @@
             border: 1px solid #ccc;
             box-sizing: border-box;
             .img-box {
-                width: 217.5px;
-                height: 217.5px;
+                width: 227.5px;
+                height: 227.5px;
                 overflow: hidden;
                 .cover-img {
                     width: 100%;
@@ -594,6 +611,15 @@
                     .look {
                         font-weight: bold;
                     }
+                }
+                .number {
+                    background: #ffb600;
+                    padding: 1px 5px;
+                    border-radius: 50%;
+                    display: inline-block;
+                    color: #fff;
+                    font-weight: bold;
+                    font-size: 14px;
                 }
             }
         }
@@ -719,6 +745,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                margin-top: 20px;
                 a {
                     width: 33.3%;
                     color: #ff8300;
@@ -757,7 +784,7 @@
         font-weight: bold;
         font-size: 18px;
         padding: 10px;
-        border-radius: 5px;
+        border-radius: 0px;
     }
 
     .el-dialog__header {

@@ -84,6 +84,13 @@ export default {
             commit('mut_live_detail', d.data)
         })
     },
+    ac_live_report_detail({commit}, param) { // 单个直播举报信息
+        $axios.get('/api/admin/play/get/'+param.videoId).then(res=>{
+            return res.data
+        }).then(d=>{
+            commit('mut_live_report_detail', d.data)
+        })
+    },
     ac_disable_chartroom({commit}, param) { // 禁用聊天室
         $axios({
             method: 'post',
@@ -129,7 +136,8 @@ export default {
             }
         })
     },
-    ac_live_enable({commit}, param) { // 解除禁播
+    ac_live_play_enable({commit}, param) { // 解除禁播
+        console.log(param)
         $axios({
             method: 'post',
             url: '/api/admin/play/enablePlay/'+param.videoId,
@@ -153,13 +161,18 @@ export default {
     },
     ac_live_report_list({commit}, param) { // 获取对单个直播的举报列表
         $axios({
-            method: 'post',
+            method: 'get',
             url: '/api/admin/expose/listByLive/'+param.videoId,
             headers: {"Content-Type": "application/json"},
+            params: {
+                pageIndex: param.pageIndex,
+                pageSize: param.pageSize
+            }
         }).then(res=>{
-            /*if (res.status === 200) {
-                commit('mut_live_success_back', true)
-            }*/
+            return res.data
+        }).then(d=>{
+            commit('mut_live_report_list', d.data.data)
+            commit('mut_live_report_total', d.data.total)
         })
     }
 }

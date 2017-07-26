@@ -26,5 +26,14 @@ export default {
     },
     mut_live_success_back(st, data) {
         st.liveSuccessBack = data
+    },
+    mut_live_report_list(st, data) {
+        st.liveReportList = data
+    },
+    mut_live_report_total(st, data) {
+        st.liveReportListTotal = data
+    },
+    mut_live_report_detail(st, data) {
+        st.liveReportDetail = data
     }
 }

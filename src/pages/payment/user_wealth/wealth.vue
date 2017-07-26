@@ -50,13 +50,17 @@
 
         <div class="dialog">
             <!-- 编辑余额 -->
-            <el-dialog title="余额编辑" :visible.sync="overageDialogFormVisible">
+            <el-dialog :visible.sync="overageDialogFormVisible" :show-close="false">
                 <div class="overage">
                     <el-input></el-input>
                 </div>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="overageDialogFormVisible = false">取 消</el-button>
                     <el-button type="primary" @click="overageDialogFormVisible = false">确 定</el-button>
+                </div>
+                <div slot="title" class="balance-title">
+                    余额编辑(魂币)
+                    <i class="el-icon-close" @click="closeEditDialog"></i>
                 </div>
             </el-dialog>
 
@@ -189,6 +193,9 @@
             },
             consumeDialogHandleCurrentChange(){
 
+            },
+            closeEditDialog() {
+                this.overageDialogFormVisible = false
             }
         },
         components: {},
@@ -216,12 +223,15 @@
     .td-op {
         .b-1 {
             background: #ff5d00;
+            padding: 3px 10px !important;
         }
         .b-2 {
             background: #00bbff;
+            padding: 3px 10px !important;
         }
         .b-3 {
             background: forestgreen;
+            padding: 3px 10px !important;
         }
     }
 
@@ -229,20 +239,46 @@
         .recharge-title {
             text-align: center;
             position: relative;
+            background: #00bbff;
+            padding: 20px;
+            color: #fff;
+            font-weight: bold;
+            h1 {
+                font-size: 20px;
+            }
+            p {
+                font-size: 16px;
+            }
         }
         .consume-title {
             text-align: center;
             position: relative;
+            background: #29c666;
+            padding: 20px;
+            color: #fff;
+            font-weight: bold;
+            h1 {
+                font-size: 20px;
+            }
+            p {
+                font-size: 16px;
+            }
         }
         .el-icon-close {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: 10px;
+            right: 10px;
             background: #ffb600;
             color: #fff;
             padding: 5px;
             border-radius: 50%;
             cursor: pointer;
+        }
+        .balance-title {
+            padding-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
         }
     }
 </style>

@@ -18,6 +18,9 @@ export default {
         liveTotal: 0, // 直播总数
         liveDetail: {}, // 直播详情
         liveSuccessBack: false, // 直播列表操作的成功返回
+        liveReportList: [], // 直播举报列表
+        liveReportListTotal: 0, // 总数
+        liveReportDetail: {}, // 直播举报详细
     },
     getters,
     actions,

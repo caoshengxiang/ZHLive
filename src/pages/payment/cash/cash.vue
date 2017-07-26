@@ -27,7 +27,7 @@
                     <th>实名认证</th>
                     <th>总收入(魂币)</th>
                     <th>收入余额(魂豆)</th>
-                    <th>操作</th>
+                    <th width="150px">操作</th>
                 </tr>
                 <tr class="border-bottom">
                     <td>1</td>
@@ -46,7 +46,7 @@
 
         <div class="dialog">
             <!-- 提现申请 -->
-            <el-dialog title="提现申请" :visible.sync="applyDialogFormVisible" >
+            <el-dialog title="提现申请" :visible.sync="applyDialogFormVisible" :show-close="false">
                 <div class="detail">　
                     <p><label>申请用户: </label><span>用户昵称（123）</span></p>
                     <p><label>申请时间: </label><span>2017-01-12 18:00</span></p>
@@ -57,6 +57,10 @@
                     <el-button type="success">同意提现</el-button>
                     <el-button type="danger">拒绝</el-button>
                     <el-button @click="backList">返回</el-button>
+                </div>
+                <div slot="title" class="cash-title">
+                    提现申请
+                    <i class="el-icon-close" @click="closeDialog"></i>
                 </div>
             </el-dialog>
         </div>
@@ -91,6 +95,9 @@
                 this.applyDialogFormVisible = true
             },
             backList() {
+                this.applyDialogFormVisible = false
+            },
+            closeDialog() {
                 this.applyDialogFormVisible = false
             }
         },
@@ -133,6 +140,22 @@
         .op {
             width: 100%;
             margin-top: 30px;
+        }
+        .el-icon-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffb600;
+            color: #fff;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .cash-title {
+            padding-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
         }
     }
     .el-button {

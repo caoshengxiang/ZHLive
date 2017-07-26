@@ -47,10 +47,10 @@
 
             <div class="con-page">
                 <el-pagination
-                        v-if="reportTotal > 5"
+                        v-if="reportTotal > 10"
                         layout="prev, pager, next, jumper"
                         :total="reportTotal"
-                        :page-size="2"
+                        :page-size="10"
                         @current-change="handleCurrentPageChange"
                         :current-page="currentPage"
                 >
@@ -60,7 +60,7 @@
 
         <div class="dialog">
             <!-- 查看 -->
-            <el-dialog title="用户举报" :visible.sync="detailDialogFormVisible">
+            <el-dialog title="用户举报" :visible.sync="detailDialogFormVisible" :show-close="false">
                 <div class="detail">　
                     <p><label>举报用户: </label><span>{{reportDetail.userNickname}}（{{reportDetail.userId}}）</span></p>
                     <p><label>举报事项: </label>
@@ -80,6 +80,10 @@
                 <div class="op">
                     <el-button type="danger" @click="delReport(reportDetail)">删除</el-button>
                     <el-button @click="backList">返回</el-button>
+                </div>
+                <div slot="title" class="report-title">
+                    用户举报
+                    <i class="el-icon-close" @click="closeDetailDialog"></i>
                 </div>
             </el-dialog>
         </div>
@@ -156,14 +160,17 @@
             },
             handleCurrentPageChange(p) { // 分页
                 this.$router.push({name: 'reportManage', params: {page: p}})
-                this.ac_report_list({pageIndex: p, pageSize: 2})
+                this.ac_report_list({pageIndex: p, pageSize: 10})
+            },
+            closeDetailDialog(){
+                this.detailDialogFormVisible = false
             }
         },
         components: {},
         beforeCreate(){
         },
         created() {
-            this.ac_report_list({pageIndex: 1, pageSize: 2})
+            this.ac_report_list({pageIndex: 1, pageSize: 10})
         },
         beforeMount() {
         },
@@ -208,6 +215,22 @@
         .op {
             width: 100%;
             margin-top: 30px;
+        }
+        .el-icon-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffb600;
+            color: #fff;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .report-title {
+            padding-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
         }
     }
 

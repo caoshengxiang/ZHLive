@@ -13,7 +13,7 @@
             <table>
                 <tr>
                     <th>版本编号</th>
-                    <th>报名</th>
+                    <th>包名</th>
                     <th>上传时间</th>
                     <th>大小</th>
                     <th>所属平台</th>
