@@ -16,3 +16,5 @@ new Vue({
     // components: { App }
     render: h => h(App)
 })
+
+// Vue.config.devtools = true // 生产环境下需要调试数据

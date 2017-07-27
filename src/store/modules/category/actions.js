@@ -6,6 +6,7 @@
 export default {
 
     ac_classify_list({commit}, param) { // 分类列表
+        // eslint-disable-next-line
         $axios.get('/api/admin/category/list', {
             params: param
         }).then((res)=>{
@@ -21,7 +22,7 @@ export default {
     // 添加分类
     ac_add_classify({commit}, param) {
 
-        // console.log("添加分类action",param)
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/category/add',
@@ -38,7 +39,7 @@ export default {
 
     // 删除一级分类
     ac_del_classify({commit}, param) {
-
+// eslint-disable-next-line
         $axios({
             method: 'delete',
             url: '/api/admin/category/remove',
@@ -64,7 +65,7 @@ export default {
         })
         p.id = param.id;
         // console.log('修改分类', p)
-
+// eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/category/modify',
@@ -83,7 +84,7 @@ export default {
         })
     },
     ac_add_tags({commit}, param) {
-        console.log(JSON.stringify(param))
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             headers: {"Content-Type":"application/json"},
@@ -98,6 +99,7 @@ export default {
     },
 
     ac_tags_list({commit}) {
+        // eslint-disable-next-line
         $axios.get('/api/admin/label/list').then((res)=>{
             return res.data.data
         }).then((d)=>{
@@ -106,6 +108,7 @@ export default {
         })
     },
     ac_del_tags({commit}, param) {
+        // eslint-disable-next-line
         $axios({
             method: 'delete',
             headers: {"Content-Type": "application/json"},

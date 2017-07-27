@@ -5,6 +5,7 @@
 
 export default {
     ac_banner_list({commit}, param) { // banner列表
+        // eslint-disable-next-line
         $axios.get('/api/admin/banner/list/'+param.category).then(res=>{
             return res.data
         }).then(d=>{
@@ -13,6 +14,7 @@ export default {
         })
     },
     ac_banner_disable({commit}, param) { // banner显示隐藏
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/banner/'+param.category+ '/'+ param.bannerNum+'/'+param.show,
@@ -24,6 +26,7 @@ export default {
         })
     },
     ac_banner_detail({commit}, param) { // banner详细
+        // eslint-disable-next-line
         $axios.get('/api/admin/banner/get/'+param.category+'/'+param.bannerNum).then(res=>{
             return res.data
         }).then(d=>{
@@ -34,7 +37,7 @@ export default {
     },
     ac_banner_edit({commit}, param) { // banner编辑
 
-        // console.log('tt', param)
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/banner/modify/'+param.category,

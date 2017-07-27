@@ -12,6 +12,7 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item
                                 v-for="(item, i) in dropDownMenu"
+                                :key="i"
                                 :command="i.toString()">{{item}}
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -459,7 +460,7 @@
 
                 this.ac_live_edit(this.liveDetail)
             },
-            cancelManageInfo(item) { // 取消编辑
+            cancelManageInfo() { // 取消编辑
                 this.tempAddTags = []
                 this.editLiveDialogVisible = false
                 this.ac_live_list({

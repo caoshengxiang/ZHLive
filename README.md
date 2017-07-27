@@ -10,6 +10,9 @@ http://47.95.6.138:8080/swagger-ui.html
 
 http://47.95.6.138:8080/api
 
+# 代码中关闭ESLint
+/* eslint-disable */
+/* eslint-enable */
 
-// 问题
-管理端删除标签，用户已添加标签，将无法找到标签id进行删除用户添加的标签
+// eslint-disable-line no-alert
+// eslint-disable-next-line

@@ -20,6 +20,7 @@ function resolve (dir) {
 module.exports = function (env) {
     return {
         // context: __dirname + '../src',
+        // debug: false,
         entry: { // 入口
             index: path.join(__dirname + '/../src/index.js')
         },

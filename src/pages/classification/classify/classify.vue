@@ -103,7 +103,7 @@
                 });
             },
             handleCurrentChange(va) {
-
+                console.log(va)
             }
 
         },

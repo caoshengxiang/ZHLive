@@ -23,8 +23,6 @@ const message = resolve => require.ensure([], () => resolve(require('../pages/ac
 // 聊天室
 const chatroom = resolve => require.ensure([], () => resolve(require('../pages/account_management/chatroom/chatroom.vue')), 'message')
 
-
-
 // 帐号
 const accountEdit = resolve => require.ensure([], () => resolve(require('../pages/account_management/account/edit.vue')), 'accountManagement')
 
@@ -34,7 +32,6 @@ const showClassify = resolve => require.ensure([], () => resolve(require('../pag
 const editClassify = resolve => require.ensure([], () => resolve(require('../pages/classification/classify/edit_classify.vue')), 'classification')
 const tags = resolve => require.ensure([], () => resolve(require('../pages/classification/tags/tags.vue')), 'classification')
 const addClassify = resolve => require.ensure([], () => resolve(require('../pages/classification/classify/add_classify.vue')), 'classification')
-
 
 // 直播管理
 const liveManage = resolve => require.ensure([], () => resolve(require('../pages/live/live_manage/live.vue')), 'liveManage')
@@ -57,7 +54,6 @@ const feedback = resolve => require.ensure([], () => resolve(require('../pages/r
 
 // 版本管理
 const version = resolve => require.ensure([], () => resolve(require('../pages/version/version/version.vue')), 'version')
-
 
 export default new Router({
     // mode: 'history', // 这个模式路由没有#

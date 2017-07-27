@@ -5,6 +5,7 @@
 
 export default {
     ac_feedback_list({commit}, param) { // 反馈
+        // eslint-disable-next-line
         $axios.get('/api/admin/feedback/list', {
             params: param
         }).then(res=>{
@@ -16,6 +17,7 @@ export default {
         })
     },
     ac_feedback_remove({commit}, param) { // 删除反馈
+        // eslint-disable-next-line
         $axios({
             method: 'delete',
             url: '/api/admin/feedback/remove/'+param.id,
@@ -28,6 +30,7 @@ export default {
     },
 
     ac_report_list({commit}, param) { // 举报
+        // eslint-disable-next-line
         $axios.get('/api/admin/expose/list', {
             params: param
         }).then(res=>{
@@ -39,6 +42,7 @@ export default {
         })
     },
     ac_report_remove({commit}, param) {
+        // eslint-disable-next-line
         $axios({
             method: 'delete',
             url: '/api/admin/expose/remove/' + param.id,

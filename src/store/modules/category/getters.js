@@ -3,7 +3,7 @@
  */
 
 export default {
-    edit_classify_detail(st, id) {
+    edit_classify_detail(st) {
         // console.log('getter',st.classifyLists)
         return st.classifyLists.map((item)=>{
             // if (item.id === id) {

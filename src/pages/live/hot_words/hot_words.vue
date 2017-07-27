@@ -12,6 +12,7 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item
                                 v-for="(item, i) in dropDownMenu"
+                                :key="i"
                                 :command="i.toString()">{{item}}
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -106,7 +107,7 @@
 
             showInput() {
                 this.inputVisible = true;
-                this.$nextTick(_ => {
+                this.$nextTick(() => {
                     this.$refs.saveTagInput.$refs.input.focus();
                 });
             },

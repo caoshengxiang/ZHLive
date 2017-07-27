@@ -12,6 +12,7 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item
                                 v-for="(item, i) in dropDownMenu"
+                                :key="i"
                                 :command="i.toString()">{{item}}
                         </el-dropdown-item>
                     </el-dropdown-menu>

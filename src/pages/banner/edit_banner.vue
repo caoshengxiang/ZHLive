@@ -156,7 +156,7 @@
                 }
                 this.ac_banner_detail({category: this.category, bannerNum: routeParams.num})
             },
-            radioChange(label) { // 链接形式改变的回调
+            radioChange() { // 链接形式改变的回调
                 this.bannerDetail.content = ''
             },
             saveBanner() {
@@ -165,14 +165,14 @@
                     d: this.bannerDetail
                 })
             },
-            handleImageAdded(file, Editor, cursorLocation) { // 处理编辑器图片上传
+            /*handleImageAdded(file, Editor, cursorLocation) { // 处理编辑器图片上传
 //                console.log(file, Editor, cursorLocation)
                 let formData = new FormData();
 
                 formData.append('image', file)
 
 
-            }
+            }*/
         },
         components: {
             VueEditor

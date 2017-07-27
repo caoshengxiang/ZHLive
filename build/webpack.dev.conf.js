@@ -34,9 +34,10 @@ module.exports = function (env) {
 
 
         plugins: [
+            // 使用Webpack的DefinePlugin来指示生产环境,生产模式将由process.env.NODE_ENVVue的源代码确定，默认情况下将处于开发模式。
             new webpack.DefinePlugin({
                 'process.env': {
-                    'NODE_ENV': JSON.stringify('dev')
+                    'NODE_ENV': JSON.stringify('development')
                 }
             }),
             new webpack.HotModuleReplacementPlugin(),

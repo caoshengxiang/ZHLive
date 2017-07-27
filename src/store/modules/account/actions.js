@@ -5,6 +5,7 @@ import {getUrl} from '../../../utils/utils'
 
 export default {
     ac_accountLists ({commit}, param) { // 用户列表
+        // eslint-disable-next-line
         $axios.get(getUrl('/api/admin/user/list', param)).then((res) => {
             // console.log('ok:', res);
             return res.data.data
@@ -19,9 +20,10 @@ export default {
 
     // 禁用
     ac_disableUser ({commit}, param) {
+        // eslint-disable-next-line
         $axios.get(getUrl('/api/admin/user/disableUser', param.param1)).then(res => {
             if (res.status === 200) {
-                $axios.get(getUrl('/api/admin/user/list', param.param2)).then((res2) => {
+                $axios.get(getUrl('/api/admin/user/list', param.param2)).then((res2) => { //eslint-disable-line
                     // console.log('ok:', res2);
                     return res2.data.data
                 }).then((d) => {
@@ -36,9 +38,10 @@ export default {
 
     // 解禁
     ac_enableUser ({commit}, param) {
+        // eslint-disable-next-line
         $axios.get(getUrl('/api/admin/user/enableUser', param.param1)).then(res => {
             if (res.status === 200 && param.param2) {
-                $axios.get(getUrl('/api/admin/user/list', param.param2)).then((res2) => {
+                $axios.get(getUrl('/api/admin/user/list', param.param2)).then((res2) => { // eslint-disable-line
                     // console.log('ok:', res2);
                     return res2.data.data
                 }).then((d) => {
@@ -53,6 +56,7 @@ export default {
 
     // 用户详细
     ac_userInfo ({commit}, param) {
+        // eslint-disable-next-line
         $axios.get(getUrl('/api/admin/user/getUser', param)).then(res => {
             return res.data.data
         }).then(d => {
@@ -70,7 +74,7 @@ export default {
                 p[key] = param[key]
             }
         })
-
+// eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/user/modify',
@@ -81,6 +85,7 @@ export default {
 
     // 提成比例
     ac_modify_commission({commit}, param) {
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/user/modifyCommission/' + param.userId + '_' + param.commission,
@@ -90,6 +95,7 @@ export default {
 
     // 移除主播
     ac_remove_anchor({commit}, param) {
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/user/removeAnchor/' + param.userId,
@@ -103,7 +109,7 @@ export default {
 
     // 通过主播申请
     ac_pass_apply({commit}, param) {
-        console.log(param)
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/user/applyPass/' + param.userId,
@@ -117,6 +123,7 @@ export default {
 
     // 拒绝主播申请
     ac_reject_apply({commit}, param) {
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/user/applyReject/' + param.userId,
@@ -130,6 +137,7 @@ export default {
 
     // 添加消息
     ac_msg_add({commit}, param) {
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/msg/add',
@@ -140,13 +148,14 @@ export default {
                 commit('mut_msg_back', true)
             }
             return res.data
-        }).then(d => {
+        }).then(() => {
 
         })
     },
 
     // 获取消息列表
     ac_msg_list({commit}, param) {
+        // eslint-disable-next-line
         $axios({
             method: 'get',
             url: '/api/admin/msg/list/' + param.type,

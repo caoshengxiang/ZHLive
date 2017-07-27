@@ -5,6 +5,7 @@
 
 export default {
     ac_hot_word_add({commit}, param) { // 热词添加
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/hotWord/add',
@@ -18,6 +19,7 @@ export default {
         })
     },
     ac_hot_word_list({commit}) { // 热词列表
+        // eslint-disable-next-line
         $axios.get('/api/admin/hotWord/list').then((res)=>{
             // console.log('热词列表',res)
             return res.data.data
@@ -27,6 +29,7 @@ export default {
         })
     },
     ac_hot_word_remove({commit}, param) {
+        // eslint-disable-next-line
         $axios.delete('/api/admin/hotWord/remove', {
             params: param
         }).then((res)=>{
@@ -35,7 +38,8 @@ export default {
             }
         })
     },
-    ac_gift_list({commit}, param) { // 礼物列表获取
+    ac_gift_list({commit}) { // 礼物列表获取
+        // eslint-disable-next-line
         $axios.get('/api/admin/present/list').then((res)=>{
             return res.data
         }).then((d)=>{
@@ -44,6 +48,7 @@ export default {
         })
     },
     ac_gift_remove({commit}, param) { // 礼物删除
+        // eslint-disable-next-line
         $axios.delete('/api/admin/present/remove', {
             params: {
                 id: param.id
@@ -55,6 +60,7 @@ export default {
         })
     },
     ac_gift_save({commit}, param) { // 礼物添加
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/present/save',
@@ -67,6 +73,7 @@ export default {
         })
     },
     ac_live_list({commit}, param) { // 直播列表
+        // eslint-disable-next-line
         $axios.get('/api/admin/play/list', {
             params: param
         }).then((res)=>{
@@ -78,6 +85,7 @@ export default {
         })
     },
     ac_live_detail({commit}, param) { // 单个直播信息
+        // eslint-disable-next-line
         $axios.get('/api/admin/play/get/'+param.videoId).then(res=>{
             return res.data
         }).then(d=>{
@@ -85,6 +93,7 @@ export default {
         })
     },
     ac_live_report_detail({commit}, param) { // 单个直播举报信息
+        // eslint-disable-next-line
         $axios.get('/api/admin/play/get/'+param.videoId).then(res=>{
             return res.data
         }).then(d=>{
@@ -92,6 +101,7 @@ export default {
         })
     },
     ac_disable_chartroom({commit}, param) { // 禁用聊天室
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/play/disableChatRoom/'+param.videoId,
@@ -102,7 +112,8 @@ export default {
             }
         })
     },
-    ac_disable_live({cmomit}, param) { // 中断直播
+    ac_disable_live({commit}, param) { // 中断直播
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/play/disableLive/'+param.videoId,
@@ -114,6 +125,7 @@ export default {
         })
     },
     ac_disable_play({commit}, param) { // 禁播
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/play/disablePlay/'+param.videoId,
@@ -125,6 +137,7 @@ export default {
         })
     },
     ac_live_edit({commit}, param) { // 修改
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/play/modify',
@@ -137,7 +150,7 @@ export default {
         })
     },
     ac_live_play_enable({commit}, param) { // 解除禁播
-        console.log(param)
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/play/enablePlay/'+param.videoId,
@@ -149,6 +162,7 @@ export default {
         })
     },
     ac_chatroom_enable({commit}, param) { // 解禁聊天室
+        // eslint-disable-next-line
         $axios({
             method: 'post',
             url: '/api/admin/play/ebableChatRoom/'+param.videoId,
@@ -160,6 +174,7 @@ export default {
         })
     },
     ac_live_report_list({commit}, param) { // 获取对单个直播的举报列表
+        // eslint-disable-next-line
         $axios({
             method: 'get',
             url: '/api/admin/expose/listByLive/'+param.videoId,
