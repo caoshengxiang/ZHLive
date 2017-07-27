@@ -536,6 +536,8 @@
                 type: this.liveType[this.$route.params.type],
                 pageIndex: this.$route.params.page,
                 pageSize: 10})
+
+            this.dropDownMenuItem = parseInt(this.$route.params.type, 10)
         },
         beforeMount() {
         },

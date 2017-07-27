@@ -133,7 +133,7 @@ export default new Router({
                     name: 'liveManage',
                     component: liveManage
                 }, { //
-                    path: 'live/hot',
+                    path: 'live/set/hot',
                     name: 'hotWords',
                     component: hotWords
                 }, { //
