@@ -22,6 +22,7 @@
         methods: {
             logoutHandle() {
                 sessionStorage.user = ''
+                sessionStorage.menuIndex = ''
                 this.$router.push({name: 'signIn'})
             }
         },
